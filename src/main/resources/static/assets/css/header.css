@@ -1,0 +1,24 @@
+.page-content .left img {
+    width: 100%;
+}
+
+/*弹框*/
+html{height: 100%;}
+body{position: relative;height: 100%;}
+.dialogbody{position: absolute;z-index: 999;width: 100%;height: 100%;background: rgba(0,0,0,.8);top: 0;left: 0;display: none;}
+.dialogbox{position: absolute;display: block;width: 800px;height: 400px;background: #fff;border-radius: 15px;top: 0;left: 0;right: 0;bottom: 0;margin: auto;}
+.dialogbox .close{position: absolute;display: block;width: 50px;height: 50px;background: url(assets/images/Close.png) no-repeat 100% center;top: 20px;right: 20px;}
+
+.navbar{background: #5dce3f;}
+.ace-nav>li.light-blue>a{background: #63b14e;}
+.breadcrumb>li>a{color:#5dce3f;}
+.nav-list>li.active>a, .nav-list>li.active>a:hover, .nav-list>li.active>a:focus, .nav-list>li.active>a:active{color:#5dce3f;}
+.btn-info, .btn-info:focus{background: #5dce3f!important;border-color:  #5dce3f;}
+.btn-info:hover{background: #63b14e!important;border-color:  #5dce3f;}
+.nav-list>li.active:after{border-color:#5dce3f }
+.nav-list li.active>a:after{border-right-color: #5dce3f;}
+
+.nav-list>li a:hover>.arrow, .nav-list>li.active>a>.arrow, .nav-list>li.open>a>.arrow{color:#5dce3f; }
+.nav-list>li.open>a{color:#5dce3f;}
+.nav-list>li.open>a:hover::before{color:#5dce3f;}
+.nav-list>li .submenu>li.active>a{color:#5dce3f;}

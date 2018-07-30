@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+	<!-- classPathEntry:数据库的JDBC驱动,换成你自己的驱动位置 -->
+    <properties resource="application_back.properties"/>
+
+	<context id="mysql2Tables" targetRuntime="MyBatis3" defaultModelType="flat">
+        <property name="javaFileEncoding" value="utf-8" />
+        <property name="mergeable" value="false"/>
+
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin" />
+        <!-- 生成注释插件 -->
+        <plugin type="org.mybatis.generator.plugin.CommentPlugin" />
+        <!-- 分页插件 -->
+        <plugin type="org.mybatis.generator.plugin.PaginationMysqlPlugin" />
+
+        <commentGenerator>
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <property name="suppressDate" value="true" />
+            <property name="suppressAllComments" value="true" />
+        </commentGenerator>
+
+
+        <jdbcConnection driverClass="${spring.datasource.driver-class-name}"
+                        connectionURL="${spring.datasource.url}"
+                        userId="${spring.datasource.username}"
+                        password="${spring.datasource.password}">
+        </jdbcConnection>
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+		<!-- 实体类的位置 -->
+		<javaModelGenerator targetPackage="com.example.sports.model"
+			targetProject="src/main/java">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+		<!-- 实体类xml映射文件的位置 -->
+		<sqlMapGenerator targetPackage="com.example.sports.mapper"
+			targetProject="src/main/resources">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+		<!-- DAOMapper的位置 -->
+		<javaClientGenerator type="MAPPER"
+			targetPackage="com.example.sports.mapper" targetProject="src/main/java">
+			<property name="enableSubPackages" value="true" />
+		</javaClientGenerator>
+		<!-- tableName:用于自动生成代码的数据库表；domainObjectName:对应于数据库表的javaBean类名 -->
+
+
+        <!--<table tableName="sys_user"-->
+               <!--enableCountByExample="true" enableUpdateByExample="true"-->
+               <!--enableDeleteByExample="true" enableSelectByExample="true"-->
+               <!--enableUpdateByPrimaryKey="true" selectByExampleQueryId="true"-->
+               <!--enableDeleteByPrimaryKey="true">-->
+            <!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+            <!--<columnOverride column="id" javaType="java.lang.Long" />-->
+        <!--</table>-->
+		<table tableName="sys_user_student"
+			   enableCountByExample="true" enableUpdateByExample="true"
+			   enableDeleteByExample="true" enableSelectByExample="true"
+			   enableUpdateByPrimaryKey="true" selectByExampleQueryId="true"
+			   enableDeleteByPrimaryKey="true">
+			<generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+			<columnOverride column="id" javaType="java.lang.Long" />
+		</table>
+		<!--<table tableName="sys_user_pt"-->
+			   <!--enableCountByExample="true" enableUpdateByExample="true"-->
+			   <!--enableDeleteByExample="true" enableSelectByExample="true"-->
+			   <!--enableUpdateByPrimaryKey="true" selectByExampleQueryId="true"-->
+			   <!--enableDeleteByPrimaryKey="true">-->
+			<!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+			<!--<columnOverride column="id" javaType="java.lang.Long" />-->
+		<!--</table>-->
+		<!--<table tableName="sys_college"-->
+			   <!--enableCountByExample="true" enableUpdateByExample="true"-->
+			   <!--enableDeleteByExample="true" enableSelectByExample="true"-->
+			   <!--enableUpdateByPrimaryKey="true" selectByExampleQueryId="true"-->
+			   <!--enableDeleteByPrimaryKey="true">-->
+			<!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+			<!--<columnOverride column="id" javaType="java.lang.Long" />-->
+		<!--</table>-->
+		<!--<table tableName="sys_project"-->
+			   <!--enableCountByExample="true" enableUpdateByExample="true"-->
+			   <!--enableDeleteByExample="true" enableSelectByExample="true"-->
+			   <!--enableUpdateByPrimaryKey="true" selectByExampleQueryId="true"-->
+			   <!--enableDeleteByPrimaryKey="true">-->
+			<!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+			<!--<columnOverride column="id" javaType="java.lang.Long" />-->
+		<!--</table>-->
+		<!--<table tableName="sys_project_sign"-->
+			   <!--enableCountByExample="true" enableUpdateByExample="true"-->
+			   <!--enableDeleteByExample="true" enableSelectByExample="true"-->
+			   <!--enableUpdateByPrimaryKey="true" selectByExampleQueryId="true"-->
+			   <!--enableDeleteByPrimaryKey="true">-->
+			<!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+			<!--<columnOverride column="id" javaType="java.lang.Long" />-->
+		<!--</table>-->
+		<!--<table tableName="sys_grading_module"-->
+			   <!--enableCountByExample="true" enableUpdateByExample="true"-->
+			   <!--enableDeleteByExample="true" enableSelectByExample="true"-->
+			   <!--enableUpdateByPrimaryKey="true" selectByExampleQueryId="true"-->
+			   <!--enableDeleteByPrimaryKey="true">-->
+			<!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+			<!--<columnOverride column="id" javaType="java.lang.Long" />-->
+		<!--</table>-->
+		<!--<table tableName="sys_module"-->
+			   <!--enableCountByExample="true" enableUpdateByExample="true"-->
+			   <!--enableDeleteByExample="true" enableSelectByExample="true"-->
+			   <!--enableUpdateByPrimaryKey="true" selectByExampleQueryId="true"-->
+			   <!--enableDeleteByPrimaryKey="true">-->
+			<!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+			<!--<columnOverride column="id" javaType="java.lang.Long" />-->
+		<!--</table>-->
+
+		<!--<table tableName="sys_user_module"-->
+			   <!--enableCountByExample="true" enableUpdateByExample="true"-->
+			   <!--enableDeleteByExample="true" enableSelectByExample="true"-->
+			   <!--enableUpdateByPrimaryKey="true" selectByExampleQueryId="true"-->
+			   <!--enableDeleteByPrimaryKey="true">-->
+			<!--<generatedKey column="id" sqlStatement="Mysql" identity="true"/>-->
+			<!--<columnOverride column="id" javaType="java.lang.Long" />-->
+		<!--</table>-->
+
+	</context>
+</generatorConfiguration>

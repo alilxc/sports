@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <script src="https://cdn.bootcss.com/jquery/2.1.0/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        function regist() {
+            $.ajax({
+                //几个参数需要注意一下
+                type: "POST",//方法类型
+                contentType: "application/json",
+                dataType: "json",//预期服务器返回的数据类型
+                url: "/user/regist",//url
+                data: $('#infoForm').serialize(),
+                async: false,
+                success: function (result) {
+                    console.log(result);//打印服务端返回的数据(调试用)
+                    if (result.resultCode == 200) {
+                        alert("退出成功！");
+                        window.location.href = "/system/loginH.html";//你可以跟换里面的网址，以便成功后跳转
+                    }
+                    ;
+                },
+                error: function () {
+                    alert("异常！");
+                }
+            });
+
+            // $('#infoForm').form('submit', {
+            //     url: "../user/regist",
+            //     onSubmit: function () {
+            //         // do some check
+            //         // return false to prevent submit;
+            //     },
+            //     success: function (data) {
+            //         data = $.parseJSON(data);
+            //         if (data.success) {
+            //             $.messager.alert('提示', '操作成功!', 'info', function () {
+            //                 // window.location.reload();
+            //                 window.location.href = "/static/loginH.html";//你可以跟换里面的网址，以便成功后跳转
+            //             });
+            //
+            //         } else {
+            //             $.messager.alert('提示', data.msg, 'info');
+            //         }
+            //     }
+            // });
+        }
+    </script>
+
+    <title>注册页面</title>
+</head>
+<body>
+
+<h3>注册</h3>
+<form id="infoForm" method="post" class="form-inline" role="form" enctype="multipart/form-data"><!-- action="/user/regist"-->
+    <div class="form-group">
+        <label class="col-sm-2 control-label">请输入注册信息</label>
+        <div class="col-sm-10">
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="sid" class="col-sm-2 control-label">学号:</label>
+        <div class="col-sm-10">
+            <input name="sid" id="sid" class="form-control"  placeholder="学号">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="name" class="col-sm-2 control-label">姓名:</label>
+        <div class="col-sm-10">
+            <input name="name" id="name" class="form-control"  placeholder="姓名">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="type" class="col-sm-2 control-label">账号类型:</label>
+        <div class="col-sm-10">
+            <input name="type" class="form-control" id="type" placeholder="账号类型">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="password" class="col-sm-2 control-label">密码:</label>
+        <div class="col-sm-10">
+            <input name="password" class="form-control" id="password" placeholder="密码">
+        </div>
+    </div>
+</form>
+
+
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-default" onclick="registH()">注册</button>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" onclick="window.location.href='/system/indexH.html'" class="btn btn-default">首页</button>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <script src="https://cdn.bootcss.com/jquery/2.1.0/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        function logout() {
+            $.ajax({
+                //几个参数需要注意一下
+                type: "POST",//方法类型
+                contentType: "application/json",
+                dataType: "json",//预期服务器返回的数据类型
+                url: "/user/logout",//url
+                async: false,
+                success: function (result) {
+                    console.log(result);//打印服务端返回的数据(调试用)
+                    if (result) {
+                        alert("SUCCESS");
+                        window.location.href = "/system/loginH.html";//你可以跟换里面的网址，以便成功后跳转
+                    }
+                    ;
+                },
+                error: function () {
+                    alert("异常！");
+                }
+            });
+        }
+    </script>
+
+    <title>运动会管理系统后台首页</title>
+</head>
+<body>
+
+<h3>运动会管理系统后台首页</h3>
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <button type="button" onclick="logout()" class="btn btn-default">登出</button>
+    </div>
+</div>
+</form>
+
+</body>
+</html>

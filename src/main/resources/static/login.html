@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="assets/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300"/>
+    <link rel="stylesheet" href="assets/css/ace.min.css"/>
+    <link rel="stylesheet" href="assets/css/ace-rtl.min.css"/>
+    <script src="assets/js/myjs/my.js"></script>
+
+    <title>登录注册</title>
+</head>
+
+<body class="login-layout">
+<div class="main-container">
+    <div class="main-content">
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
+                <div class="login-container" style="width: 450px;">
+                    <div class="center">
+                        <h1>
+                            <i class="icon-leaf green"></i>
+                            <span class="white">大学生运动管理信息系统</span>
+                        </h1>
+                        <h4 class="blue">中北大学</h4>
+                    </div>
+
+                    <div class="space-6"></div>
+
+                    <div class="position-relative">
+                        <!--登录 Begin-->
+                        <div id="login-box" class="login-box visible widget-box no-border">
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    <h4 class="header blue lighter bigger">
+                                        <i class="icon-coffee green"></i>
+                                        请输入您的信息
+                                    </h4>
+
+                                    <div class="space-6"></div>
+
+                                    <form id="infoForm" method="post" class="form-inline" role="form"
+                                          enctype="multipart/form-data">
+                                        <fieldset>
+                                            <label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input name="sid" id="sid" type="text" class="form-control"
+                                                                   placeholder="学号"/>
+															<i class="icon-user"></i>
+														</span>
+                                            </label>
+
+                                            <label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input name="password" id="password" type="password"
+                                                                   class="form-control"
+                                                                   placeholder="密码"/>
+															<i class="icon-lock"></i>
+														</span>
+                                            </label>
+
+                                            <div class="space"></div>
+
+                                            <div class="clearfix">
+                                                <label class="inline">
+                                                    <input type="checkbox" class="ace" name="isRemberPwdId" id="isRemberPwdId" />
+                                                    <span class="lbl">记住</span>
+                                                </label>
+
+                                                <button type="button"
+                                                        class="width-35 pull-right btn btn-sm btn-primary"
+                                                        onclick="login()">
+                                                    <i class="icon-key"></i>
+                                                    登录
+                                                </button>
+                                            </div>
+
+                                            <div class="space-4"></div>
+                                        </fieldset>
+                                    </form>
+
+
+                                </div><!-- /widget-main -->
+
+                                <div class="toolbar clearfix">
+                                    <div>
+                                        <a href="#" onclick="show_box('signup-box'); return false;"
+                                           class="user-signup-link">
+                                            注册
+                                            <i class="icon-arrow-right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--登录 End-->
+
+                        <!--注册 Begin-->
+                        <div id="signup-box" class="signup-box widget-box no-border">
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    <h4 class="header green lighter bigger">
+                                        <i class="icon-group blue"></i>
+                                        用户注册
+                                    </h4>
+
+                                    <div class="space-6"></div>
+
+                                    <form id="infoForm1" method="post" class="form-inline" role="form"
+                                          enctype="multipart/form-data">
+                                        <fieldset>
+
+                                            <label for="name" class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="name" class="form-control" name="name"
+                                                                   placeholder="姓名"/>
+															<i class="icon-user"></i>
+														</span>
+                                            </label>
+                                            <label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="text" class="form-control" name="sid"
+                                                                   placeholder="学号"/>
+															<i class="icon-user"></i>
+														</span>
+                                            </label>
+
+                                            <label class="block clearfix">
+
+                                                <span class="block input-icon input-icon-right">
+                                                    <select  placeholder="" class="form-control" name="collegeId">
+                                                        <option value="1" selected>机电工程学院</option>
+                                                        <option value="2">机械与制造机学院</option>
+                                                        <option value="3">计算机学院</option>
+                                                        <option value="4">经济与管理学院</option>
+                                                        <option value="5">人文与社会学院</option>
+                                                        <option value="6">艺术学院</option>
+                                                        <option value="7">体育学院</option>
+                                                         <option value="8">材料科学与工程学院</option>
+                                                        <option value="9">环境与安全工程学院</option>
+                                                        <option value="10">能源动力学院</option>
+                                                        <option value="11">仪器与电子学院</option>
+                                                        <option value="12">软件学院</option>
+                                                        <option value="13">研究生院</option>
+                                                        <option value="14">理学院</option>
+                                                    </select>
+                                                </span>
+
+                                            </label>
+
+                                                <label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+                                                            <select  placeholder="账号类型" class="form-control" name="type">
+                                                                    <!--<option value="1">各院负责人</option>
+                                                                    <option value="2">体育学院老师</option>-->
+                                                                    <option value="3">普通学生教师</option>
+                                                                </select>
+															<i class="icon-user"></i>
+														</span>
+                                            </label>
+
+                                            <label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+                                                           <input type="file" class="form-control" name="avatar" placeholder="头像">
+															<i class="icon-user"></i>
+														</span>
+                                            </label>
+
+                                            <label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="password" class="form-control" name="password"
+                                                                   id="password1"
+                                                                   placeholder="密码"/>
+															<i class="icon-lock"></i>
+														</span>
+                                            </label>
+
+                                            <label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="password" class="form-control"
+                                                                   name="rePassword" id="rePassword"
+                                                                   placeholder="确认密码"/>
+															<i class="icon-retweet"></i>
+														</span>
+                                            </label>
+
+                                            <div class="space-24"></div>
+
+                                            <div class="clearfix">
+                                                <button type="reset" class="width-30 pull-left btn btn-sm">
+                                                    <i class="icon-refresh"></i>
+                                                    重置
+                                                </button>
+
+                                                <button type="button"
+                                                        class="width-65 pull-right btn btn-sm btn-success"
+                                                        onclick="regist()">
+                                                    注册
+                                                    <i class="icon-arrow-right icon-on-right"></i>
+                                                </button>
+                                            </div>
+                                        </fieldset>
+                                    </form>
+                                </div>
+
+                                <div class="toolbar center">
+                                    <a href="#" onclick="show_box('login-box'); return false;"
+                                       class="back-to-login-link">
+                                        <i class="icon-arrow-left"></i>
+                                        返回登录
+                                    </a>
+                                </div>
+                            </div><!-- /widget-body -->
+                        </div>
+                        <!--注册 End-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!-- /.main-container -->
+<script src="assets/js/jquery-2.0.3.min.js"></script>
+<script type="text/javascript">
+    window.jQuery || document.write("<script src='assets/js/jquery-2.0.3.min.js'>" + "<" + "/script>");
+</script>
+<script type="text/javascript">
+    if ("ontouchend" in document) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+</script>
+<script type="text/javascript">
+    function show_box(id) {
+        jQuery('.widget-box.visible').removeClass('visible');
+        jQuery('#' + id).addClass('visible');
+    }
+</script>
+<script type="text/javascript">
+    function login() {
+        $.ajax({
+            //几个参数需要注意一下
+            type: "POST",//方法类型
+            // contentType: "application/json",
+            dataType: "json",//预期服务器返回的数据类型
+            url: "/user/login",//url
+            data: $('#infoForm').serialize(),
+            async: false,
+            success: function (result) {
+                if (result.httpStatus == 200) {
+                    alert("roles:"+result.data.roles);
+                    var name = result.data.name;
+                    var roleId = new Array();
+
+                    $.each(result.data.roles, function (i, item) {
+                        // alert("item"+item);
+                        roleId.push(item);
+                    });
+
+                    // alert("roledId  = "+roleId.toString());
+                    localStorage.setItem('roles',roleId);
+                    localStorage.setItem('sid',$("#sid").val());
+                    localStorage.setItem('username',name);
+
+                    alert("欢迎登陆大学生运动管理信息系统");
+                    window.location.href = "/static/index.html";
+
+                };
+            },
+            error: function () {
+                alert("账号信息有误！");
+                window.location.href = "/static/login.html";
+            }
+        });
+    }
+</script>
+
+<script type="text/javascript">
+    function regist() {
+        // alert($('#infoForm1').serialize());
+        $.ajax({
+            //几个参数需要注意一下
+            type: "POST",//方法类型
+            // contentType: "application/json",
+            dataType: "json",//预期服务器返回的数据类型
+            url: "/user/regist",//url
+            data: $('#infoForm1').serialize(),
+            async: false,
+            success: function (result) {
+                // console.log(result);//打印服务端返回的数据(调试用)
+                if (result.httpStatus == 200) {
+                    alert("注册成功！");
+                    window.location.href = "/static/login.html";//你可以跟换里面的网址，以便成功后跳转
+                }
+                ;
+            },
+            error: function () {
+                alert("注册信息有误！");
+            }
+        });
+    }
+</script>
+</body>
+</html>

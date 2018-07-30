@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.sports.mapper.SysProjectSignMapper" >
+  <resultMap id="BaseResultMap" type="com.example.sports.model.SysProjectSign" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="sys_user_sid" property="sysUserSid" jdbcType="VARCHAR" />
+    <result column="sys_college_id" property="sysCollegeId" jdbcType="INTEGER" />
+    <result column="sys_project_id" property="sysProjectId" jdbcType="INTEGER" />
+    <result column="sport_id" property="sportId" jdbcType="VARCHAR" />
+    <result column="team_type" property="teamType" jdbcType="INTEGER" />
+    <result column="sport_type" property="sportType" jdbcType="INTEGER" />
+    <result column="achievement" property="achievement" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, sys_user_sid, sys_college_id, sys_project_id, sport_id, team_type, sport_type, 
+    achievement, create_time, update_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.example.sports.model.SysProjectSignExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from sys_project_sign
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limitStart >= 0" >
+       limit ${limitStart} , ${limitEnd}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_project_sign
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from sys_project_sign
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.example.sports.model.SysProjectSignExample" >
+    delete from sys_project_sign
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.example.sports.model.SysProjectSign" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into sys_project_sign (sys_user_sid, sys_college_id, sys_project_id, 
+      sport_id, team_type, sport_type, 
+      achievement, create_time, update_time
+      )
+    values (#{sysUserSid,jdbcType=VARCHAR}, #{sysCollegeId,jdbcType=INTEGER}, #{sysProjectId,jdbcType=INTEGER}, 
+      #{sportId,jdbcType=VARCHAR}, #{teamType,jdbcType=INTEGER}, #{sportType,jdbcType=INTEGER}, 
+      #{achievement,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.sports.model.SysProjectSign" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into sys_project_sign
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sysUserSid != null" >
+        sys_user_sid,
+      </if>
+      <if test="sysCollegeId != null" >
+        sys_college_id,
+      </if>
+      <if test="sysProjectId != null" >
+        sys_project_id,
+      </if>
+      <if test="sportId != null" >
+        sport_id,
+      </if>
+      <if test="teamType != null" >
+        team_type,
+      </if>
+      <if test="sportType != null" >
+        sport_type,
+      </if>
+      <if test="achievement != null" >
+        achievement,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sysUserSid != null" >
+        #{sysUserSid,jdbcType=VARCHAR},
+      </if>
+      <if test="sysCollegeId != null" >
+        #{sysCollegeId,jdbcType=INTEGER},
+      </if>
+      <if test="sysProjectId != null" >
+        #{sysProjectId,jdbcType=INTEGER},
+      </if>
+      <if test="sportId != null" >
+        #{sportId,jdbcType=VARCHAR},
+      </if>
+      <if test="teamType != null" >
+        #{teamType,jdbcType=INTEGER},
+      </if>
+      <if test="sportType != null" >
+        #{sportType,jdbcType=INTEGER},
+      </if>
+      <if test="achievement != null" >
+        #{achievement,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.example.sports.model.SysProjectSignExample" resultType="java.lang.Integer" >
+    select count(*) from sys_project_sign
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update sys_project_sign
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.sysUserSid != null" >
+        sys_user_sid = #{record.sysUserSid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sysCollegeId != null" >
+        sys_college_id = #{record.sysCollegeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.sysProjectId != null" >
+        sys_project_id = #{record.sysProjectId,jdbcType=INTEGER},
+      </if>
+      <if test="record.sportId != null" >
+        sport_id = #{record.sportId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.teamType != null" >
+        team_type = #{record.teamType,jdbcType=INTEGER},
+      </if>
+      <if test="record.sportType != null" >
+        sport_type = #{record.sportType,jdbcType=INTEGER},
+      </if>
+      <if test="record.achievement != null" >
+        achievement = #{record.achievement,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update sys_project_sign
+    set id = #{record.id,jdbcType=INTEGER},
+      sys_user_sid = #{record.sysUserSid,jdbcType=VARCHAR},
+      sys_college_id = #{record.sysCollegeId,jdbcType=INTEGER},
+      sys_project_id = #{record.sysProjectId,jdbcType=INTEGER},
+      sport_id = #{record.sportId,jdbcType=VARCHAR},
+      team_type = #{record.teamType,jdbcType=INTEGER},
+      sport_type = #{record.sportType,jdbcType=INTEGER},
+      achievement = #{record.achievement,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.sports.model.SysProjectSign" >
+    update sys_project_sign
+    <set >
+      <if test="sysUserSid != null" >
+        sys_user_sid = #{sysUserSid,jdbcType=VARCHAR},
+      </if>
+      <if test="sysCollegeId != null" >
+        sys_college_id = #{sysCollegeId,jdbcType=INTEGER},
+      </if>
+      <if test="sysProjectId != null" >
+        sys_project_id = #{sysProjectId,jdbcType=INTEGER},
+      </if>
+      <if test="sportId != null" >
+        sport_id = #{sportId,jdbcType=VARCHAR},
+      </if>
+      <if test="teamType != null" >
+        team_type = #{teamType,jdbcType=INTEGER},
+      </if>
+      <if test="sportType != null" >
+        sport_type = #{sportType,jdbcType=INTEGER},
+      </if>
+      <if test="achievement != null" >
+        achievement = #{achievement,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.sports.model.SysProjectSign" >
+    update sys_project_sign
+    set sys_user_sid = #{sysUserSid,jdbcType=VARCHAR},
+      sys_college_id = #{sysCollegeId,jdbcType=INTEGER},
+      sys_project_id = #{sysProjectId,jdbcType=INTEGER},
+      sport_id = #{sportId,jdbcType=VARCHAR},
+      team_type = #{teamType,jdbcType=INTEGER},
+      sport_type = #{sportType,jdbcType=INTEGER},
+      achievement = #{achievement,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
