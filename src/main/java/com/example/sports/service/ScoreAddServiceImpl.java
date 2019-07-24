@@ -15,10 +15,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
- * @title
- * @Author huangjiarui
- * @date: 2018-05-02
+ * @author xingchao.lxc
  */
 @Service
 public class ScoreAddServiceImpl implements ScoreAddService {
@@ -99,7 +98,6 @@ public class ScoreAddServiceImpl implements ScoreAddService {
                             dto.setSportType(sysGradingModule.getSportType());
                             dto.setAchievement(sysGradingModule.getAchievement());
                             dto.setSid(sysUserStudent.getSysUserSid());
-                            dto.setName(sysUsers.get(0).getName());
 
                             dto.setSysProjectId(sysGradingModule.getSysProjectId());
                             dto.setSysProjectName(sysProjectMapper.selectByPrimaryKey(sysGradingModule.getSysProjectId().longValue()).getName());
@@ -108,13 +106,13 @@ public class ScoreAddServiceImpl implements ScoreAddService {
                             res.add(dto);
                         }
                     }
-                    }
-                    PageInfo<SchoolScoreRes> pageInfo = new PageInfo<>(res);
-                    pageInfo.setPageNum(resPageInfo.getPageNum());
-                    pageInfo.setPageSize(resPageInfo.getPageSize());
-                    pageInfo.setTotal(resPageInfo.getTotal());
-                    pageInfo.setPages(resPageInfo.getPages());
-                    return pageInfo;
+                }
+                PageInfo<SchoolScoreRes> pageInfo = new PageInfo<>(res);
+                pageInfo.setPageNum(resPageInfo.getPageNum());
+                pageInfo.setPageSize(resPageInfo.getPageSize());
+                pageInfo.setTotal(resPageInfo.getTotal());
+                pageInfo.setPages(resPageInfo.getPages());
+                return pageInfo;
             }
 
         }

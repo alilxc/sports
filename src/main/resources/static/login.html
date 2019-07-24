@@ -23,9 +23,8 @@
                     <div class="center">
                         <h1>
                             <i class="icon-leaf green"></i>
-                            <span class="white">大学生运动管理信息系统</span>
+                            <span class="white">运动管理信息系统</span>
                         </h1>
-                        <h4 class="blue">中北大学</h4>
                     </div>
 
                     <div class="space-6"></div>
@@ -48,7 +47,7 @@
                                             <label class="block clearfix">
 														<span class="block input-icon input-icon-right">
 															<input name="sid" id="sid" type="text" class="form-control"
-                                                                   placeholder="学号"/>
+                                                                   placeholder="用户名"/>
 															<i class="icon-user"></i>
 														</span>
                                             </label>
@@ -112,23 +111,15 @@
                                     <form id="infoForm1" method="post" class="form-inline" role="form"
                                           enctype="multipart/form-data">
                                         <fieldset>
-
-                                            <label for="name" class="block clearfix">
-														<span class="block input-icon input-icon-right">
-															<input type="name" class="form-control" name="name"
-                                                                   placeholder="姓名"/>
-															<i class="icon-user"></i>
-														</span>
-                                            </label>
                                             <label class="block clearfix">
 														<span class="block input-icon input-icon-right">
 															<input type="text" class="form-control" name="sid"
-                                                                   placeholder="学号"/>
+                                                                   placeholder="用户名"/>
 															<i class="icon-user"></i>
 														</span>
                                             </label>
 
-                                            <label class="block clearfix">
+                                            <!--<label class="block clearfix">
 
                                                 <span class="block input-icon input-icon-right">
                                                     <select  placeholder="" class="form-control" name="collegeId">
@@ -149,14 +140,13 @@
                                                     </select>
                                                 </span>
 
-                                            </label>
+                                            </label>-->
 
-                                                <label class="block clearfix">
+                                            <label class="block clearfix">
 														<span class="block input-icon input-icon-right">
                                                             <select  placeholder="账号类型" class="form-control" name="type">
-                                                                    <!--<option value="1">各院负责人</option>
-                                                                    <option value="2">体育学院老师</option>-->
-                                                                    <option value="3">普通学生教师</option>
+                                                                    <option value="1">裁判员</option>
+                                                                    <option value="2">教练员领队</option>
                                                                 </select>
 															<i class="icon-user"></i>
 														</span>
@@ -247,21 +237,20 @@
             async: false,
             success: function (result) {
                 if (result.httpStatus == 200) {
-                    alert("roles:"+result.data.roles);
                     var name = result.data.name;
-                    var roleId = new Array();
+                    var roles = result.data.roles;
+                    /*var roleId = new Array();
 
                     $.each(result.data.roles, function (i, item) {
                         // alert("item"+item);
                         roleId.push(item);
-                    });
+                    });*/
 
                     // alert("roledId  = "+roleId.toString());
-                    localStorage.setItem('roles',roleId);
+                    localStorage.setItem('roles',roles);
                     localStorage.setItem('sid',$("#sid").val());
                     localStorage.setItem('username',name);
 
-                    alert("欢迎登陆大学生运动管理信息系统");
                     window.location.href = "/static/index.html";
 
                 };

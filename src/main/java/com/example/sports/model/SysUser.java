@@ -3,19 +3,13 @@ package com.example.sports.model;
 import java.io.Serializable;
 import java.util.Date;
 
+
 /**
- * 
- *
- * @author hjr
- * @date 2018-04-24
- *
+ * @author xingchao.lxc
  */
 public class SysUser implements Serializable {
     /**  */
     private Long id;
-
-    /** 姓名 */
-    private String name;
 
     /** 学号/教师编号 */
     private String sid;
@@ -23,7 +17,7 @@ public class SysUser implements Serializable {
     /** 密码 */
     private String password;
 
-    /** 账号类型1、各院运动会负责人 2、体育学院教师 3、普通学生和教师 */
+    /** 账号类型1、运动会负责人 2、裁判员 3、普通参赛人员 */
     private Short type;
 
     /** 头像 */
@@ -33,10 +27,10 @@ public class SysUser implements Serializable {
     private Boolean frozen;
 
     /** 创建时间 */
-    private Date createTime;
+    private Long createTime;
 
     /** 更新时间 */
-    private Date updateTime;
+    private Long updateTime;
 
     private static final long serialVersionUID = 1L;
 
@@ -46,14 +40,6 @@ public class SysUser implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
     }
 
     public String getSid() {
@@ -96,19 +82,19 @@ public class SysUser implements Serializable {
         this.frozen = frozen;
     }
 
-    public Date getCreateTime() {
+    public Long getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(Long createTime) {
         this.createTime = createTime;
     }
 
-    public Date getUpdateTime() {
+    public Long getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(Long updateTime) {
         this.updateTime = updateTime;
     }
 
@@ -119,7 +105,6 @@ public class SysUser implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", name=").append(name);
         sb.append(", sid=").append(sid);
         sb.append(", password=").append(password);
         sb.append(", type=").append(type);

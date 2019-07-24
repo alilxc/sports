@@ -2,6 +2,7 @@ package com.example.sports.service;
 
 import com.example.sports.constant.ErrorContants;
 import com.example.sports.constant.Errors;
+import com.example.sports.constant.SysUserEnum;
 import com.example.sports.dto.request.LoginRequest;
 import com.example.sports.dto.request.RegistRequest;
 import com.example.sports.dto.response.LoginRes;
@@ -29,10 +30,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
- * @title
- * @Author huangjiarui
- * @date: 2018-04-24
+ * @author xingchao.lxc
  */
 @Service
 public class SysServiceImpl implements SysService {
@@ -71,11 +71,21 @@ public class SysServiceImpl implements SysService {
         loginRes.setId(sysUser.getId().intValue());
         loginRes.setType(sysUser.getType());
         loginRes.setSid(sysUser.getSid());
-        loginRes.setName(sysUser.getName());
         loginRes.setAvatar(sysUser.getAvatar());
 
+        List<Integer> roleId = new ArrayList<>();
+        if(sysUser.getType() == SysUserEnum.ADMIN.getType()){
+            loginRes.setRoles(SysUserEnum.ADMIN.getRoles());
+        }else if(sysUser.getType() == SysUserEnum.LEADER.getType()){
+            loginRes.setRoles(SysUserEnum.LEADER.getRoles());
+        }else{
+            loginRes.setRoles(SysUserEnum.REFEREE.getRoles());
+        }
+
+        return loginRes;
+
         //查userPt表
-        SysUserPtExample userPtExample = new SysUserPtExample();
+        /*SysUserPtExample userPtExample = new SysUserPtExample();
         SysUserPtExample.Criteria criteria = userPtExample.createCriteria();
         criteria.andSysUserIdEqualTo(sysUser.getId().intValue());
 
@@ -102,7 +112,7 @@ public class SysServiceImpl implements SysService {
 
             return loginRes;
         }
-            return null;
+            return null;*/
     }
 
 
@@ -115,8 +125,8 @@ public class SysServiceImpl implements SysService {
         if (sysUser == null) {
             try {
                 SysUser sysUser1 = new SysUser();
+                long timestamp = System.currentTimeMillis();
                 sysUser1.setSid(registRequest.getSid());
-                sysUser1.setName(registRequest.getName());
                 registRequest.setType((short) 3);
                 if (registRequest.getType() != 3) {
                     throw new BusinessException(ErrorContants.PARAMS_INAVAILABLE, "❌！");
@@ -129,9 +139,12 @@ public class SysServiceImpl implements SysService {
                     throw new BusinessException(ErrorContants.PARAMS_INAVAILABLE, "❌！");
                 }
                 sysUser1.setPassword(PasswordUtil.encode(registRequest.getPassword()));
+                sysUser1.setCreateTime(timestamp);
+                sysUser1.setUpdateTime(timestamp);
+                sysUser1.setFrozen(false);
                 sysUserMapper.insertSelective(sysUser1);//创建用户账号
 
-                SysUserStudent sysUserStudent = new SysUserStudent();
+                /*SysUserStudent sysUserStudent = new SysUserStudent();
                 sysUserStudent.setSysUserSid(registRequest.getSid());
                 sysUserStudent.setSysCollege(registRequest.getCollegeId());
 
@@ -155,7 +168,7 @@ public class SysServiceImpl implements SysService {
                     sysUserPt.setMark(String.valueOf(roleId.get(0)));
                     sysUserPt.setRoleName("成绩查询");
                     sysUserPtMapper.insertSelective(sysUserPt);
-                }
+                }*/
 
 
 

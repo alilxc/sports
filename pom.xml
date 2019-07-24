@@ -163,7 +163,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
+            <version>2.0.1.RELEASE</version>
         </dependency>
         <!--End打包需要的-->
 

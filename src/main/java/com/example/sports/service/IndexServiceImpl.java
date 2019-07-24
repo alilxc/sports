@@ -9,10 +9,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
- * @title
- * @Author huangjiarui
- * @date: 2018-05-06
+ * @author xingchao.lxc
  */
 @Service
 public class IndexServiceImpl implements IndexService {
@@ -23,7 +22,9 @@ public class IndexServiceImpl implements IndexService {
 
     @Override
     public List<SchoolScoreRes> schoolPScoreInfo() {
-        List<SchoolScoreRes> res = sysMapper.selectByProject();
+        //todo 增加记录
+        //List<SchoolScoreRes> res = sysMapper.selectByProject();
+        List<SchoolScoreRes> res = new ArrayList<>();
         System.out.println(res.toString());
         return res;
     }

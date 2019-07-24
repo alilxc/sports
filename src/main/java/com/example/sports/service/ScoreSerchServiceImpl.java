@@ -14,10 +14,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
- * @title
- * @Author huangjiarui
- * @date: 2018-05-02
+ * @author xingchao.lxc
  */
 @Service
 public class ScoreSerchServiceImpl implements ScoreSerchService {
@@ -96,9 +95,6 @@ public class ScoreSerchServiceImpl implements ScoreSerchService {
                             dto.setSysUserSid(String.valueOf(sid));
                             dto.setIntegral(sysUserStudent.getIntegral());
 
-                            //姓名
-                            dto.setName(sysUser.getName());
-
                             //查询学院名
                             dto.setCollegename(sysCollegeMapper.selectByPrimaryKey(sysUserStudent.getSysCollege().longValue()).getName());
 
@@ -159,8 +155,7 @@ public class ScoreSerchServiceImpl implements ScoreSerchService {
 
                     if (sysUsers.size()>0)
                     {
-                      SysUser  sysUser=sysUsers.get(0);
-                        name = sysUser.getName(); //姓名
+                        SysUser  sysUser=sysUsers.get(0);
                         user_id = sysUser.getId(); //user表id
 
                         //sportType teamType matchType achievement projectid 查询学生成绩表

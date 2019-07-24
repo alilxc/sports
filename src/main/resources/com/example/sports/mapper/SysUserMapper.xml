@@ -3,14 +3,13 @@
 <mapper namespace="com.example.sports.mapper.SysUserMapper" >
   <resultMap id="BaseResultMap" type="com.example.sports.model.SysUser" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="sid" property="sid" jdbcType="VARCHAR" />
     <result column="password" property="password" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="SMALLINT" />
     <result column="avatar" property="avatar" jdbcType="VARCHAR" />
     <result column="frozen" property="frozen" jdbcType="BIT" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="BIGINT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -71,7 +70,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, name, sid, password, type, avatar, frozen, create_time, update_time
+    id, sid, password, type, avatar, frozen, create_time, update_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.example.sports.model.SysUserExample" >
     select
@@ -88,23 +87,23 @@
       order by ${orderByClause}
     </if>
     <if test="limitStart >= 0" >
-       limit ${limitStart} , ${limitEnd}
+      limit ${limitStart} , ${limitEnd}
     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from sys_user
     where id = #{id,jdbcType=INTEGER}
   </select>
-<!--  <select id="selectBySid" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select
-    <include refid="Base_Column_List" />
-    from sys_user
-    <if test="sid!=null">
-      where sid = #{id,jdbcType=VARCHAR}
-    </if>
-  </select>-->
+  <!--  <select id="selectBySid" resultMap="BaseResultMap" parameterType="java.lang.String" >
+      select
+      <include refid="Base_Column_List" />
+      from sys_user
+      <if test="sid!=null">
+        where sid = #{id,jdbcType=VARCHAR}
+      </if>
+    </select>-->
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from sys_user
     where id = #{id,jdbcType=INTEGER}
@@ -119,12 +118,12 @@
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into sys_user (name, sid, password, 
-      type, avatar, frozen, 
-      create_time, update_time)
-    values (#{name,jdbcType=VARCHAR}, #{sid,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{type,jdbcType=SMALLINT}, #{avatar,jdbcType=VARCHAR}, #{frozen,jdbcType=BIT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+    insert into sys_user (sid, password,
+    type, avatar, frozen,
+    create_time, update_time)
+    values (#{sid,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+    #{type,jdbcType=SMALLINT}, #{avatar,jdbcType=VARCHAR}, #{frozen,jdbcType=BIT},
+    #{createTime,jdbcType=BIGINT}, #{updateTime,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" parameterType="com.example.sports.model.SysUser" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
@@ -132,9 +131,6 @@
     </selectKey>
     insert into sys_user
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="name != null" >
-        name,
-      </if>
       <if test="sid != null" >
         sid,
       </if>
@@ -158,9 +154,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="name != null" >
-        #{name,jdbcType=VARCHAR},
-      </if>
       <if test="sid != null" >
         #{sid,jdbcType=VARCHAR},
       </if>
@@ -177,10 +170,10 @@
         #{frozen,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
+        #{createTime,jdbcType=BIGINT},
       </if>
       <if test="updateTime != null" >
-        #{updateTime,jdbcType=TIMESTAMP},
+        #{updateTime,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -195,9 +188,6 @@
     <set >
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
-      </if>
-      <if test="record.name != null" >
-        name = #{record.name,jdbcType=VARCHAR},
       </if>
       <if test="record.sid != null" >
         sid = #{record.sid,jdbcType=VARCHAR},
@@ -215,10 +205,10 @@
         frozen = #{record.frozen,jdbcType=BIT},
       </if>
       <if test="record.createTime != null" >
-        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        create_time = #{record.createTime,jdbcType=BIGINT},
       </if>
       <if test="record.updateTime != null" >
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+        update_time = #{record.updateTime,jdbcType=BIGINT},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -228,14 +218,13 @@
   <update id="updateByExample" parameterType="map" >
     update sys_user
     set id = #{record.id,jdbcType=INTEGER},
-      name = #{record.name,jdbcType=VARCHAR},
-      sid = #{record.sid,jdbcType=VARCHAR},
-      password = #{record.password,jdbcType=VARCHAR},
-      type = #{record.type,jdbcType=SMALLINT},
-      avatar = #{record.avatar,jdbcType=VARCHAR},
-      frozen = #{record.frozen,jdbcType=BIT},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    sid = #{record.sid,jdbcType=VARCHAR},
+    password = #{record.password,jdbcType=VARCHAR},
+    type = #{record.type,jdbcType=SMALLINT},
+    avatar = #{record.avatar,jdbcType=VARCHAR},
+    frozen = #{record.frozen,jdbcType=BIT},
+    create_time = #{record.createTime,jdbcType=BIGINT},
+    update_time = #{record.updateTime,jdbcType=BIGINT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -243,9 +232,6 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.example.sports.model.SysUser" >
     update sys_user
     <set >
-      <if test="name != null" >
-        name = #{name,jdbcType=VARCHAR},
-      </if>
       <if test="sid != null" >
         sid = #{sid,jdbcType=VARCHAR},
       </if>
@@ -262,24 +248,24 @@
         frozen = #{frozen,jdbcType=BIT},
       </if>
       <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=TIMESTAMP},
+        create_time = #{createTime,jdbcType=BIGINT},
       </if>
       <if test="updateTime != null" >
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
+        update_time = #{updateTime,jdbcType=BIGINT},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.example.sports.model.SysUser" >
     update sys_user
-    set name = #{name,jdbcType=VARCHAR},
+    set
       sid = #{sid,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
       type = #{type,jdbcType=SMALLINT},
       avatar = #{avatar,jdbcType=VARCHAR},
       frozen = #{frozen,jdbcType=BIT},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      create_time = #{createTime,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=BIGINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

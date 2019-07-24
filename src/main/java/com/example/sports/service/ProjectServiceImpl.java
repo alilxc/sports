@@ -15,10 +15,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
- * @title
- * @Author huangjiarui
- * @date: 2018-05-02
+ * @author xingchao.lxc
  */
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -45,7 +44,6 @@ public class ProjectServiceImpl implements ProjectService {
                 ProjectRes dto = new ProjectRes();
                 dto.setName(sysProject.getName());
                 dto.setId(sysProject.getId());
-                dto.setScore(sysProject.getScore());
                 res.add(dto);
             }
             PageInfo<ProjectRes> resPageInfo = new PageInfo<>(res);
@@ -56,15 +54,15 @@ public class ProjectServiceImpl implements ProjectService {
             return resPageInfo;
         }
 
-    return  null;
-}
+        return  null;
+    }
 
     @Override
     public void addProject(ProjectRequest request) {
-        if (StringUtils.isNotBlank(request.getName()) && StringUtils.isNotBlank(request.getScore())) {
+        if (StringUtils.isNotBlank(request.getName()) && StringUtils.isNotBlank(request.getOrganization())) {
             SysProject sysProject = new SysProject();
             sysProject.setName(request.getName());
-            sysProject.setScore(request.getScore());
+            sysProject.setOrganization(request.getOrganization());
             sysProjectMapper.insertSelective(sysProject);
         }
     }
@@ -78,14 +76,14 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public void modifyProject(ProjectRequest request, Long id) {
-        if (StringUtils.isNotBlank(request.getName()) && StringUtils.isNotBlank(request.getScore())
+        if (StringUtils.isNotBlank(request.getName()) && StringUtils.isNotBlank(request.getOrganization())
                 && id > 0) {
             SysProjectExample example = new SysProjectExample();
             SysProjectExample.Criteria criteria = example.createCriteria();
             criteria.andIdEqualTo(id);
             SysProject sysProject = new SysProject();
             sysProject.setName(request.getName());
-            sysProject.setScore(request.getScore());
+            sysProject.setOrganization(request.getOrganization());
             sysProjectMapper.updateByExampleSelective(sysProject, example);
         }
     }

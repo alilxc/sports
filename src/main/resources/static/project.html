@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="utf-8"/>
-	<title>大学生运动管理信息系统</title>
+	<title>运动管理信息系统</title>
 	<meta name="keywords" content=""/>
 	<meta name="description" content=""/>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -21,8 +21,8 @@
 			width: 100%;
 		}
 
-			 /*弹框*/
-		 html{height: 100%;}
+		/*弹框*/
+		html{height: 100%;}
 		body{position: relative;height: 100%;}
 		.dialogbody{position: absolute;z-index: 999;width: 100%;height: 100%;background: rgba(0,0,0,.8);top: 0;left: 0;display: none;}
 		.dialogbox{position: absolute;display: block;width: 800px;height: 400px;background: #fff;border-radius: 15px;top: 0;left: 0;right: 0;bottom: 0;margin: auto;}
@@ -47,7 +47,7 @@
 			<a href="#" class="navbar-brand">
 				<small>
 					<i class="icon-leaf"></i>
-					大学生运动管理信息系统
+					运动管理信息系统
 				</small>
 			</a>
 		</div>
@@ -221,8 +221,9 @@
 								<thead>
 								<tr>
 									<th>序号</th>
-									<th>项目名称</th>
-									<th>校级记录</th>
+									<th>比赛名称</th>
+									<th>组办方</th>
+									<th>起止日期</th>
 									<th>修改</th>
 									<th>删除</th>
 								</tr>
@@ -253,23 +254,37 @@
 					<div class="space-4"></div>
 
 					<div class="form-group">
-						<label class="col-sm-5 control-label no-padding-right">项目名称:</label>
+						<label class="col-sm-3 control-label no-padding-right">比赛名称:</label>
 
-						<div class="col-sm-6">
+						<div class="col-sm-6" >
 							<input type="text" id="name" name="name" placeholder="" class="col-xs-10 col-sm-5" />
 						</div>
 					</div>
 
 					<div class="space-4"></div>
 
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right">组办方:</label>
+
+						<div class="col-sm-6">
+							<input type="text" id="organization" name="organization" placeholder="" class="col-xs-10 col-sm-5" />
+						</div>
+					</div>
 
 					<div class="space-4"></div>
 
 					<div class="form-group">
-						<label class="col-sm-5 control-label no-padding-right">校级记录:</label>
-
-						<div class="col-sm-6">
-							<input type="text" id="score" name="score" placeholder="" class="col-xs-10 col-sm-5" />
+						<label class="col-xs-3 control-label no-padding-right">起止日期</label>
+						<div class="col-xs-6">
+							<div class="input-daterange input-group">
+								<input type=date data-date-format="yyyy-mm-dd"
+									   class="input-sm form-control date-picker" name="activeStart" />
+								<span class="input-group-addon"> <i
+										class="fa fa-exchange"></i></span>
+								<input type=date
+									   data-date-format="yyyy-mm-dd"
+									   class="input-sm form-control date-picker" name="activeFinish" />
+							</div>
 						</div>
 					</div>
 
@@ -312,7 +327,7 @@
 					<div class="space-4"></div>
 
 					<div class="form-group">
-						<label class="col-sm-5 control-label no-padding-right">项目:</label>
+						<label class="col-sm-5 control-label no-padding-right">比赛名称:</label>
 
 						<div class="col-sm-6">
 							<input type="text" id="modname" name="name" placeholder="" class="col-xs-10 col-sm-5" />
@@ -322,10 +337,10 @@
 					<div class="space-4"></div>
 
 					<div class="form-group">
-						<label class="col-sm-5 control-label no-padding-right">校级记录:</label>
+						<label class="col-sm-5 control-label no-padding-right">组办方:</label>
 
 						<div class="col-sm-6">
-							<input type="text" id="modscore" name="score" placeholder="" class="col-xs-10 col-sm-5" />
+							<input type="text" id="modorganization" name="organization" placeholder="" class="col-xs-10 col-sm-5" />
 						</div>
 					</div>
 
@@ -443,7 +458,7 @@
             type: "POST",
             contentType: "application/json",
             dataType: "json",
-			data:{pageSize: 50,pageNum:1},
+            data:{pageSize: 50,pageNum:1},
             url: "/projectController/adminRoleList",
             async: false,
             success: function (result) {
@@ -456,7 +471,7 @@
                     content+="<tr>" +
                         "<td class='center'>"+item.id+"</td>" +
                         "<td>" + item.name+"</td>" +
-                        "<td>"+item.score+ "</td>" +
+                        "<td>"+item.organization+ "</td>" +
                         "<td class='hidden-480'>" +
                         "<div class='visible-md visible-lg hidden-sm hidden-xs action-buttons'>" +
                         "<a class='green '>" +
@@ -482,19 +497,19 @@
         $('.dialogbody.modify').css({'display':'block'})
         var aid = $(this).parents('tr').children('td.center').text();
         var aname = $(this).parents('tr').children('td').eq(1).text();
-        var ascore = $(this).parents('tr').children('td').eq(2).text();
+        var aorganization = $(this).parents('tr').children('td').eq(2).text();
         var obj = $(this).parents('tr')
         $('#modname').val(aname);
-        $('#modscore').val(ascore);
+        $('#modorganization').val(aorganization);
         $('#modifyProject').click(function () {
             var newName = $('#modname').val();
-            var newScore = $('#modscore').val();
+            var newOrganization = $('#modorganization').val();
             $.ajax({
                 type: "post",
                 dataType: "json",
                 async:'false',
                 url: "/projectController/modifyProject",
-                data:{id:aid,name:newName,score:newScore},
+                data:{id:aid,name:newName,organization:newOrganization},
                 success:function (res) {
                     $('.dialogbody').css({'display':'none'})
                     window.location.href = '/static/project.html'

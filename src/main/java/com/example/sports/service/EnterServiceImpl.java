@@ -19,10 +19,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
 /**
- * @title
- * @Author huangjiarui
- * @date: 2018-05-02
+ * @author xingchao.lxc
  */
 @Service
 public class EnterServiceImpl implements EnterService {
@@ -88,41 +87,40 @@ public class EnterServiceImpl implements EnterService {
 
             if (sysProjectSignList.size() > 0) {
 
-            for (SysProjectSign sysProjectSign : sysProjectSignList) {
-                EnterInfoRes dto = new EnterInfoRes();
-                SysCollege sysCollege = sysCollegeMapper.selectByPrimaryKey(Long.valueOf(request.getCollegeId()));
+                for (SysProjectSign sysProjectSign : sysProjectSignList) {
+                    EnterInfoRes dto = new EnterInfoRes();
+                    SysCollege sysCollege = sysCollegeMapper.selectByPrimaryKey(Long.valueOf(request.getCollegeId()));
 
-                dto.setCollgeName(sysCollege.getName());//院系
-                dto.setSysUserSid(sysProjectSign.getSysUserSid());//学号
+                    dto.setCollgeName(sysCollege.getName());//院系
+                    dto.setSysUserSid(sysProjectSign.getSysUserSid());//学号
 
-                //查user表取name
-                criteria1.andSidEqualTo(request.getSysUserSid());
+                    //查user表取name
+                    criteria1.andSidEqualTo(request.getSysUserSid());
 
-                List<SysUser> sysUsers = sysUserMapper.selectByExample(example1);
-                if (sysUsers.size() > 0 && sysProjectMapper.selectByPrimaryKey(sysProjectSign.getSysProjectId().longValue())!=null) { //唯一
-                    dto.setStudentName(sysUsers.get(0).getName());//姓名
+                    List<SysUser> sysUsers = sysUserMapper.selectByExample(example1);
+                    if (sysUsers.size() > 0 && sysProjectMapper.selectByPrimaryKey(sysProjectSign.getSysProjectId().longValue())!=null) { //唯一
 
-                    dto.setSysProject(sysProjectMapper.selectByPrimaryKey(sysProjectSign.getSysProjectId().longValue()).getName());//项目名称
-                    dto.setSportType(sysProjectSign.getSportType());//项目类型
-                    dto.setSportId(sysProjectSign.getSportId());//运动员编号
-                    dto.setTeamType(sysProjectSign.getTeamType());
-                    res.add(dto);
-                    System.out.println(dto.toString());
+                        dto.setSysProject(sysProjectMapper.selectByPrimaryKey(sysProjectSign.getSysProjectId().longValue()).getName());//项目名称
+                        dto.setSportType(sysProjectSign.getSportType());//项目类型
+                        dto.setSportId(sysProjectSign.getSportId());//运动员编号
+                        dto.setTeamType(sysProjectSign.getTeamType());
+                        res.add(dto);
+                        System.out.println(dto.toString());
+                    }
                 }
+                PageInfo<EnterInfoRes> pageInfo = new PageInfo(res);//将循环遍历后的新建List中元素放入返回PageInfo中
+                pageInfo.setPages(resPage.getPages());//总页数
+                pageInfo.setTotal(resPage.getTotal());//总条数
+                pageInfo.setPageSize(resPage.getPageSize());//每页大小
+                pageInfo.setPageNum(resPage.getPageNum());//当前页
+                return pageInfo;//返回分页完成的数据
             }
-            PageInfo<EnterInfoRes> pageInfo = new PageInfo(res);//将循环遍历后的新建List中元素放入返回PageInfo中
-            pageInfo.setPages(resPage.getPages());//总页数
-            pageInfo.setTotal(resPage.getTotal());//总条数
-            pageInfo.setPageSize(resPage.getPageSize());//每页大小
-            pageInfo.setPageNum(resPage.getPageNum());//当前页
-            return pageInfo;//返回分页完成的数据
-        }
-        else {
+            else {
                 throw new BusinessException(ErrorContants.NO_PT,"未查询到相关信息");
             }
         }
         return null;
-}
+    }
     @Override
     public List<SysCollege> sysCollegeInfo() {
         SysCollegeExample example = new SysCollegeExample();

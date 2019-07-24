@@ -2,21 +2,23 @@ package com.example.sports.dto.response;
 
 import io.swagger.annotations.ApiModelProperty;
 
+
 /**
- * @title
- * @Author huangjiarui
- * @date: 2018-05-03
+ * @author xingchao.lxc
  */
 public class ProjectRes {
 
     @ApiModelProperty(value = "id")
     private Long id;
 
-    @ApiModelProperty(value = "项目名称")
+    @ApiModelProperty(value = "比赛名称")
     private String name;
 
-    @ApiModelProperty(value = "校级记录")
-    private String score;
+    @ApiModelProperty(value = "组办方")
+    private String organization;
+
+    @ApiModelProperty(value = "举办时间")
+    private String durationTime;
 
     public Long getId() {
         return id;
@@ -34,12 +36,20 @@ public class ProjectRes {
         this.name = name;
     }
 
-    public String getScore() {
-        return score;
+    public String getOrganization() {
+        return organization;
     }
 
-    public void setScore(String score) {
-        this.score = score;
+    public void setOrganization(String organization) {
+        this.organization = organization;
+    }
+
+    public String getDurationTime() {
+        return durationTime;
+    }
+
+    public void setDurationTime(String durationTime) {
+        this.durationTime = durationTime;
     }
 
     @Override

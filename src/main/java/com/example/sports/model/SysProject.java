@@ -3,12 +3,9 @@ package com.example.sports.model;
 import java.io.Serializable;
 import java.util.Date;
 
+
 /**
- * 
- *
- * @author hjr
- * @date 2018-04-24
- *
+ * @author xingchao.lxc
  */
 public class SysProject implements Serializable {
     /**  */
@@ -17,14 +14,24 @@ public class SysProject implements Serializable {
     /** 项目名称 */
     private String name;
 
-    /** 校级记录 */
-    private String score;
+    /** 组办方 */
+    private String organization;
 
     /** 创建时间 */
-    private Date createTime;
+    private Long createTime;
 
     /** 更新时间 */
-    private Date updateTime;
+    private Long updateTime;
+
+    /**
+     *  比赛开始时间
+     */
+    private Long activeStart;
+
+    /**
+     * 比赛结束时间
+     */
+    private Long activeFinish;
 
     private static final long serialVersionUID = 1L;
 
@@ -44,28 +51,44 @@ public class SysProject implements Serializable {
         this.name = name == null ? null : name.trim();
     }
 
-    public String getScore() {
-        return score;
+    public String getOrganization() {
+        return organization;
     }
 
-    public void setScore(String score) {
-        this.score = score == null ? null : score.trim();
+    public void setOrganization(String organization) {
+        this.organization = organization;
     }
 
-    public Date getCreateTime() {
+    public Long getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(Long createTime) {
         this.createTime = createTime;
     }
 
-    public Date getUpdateTime() {
+    public Long getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(Long updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Long getActiveStart() {
+        return activeStart;
+    }
+
+    public void setActiveStart(Long activeStart) {
+        this.activeStart = activeStart;
+    }
+
+    public Long getActiveFinish() {
+        return activeFinish;
+    }
+
+    public void setActiveFinish(Long activeFinish) {
+        this.activeFinish = activeFinish;
     }
 
     @Override
@@ -76,7 +99,7 @@ public class SysProject implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", name=").append(name);
-        sb.append(", score=").append(score);
+        sb.append(", organization=").append(organization);
         sb.append(", createTime=").append(createTime);
         sb.append(", updateTime=").append(updateTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);

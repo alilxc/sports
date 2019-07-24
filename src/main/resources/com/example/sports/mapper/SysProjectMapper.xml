@@ -4,9 +4,11 @@
   <resultMap id="BaseResultMap" type="com.example.sports.model.SysProject" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="score" property="score" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="organization" property="organization" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="BIGINT" />
+    <result column="active_start" property="activeStart" jdbcType="BIGINT" />
+    <result column="active_finish" property="activeFinish" jdbcType="BIGINT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -67,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, name, score, create_time, update_time
+    id, name, organization, create_time, update_time, active_start, active_finish
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.example.sports.model.SysProjectExample" >
     select
@@ -84,11 +86,11 @@
       order by ${orderByClause}
     </if>
     <if test="limitStart >= 0" >
-       limit ${limitStart} , ${limitEnd}
+      limit ${limitStart} , ${limitEnd}
     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from sys_project
     where id = #{id,jdbcType=INTEGER}
@@ -107,10 +109,10 @@
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into sys_project (name, score, create_time, 
-      update_time)
-    values (#{name,jdbcType=VARCHAR}, #{score,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+    insert into sys_project (name, organization, create_time,
+    update_time, active_start, active_finish)
+    values (#{name,jdbcType=VARCHAR}, #{organization,jdbcType=VARCHAR}, #{createTime,jdbcType=BIGINT},
+    #{updateTime,jdbcType=BIGINT}, #{activeStart,jdbcType=BIGINT}, #{activeFinish,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" parameterType="com.example.sports.model.SysProject" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
@@ -121,8 +123,8 @@
       <if test="name != null" >
         name,
       </if>
-      <if test="score != null" >
-        score,
+      <if test="organization != null" >
+        organization,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -130,19 +132,31 @@
       <if test="updateTime != null" >
         update_time,
       </if>
+      <if test="activeStart != null" >
+        create_start,
+      </if>
+      <if test="activeFinish != null" >
+        active_finish,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="name != null" >
         #{name,jdbcType=VARCHAR},
       </if>
-      <if test="score != null" >
-        #{score,jdbcType=VARCHAR},
+      <if test="organization != null" >
+        #{organization,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
+        #{createTime,jdbcType=BIGINT},
       </if>
       <if test="updateTime != null" >
-        #{updateTime,jdbcType=TIMESTAMP},
+        #{updateTime,jdbcType=BIGINT},
+      </if>
+      <if test="activeStart != null" >
+        #{activeStart,jdbcType=BIGINT},
+      </if>
+      <if test="activeFinish != null" >
+        #{activeFinish,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -161,14 +175,20 @@
       <if test="record.name != null" >
         name = #{record.name,jdbcType=VARCHAR},
       </if>
-      <if test="record.score != null" >
-        score = #{record.score,jdbcType=VARCHAR},
+      <if test="record.organization != null" >
+        organization = #{record.organization,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null" >
-        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        create_time = #{record.createTime,jdbcType=BIGINT},
       </if>
       <if test="record.updateTime != null" >
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+        update_time = #{record.updateTime,jdbcType=BIGINT},
+      </if>
+      <if test="record.activeStart != null" >
+        active_start = #{record.activeStart,jdbcType=BIGINT},
+      </if>
+      <if test="record.activeFinish != null" >
+        active_finish = #{record.activeFinish,jdbcType=BIGINT},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -178,10 +198,12 @@
   <update id="updateByExample" parameterType="map" >
     update sys_project
     set id = #{record.id,jdbcType=INTEGER},
-      name = #{record.name,jdbcType=VARCHAR},
-      score = #{record.score,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    name = #{record.name,jdbcType=VARCHAR},
+    organization = #{record.organization,jdbcType=VARCHAR},
+    create_time = #{record.createTime,jdbcType=BIGINT},
+    update_time = #{record.updateTime,jdbcType=BIGINT},
+    active_start = #{record.activeStart,jdbcType=BIGINT},
+    active_finish = #{record.activeFinish,jdbcType=BIGINT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -192,14 +214,20 @@
       <if test="name != null" >
         name = #{name,jdbcType=VARCHAR},
       </if>
-      <if test="score != null" >
-        score = #{score,jdbcType=VARCHAR},
+      <if test="organization != null" >
+        organization = #{organization,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
-        create_time = #{createTime,jdbcType=TIMESTAMP},
+        create_time = #{createTime,jdbcType=BIGINT},
       </if>
       <if test="updateTime != null" >
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
+        update_time = #{updateTime,jdbcType=BIGINT},
+      </if>
+      <if test="activeStart != null" >
+        active_start = #{activeStart,jdbcType=BIGINT},
+      </if>
+      <if test="activeFinish != null" >
+        active_finish = #{activeFinish,jdbcType=BIGINT},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -207,9 +235,11 @@
   <update id="updateByPrimaryKey" parameterType="com.example.sports.model.SysProject" >
     update sys_project
     set name = #{name,jdbcType=VARCHAR},
-      score = #{score,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      organization = #{organization,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=BIGINT},
+       active_start = #{activeStart,jdbcType=BIGINT},
+      active_finish = #{activeFinish,jdbcType=BIGINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

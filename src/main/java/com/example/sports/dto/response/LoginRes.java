@@ -4,10 +4,9 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;
 
+
 /**
- * @title
- * @Author huangjiarui
- * @date: 2018-04-24
+ * @author xingchao.lxc
  */
 public class LoginRes {
 
@@ -24,7 +23,7 @@ public class LoginRes {
     private String avatar;
 
     @ApiModelProperty("权限")
-    List<Integer> roles;
+    String roles;
 
     public Integer getId() {
         return id;
@@ -66,11 +65,11 @@ public class LoginRes {
         this.avatar = avatar;
     }
 
-    public List<Integer> getRoles() {
+    public String getRoles() {
         return roles;
     }
 
-    public void setRoles(List<Integer> roles) {
+    public void setRoles(String roles) {
         this.roles = roles;
     }
 

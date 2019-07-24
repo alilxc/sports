@@ -23,10 +23,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
- * @title
- * @Author huangjiarui
- * @date: 2018-04-29
+ * @author xingchao.lxc
  */
 @Service
 public class RoleServiceImpl implements RoleService {
@@ -82,25 +81,25 @@ public class RoleServiceImpl implements RoleService {
         //查user表获取userid
         SysUserExample sysUserExample = new SysUserExample();
         SysUserExample.Criteria criteria = sysUserExample.createCriteria();
-       criteria.andSidEqualTo(String.valueOf(sId));
-       List<SysUser> sysUsers = sysUserMapper.selectByExample(sysUserExample);
+        criteria.andSidEqualTo(String.valueOf(sId));
+        List<SysUser> sysUsers = sysUserMapper.selectByExample(sysUserExample);
 
-       if (sysUsers.size()>0 && sysUserPt !=null)
-       {
-           SysUser sysUser = sysUsers.get(0);
-           sysUserPt.setSysUserId(sysUser.getId().intValue());
-           System.out.println(roleId.toString());
-           String roleName = "";
-           String roleId2 = "";
-           for (int i = 0; i < roleId.length; i++) {
-               SysModule sysModule = sysModuleMapper.selectByPrimaryKey(Long.valueOf(roleId[i]));
-               roleName += sysModule.getModuleName() + " ";
-               roleId2 += sysModule.getId()+" ";
-               sysUserPt.setRoleName(roleName);
-               sysUserPt.setMark(roleId2);
-           }
-           sysUserPtMapper.updateByPrimaryKey(sysUserPt);
-       }
+        if (sysUsers.size()>0 && sysUserPt !=null)
+        {
+            SysUser sysUser = sysUsers.get(0);
+            sysUserPt.setSysUserId(sysUser.getId().intValue());
+            System.out.println(roleId.toString());
+            String roleName = "";
+            String roleId2 = "";
+            for (int i = 0; i < roleId.length; i++) {
+                SysModule sysModule = sysModuleMapper.selectByPrimaryKey(Long.valueOf(roleId[i]));
+                roleName += sysModule.getModuleName() + " ";
+                roleId2 += sysModule.getId()+" ";
+                sysUserPt.setRoleName(roleName);
+                sysUserPt.setMark(roleId2);
+            }
+            sysUserPtMapper.updateByPrimaryKey(sysUserPt);
+        }
 
 
     }
@@ -129,7 +128,7 @@ public class RoleServiceImpl implements RoleService {
                 RoleRes dto = new RoleRes();
                 SysUser sysUser = sysUserMapper.selectByPrimaryKey(Long.valueOf(sysUserPt.getSysUserId()));
 
-               String roleId2 = sysUserPt.getMark();//roleId字段
+                String roleId2 = sysUserPt.getMark();//roleId字段
                 List<Integer> roleId = new ArrayList<>();
 
 
@@ -140,14 +139,13 @@ public class RoleServiceImpl implements RoleService {
                         Integer listlong = Integer.parseInt(list);
                         roleId.add(listlong);
                         System.out.print(list + " ");
-                }
+                    }
                 }
                 System.out.println(roleId.toString());
 
                 if (sysUser != null &&roleId.size()>0) {
                     dto.setId(sysUserPt.getId().intValue());
                     dto.setsId(Integer.valueOf(sysUser.getSid()));
-                    dto.setName(sysUser.getName());
                     dto.setRoleName(sysUserPt.getRoleName());
                     dto.setRoleId(roleId);
                     res.add(dto);//放入新建实体类List中
