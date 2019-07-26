@@ -27,7 +27,7 @@ public class DateUtil {
 
     public static final String MONTH_TIME        = "MM-dd HH:mm";
 
-    public static final String SCHEDULE_TIME     = "yyyy.MM.dd HH:mm";
+    public static final String SCHEDULE_TIME     = "yyyy.MM.dd";
 
     public static final String SCHEDULE_TIME_SMS = "yyyy年MM月dd日 HH时mm分";
 
@@ -67,7 +67,7 @@ public class DateUtil {
         if (date == null) {
             return null;
         }
-        return DateFormatUtils.format(date, SCHEDULE_TIME);
+        return DateFormatUtils.format(date, YYYY_MM_DD);
     }
 
     public static Date getCurrentTime() {

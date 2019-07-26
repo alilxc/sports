@@ -444,6 +444,12 @@ public class SysProjectExample {
             addCriterion("update_time not between", value1, value2, "updateTime");
             return (Criteria) this;
         }
+
+        public Criteria addActiveFinish(Long value1){
+            addCriterion("active_finish >", value1, "activeFinish");
+            return (Criteria) this;
+        }
+
     }
 
     public static class Criteria extends GeneratedCriteria {

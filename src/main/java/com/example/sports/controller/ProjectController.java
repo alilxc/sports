@@ -12,6 +12,7 @@ import com.example.sports.util.ResponseObjectUtil;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +38,15 @@ public class ProjectController {
     @PostMapping("/addProject")
     @ApiOperation(value = "添加新的项目")
     public ResponseObject<Void> addProject(ProjectRequest request) {
+        if(StringUtils.isEmpty(request.getActiveStart()) || StringUtils.isEmpty(request.getActiveFinish())){
+            return ResponseObjectUtil.fail("请选择比赛举办日期");
+        }
+        if(StringUtils.isEmpty(request.getName())){
+            return ResponseObjectUtil.fail("请输入比赛名称");
+        }
+        if(StringUtils.isEmpty(request.getOrganization())){
+            return ResponseObjectUtil.fail("请输入活动举办方");
+        }
         projectService.addProject(request);
         return ResponseObjectUtil.success();
     }
