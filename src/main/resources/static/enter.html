@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="utf-8" />
-		<title>大学生运动管理信息系统</title>
+		<title>运动赛事管理信息系统</title>
 		<meta name="keywords" content="" />
 		<meta name="description" content="" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -48,7 +48,7 @@
 					<a href="#" class="navbar-brand">
 						<small>
 							<i class="icon-leaf"></i>
-							大学生运动管理信息系统
+							运动赛事管理信息系统
 						</small>
 					</a>
 				</div>
@@ -116,8 +116,17 @@
 						<li class="active navshowa1">
 							<a href="project.html">
 								<i class="icon-text-width"></i>
-								<span class="menu-text">项目管理</span>
+								<span class="menu-text">赛事管理</span>
+								<b class="arrow icon-angle-down"></b>
 							</a>
+
+							<ul class="submenu">
+								<li class="navshowa21">
+									<a href="sub_project.html">
+										<i class="icon-double-angle-right"></i> 项目管理
+									</a>
+								</li>
+							</ul>
 						</li>
 
 						<li class="active navshowa2">
@@ -137,7 +146,7 @@
 
 								<li class="navshowa22">
 									<a href="search_school.html">
-										<i class="icon-double-angle-right"></i> 院系查询
+										<i class="icon-double-angle-right"></i> 团队查询
 									</a>
 								</li>
 							</ul>
@@ -146,7 +155,7 @@
 						<li class="active navshowa3">
 							<a href="#" class="dropdown-toggle">
 								<i class="icon-list"></i>
-								<span class="menu-text">学生报名管理</span>
+								<span class="menu-text">报名管理</span>
 
 								<b class="arrow icon-angle-down"></b>
 							</a>
@@ -211,67 +220,44 @@
 
 								<form class="form-horizontal" role="form" id="signupform">
 									<div class="form-group">
-										<label class="col-sm-3 control-label no-padding-right" for="form-field-0">组别：</label>
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-0">团体名称: </label>
 
 										<div class="col-sm-6">
-											<select id="form-field-1" placeholder="" class="col-xs-10 col-sm-5" name="teamType">
-												<option value="2" selected>男子组</option>
-												<option value="1">女子组</option>
-											</select>
+											<input type="text" name="team" placeholder="" class="col-xs-10 col-sm-5" />
 										</div>
 									</div>
 
 									<div class="space-4"></div>
 									
 									<div class="form-group">
-										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">学号：</label>
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1">所属单位 </label>
 
 										<div class="col-sm-6">
-											<input type="text" name="sysUserSid" placeholder="" class="col-xs-10 col-sm-5" />
+											<input type="text" name="company" placeholder="" class="col-xs-10 col-sm-5" />
 										</div>
 									</div>
 
 									<div class="space-4"></div>
 
-									<!--<div class="form-group">
-										<label class="col-sm-3 control-label no-padding-right" for="form-field-3">学院：</label>
-
-										<div class="col-sm-6">
-											<select id="collegelist" placeholder="" class="col-xs-10 col-sm-5" name="collegeId">
-											</select>
-										</div>
-									</div>-->
-
-									<div class="space-4"></div>
-
-									<form class="form-horizontal" role="form">
 									<div class="form-group">
-
-
-										<label class="col-sm-3 control-label no-padding-right" for="form-field-3">项目名称：</label>
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-2">领队 </label>
 
 										<div class="col-sm-6">
-											<select id="projectname" placeholder="" class="col-xs-10 col-sm-5" name="sysProjectId">
-												<!--<option value="1">田赛</option>
-												<option value="2">径赛</option>-->
-											</select>
+											<input type="text" name="leader" placeholder="" class="col-xs-10 col-sm-5" />
 										</div>
 									</div>
 
 									<div class="space-4"></div>
 
-										<div class="form-group">
-											<label class="col-sm-3 control-label no-padding-right" for="form-field-3" >项目类型：</label>
+									<div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-2">性别 </label>
 
-											<div class="col-sm-6">
-												<select id="projectType" placeholder="" class="col-xs-10 col-sm-5" name="sportType">
-													<option value="1" selected>田赛</option>
-                                                    <option value="2">径赛</option>
-												</select>
-											</div>
+										<div class="col-sm-6">
+											<input type="radio" name="gender" id="male">男  &nbsp&nbsp&nbsp <input type="radio" name="gender" id="female">女
 										</div>
+									</div>
 
-										<div class="space-4"></div>
+									<div class="space-4"></div>
 								
 									<div class="clearfix form-actions">
 										<div class="col-md-offset-3 col-md-9">

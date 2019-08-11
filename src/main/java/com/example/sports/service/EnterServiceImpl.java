@@ -43,6 +43,21 @@ public class EnterServiceImpl implements EnterService {
 
     @Override
     public void enter(EnterRequest request) {
+
+    }
+
+    @Override
+    public PageInfo<EnterInfoRes> enterInfo(EnterInfoRequest request) {
+        return null;
+    }
+
+    @Override
+    public List<SysCollege> sysCollegeInfo() {
+        return null;
+    }
+
+    /*@Override
+    public void enter(EnterRequest request) {
         SysUserStudentExample example = new SysUserStudentExample();
         SysUserStudentExample.Criteria criteria = example.createCriteria();
         criteria.andSysUserSidEqualTo(request.getSysUserSid());
@@ -127,5 +142,5 @@ public class EnterServiceImpl implements EnterService {
         SysCollegeExample.Criteria criteria = example.createCriteria();
         List<SysCollege> sysColleges = sysCollegeMapper.selectByExample(example);
         return sysColleges;
-    }
+    }*/
 }

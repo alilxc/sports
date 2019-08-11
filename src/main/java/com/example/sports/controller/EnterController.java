@@ -31,7 +31,7 @@ import java.util.List;
  */
 @RequestMapping("/enterController")
 @RestController
-@Api(description = "学生报名管理")
+@Api(description = "报名管理")
 public class EnterController {
 
     @Autowired

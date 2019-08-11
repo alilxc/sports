@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="utf-8" />
-		<title>大学生运动管理信息系统</title>
+		<title>运动赛事管理信息系统</title>
 		<meta name="keywords" content="" />
 		<meta name="description" content="" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -33,7 +33,7 @@
 					<a href="#" class="navbar-brand">
 						<small>
 							<i class="icon-leaf"></i>
-							大学生运动管理信息系统
+							运动赛事管理信息系统
 						</small>
 					</a>
 				</div>
@@ -102,8 +102,18 @@
 						<li class="active navshowa1">
 							<a href="project.html">
 								<i class="icon-text-width"></i>
-								<span class="menu-text">项目管理</span>
+								<span class="menu-text">赛事管理</span>
+
+								<b class="arrow icon-angle-down"></b>
 							</a>
+
+							<ul class="submenu">
+								<li class="navshowa21">
+									<a href="sub_project.html">
+										<i class="icon-double-angle-right"></i> 项目管理
+									</a>
+								</li>
+							</ul>
 						</li>
 
 						<li class="active navshowa2">
@@ -123,7 +133,7 @@
 
 								<li class="navshowa22">
 									<a href="search_school.html">
-										<i class="icon-double-angle-right"></i> 院系查询
+										<i class="icon-double-angle-right"></i> 团队查询
 									</a>
 								</li>
 							</ul>
@@ -132,7 +142,7 @@
 						<li class="active navshowa3">
 							<a href="#" class="dropdown-toggle">
 								<i class="icon-list"></i>
-								<span class="menu-text">学生报名管理</span>
+								<span class="menu-text">报名管理</span>
 
 								<b class="arrow icon-angle-down"></b>
 							</a>
@@ -192,11 +202,11 @@
 					<!--内容 Begin-->
 					<div class="page-content">
 						<!--项目选择 Begin-->
-						<div class="row">
+						<!--<div class="row">
 							<div class="col-xs-12" style="padding-top: 30px;">
-								<!-- PAGE CONTENT BEGINS -->
+								&lt;!&ndash; PAGE CONTENT BEGINS &ndash;&gt;
 
-								<!--输入框 Begin-->
+								&lt;!&ndash;输入框 Begin&ndash;&gt;
 								<div class="form-group">
 									<form class="form-horizontal" role="form">
 
@@ -223,8 +233,8 @@
                                             <table id="table4" class="table table-striped table-bordered table-hover">
                                                 <thead>
                                                     <tr>
-                                                        <th>学院</th>
-                                                        <th>学号</th>
+                                                        <th>团队</th>
+                                                        <th>编号</th>
                                                         <th class="hidden-480">姓名</th>
                                                         <th>项目名称</th>
                                                         <th>项目类别</th>
@@ -241,14 +251,14 @@
                                     </div>
                                 </div>
 							</div>
-						</div>
+						</div>-->
 						<!--项目选择 End-->
 						<div class="row">
 							<div class="col-sm-10">
 								<div class="tabbable">
 									
 									<!--选项卡 Begin-->
-									<ul class="nav nav-tabs" id="myTab">
+									<!--<ul class="nav nav-tabs" id="myTab">
 										
 										<li class="active">
 											<a data-toggle="tab" href="#home" onclick="showProjectInfo(1)">
@@ -267,7 +277,7 @@
 												决赛
 											</a>
 										</li>
-									</ul>
+									</ul>-->
 									<!--选项卡 End-->
 									
 									<!--选项内容 Begin-->
@@ -278,6 +288,11 @@
 											<div class="row">
 													<div class="col-xs-12">
 
+														<button class="btn btn-info dialogalert"  type="button" style="float: right;" data-toggle="modal" data-target="#myMember">
+															名单导入
+															<i class="icon-print  align-top bigger-125 icon-on-right"></i>
+														</button>
+
 														<button class="btn btn-info dialogalert"  type="button" style="float: right;" data-toggle="modal" data-target="#myModal">
 															录入成绩
 															<i class="icon-print  align-top bigger-125 icon-on-right"></i>
@@ -287,8 +302,8 @@
 															<table id="table1" class="table table-striped table-bordered table-hover">
 																<thead>
 																	<tr>
-                                                                        <th>院系</th>
-                                                                        <th>学号</th>
+                                                                        <th>团队</th>
+                                                                        <th>编号</th>
                                                                         <th class="hidden-480">姓名</th>
                                                                         <th>项目名称</th>
                                                                         <th>项目类别</th>
@@ -305,61 +320,7 @@
 													</div>
 												</div>
 										</div>
-										<!--小组赛 End-->
-							
-										<!--初赛 Begin-->
-										<div id="profile" class="tab-pane">
-											<div class="row">
-													<div class="col-xs-12">
-														<div class="table-responsive">
-															<table id="table2" class="table table-striped table-bordered table-hover">
-																<thead>
-																	<tr>
-                                                                        <th>院系</th>
-                                                                        <th>学号</th>
-                                                                        <th class="hidden-480">姓名</th>
-                                                                        <th>项目名称</th>
-                                                                        <th>项目类别</th>
-                                                                        <th>组别</th>
-                                                                        <th>成绩</th>
-																	</tr>
-																</thead>
-																
-																<tbody>
-																</tbody>
-															</table>
-														</div>
-													</div>
-												</div>
-										</div>
-										<!--初赛 End-->
-										
-										<!--决赛 Begin-->
-										<div id="endpro" class="tab-pane">
-											<div class="row">
-													<div class="col-xs-12">
-														<div class="table-responsive">
-															<table id="table3" class="table table-striped table-bordered table-hover">
-																<thead>
-																	<tr>
-                                                                        <th>院系</th>
-                                                                        <th>学号</th>
-                                                                        <th class="hidden-480">姓名</th>
-                                                                        <th>项目名称</th>
-                                                                        <th>项目类别</th>
-                                                                        <th>组别</th>
-                                                                        <th>成绩</th>
-																	</tr>
-																</thead>
-																
-																<tbody>
-																</tbody>
-															</table>
-														</div>
-													</div>
-												</div>
-										</div>
-										<!--决赛 End-->
+
 										
 									</div>
 									<!--选项内容 End-->
@@ -372,6 +333,42 @@
 				</div>
 				<!--右侧内容 End-->
 		</div>
+
+			<div class="modal fade" id="myMember" tabindex="-1" role="dialog" aria-labelledby="myMemberLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title" id="myMemberLabel">分组名单导入</h4>
+						</div>
+
+						<div class="space-2"></div>
+
+						<!-- 名单录入弹框BEGINS -->
+
+						<form class="form-horizontal" role="form" id="importMembers" enctype="multipart/form-data">
+							<div class="space-4"></div>
+
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1">名单</label>
+
+								<div class="col-sm-6">
+									<input type="file" name="members" placeholder="" id="memberFile" class="col-xs-10 col-sm-8" />
+								</div>
+							</div>
+
+							<div class="space-4"></div>
+
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+								<button type="button" class="btn btn-primary" onclick="importMember()">上传</button>
+							</div>
+						</form>
+
+
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal -->
+			</div>
 
 			<!--弹框（Modal） -->
 			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -516,6 +513,48 @@
                 })
             }
 		</script>
+
+		<script type="text/javascript">
+            function importMember() {
+
+                var uploadFile = $("#memberFile").val();
+                if (uploadFile == '') {
+                    alert("请择excel,再上传");
+                } else if (uploadFile.lastIndexOf(".xls") < 0 && uploadFile.lastIndexOf(".xlsx") < 0
+							&& uploadFile.lastIndexOf(".xlsm") < 0) {//可判断以.xls和.xlsx结尾的excel
+                    alert("只能上传Excel文件");
+                }else{
+                    var formData = new FormData();
+                    var file = $("#memberFile")[0].files[0];
+                    //此处将所要传递的数据append到formData中
+                    formData.append("fileinfo", file);
+                    $.ajax({
+                        //几个参数需要注意一下
+                        type: "POST",//方法类型
+                        // contentType: "application/json",
+                        dataType: "json",//预期服务器返回的数据类型
+                        url: "/scoreAddController/importMember",//url
+                        data:formData,
+                        async: false,
+                        processData: false,       //必不可缺
+                        contentType: false,       //必不可缺
+                        success: function (result) {
+                            if (result) {
+                                alert("导入成功！");
+                                //window.location.href = "/static/addscore.html";
+                            };
+                        },
+                        error: function () {
+                            alert("异常！");
+                            //window.location.href = "/static/addscore.html";
+                        }
+                    });
+				}
+            }
+
+
+		</script>
+
 		<script type="text/javascript">
             /*成绩录入的函数有点问题
             * 需要获取下拉框id然后传过去以下字段，页面的name已对应好
@@ -549,8 +588,6 @@
                     }
                 });
             }
-
-
 		</script>
 		<script type="text/javascript">
             window.onload = showProjects();

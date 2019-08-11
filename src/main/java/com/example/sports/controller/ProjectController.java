@@ -11,15 +11,18 @@ import com.example.sports.util.ResponseObject;
 import com.example.sports.util.ResponseObjectUtil;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * @title
@@ -29,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @RequestMapping("/projectController")
 @RestController
-@Api(description = "项目管理")
+@Api(description = "赛事管理")
 public class ProjectController {
 
     @Autowired
@@ -66,9 +69,16 @@ public class ProjectController {
     }
 
     @PostMapping("/adminRoleList")
-    @ApiOperation(value = "运动会项目列表")
+    @ApiOperation(value = "运动会赛事列表")
     public ResponseObject<PageInfo<ProjectRes>> adminRoleList(PageRequestBean requestBean) {
         PageInfo<ProjectRes> resPageInfo = projectService.adminRoleList(requestBean);
         return ResponseObjectUtil.success(resPageInfo);
+    }
+
+    @GetMapping("/queryGameList")
+    @ApiModelProperty(value = "运功会赛事")
+    public ResponseObject<List<String>> queryProceedGames(){
+        List<String> data = projectService.queryProceedGames();
+        return ResponseObjectUtil.success(data);
     }
 }

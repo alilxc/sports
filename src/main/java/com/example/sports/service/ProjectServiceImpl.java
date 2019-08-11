@@ -47,7 +47,7 @@ public class ProjectServiceImpl implements ProjectService {
         c.set(Calendar.MINUTE, 0);
         c.set(Calendar.SECOND, 0);
         c.set(Calendar.MILLISECOND, 0);
-        Long today=c.getTimeInMillis()/1000;
+        Long today=c.getTimeInMillis();
         criteria.addActiveFinish(today);
 
         List<ProjectRes> res = new ArrayList<>();
@@ -76,6 +76,29 @@ public class ProjectServiceImpl implements ProjectService {
         }
 
         return  null;
+    }
+
+    @Override
+    public List<String> queryProceedGames() {
+        SysProjectExample example = new SysProjectExample();
+        SysProjectExample.Criteria criteria = example.createCriteria();
+
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        Long today=c.getTimeInMillis();
+        criteria.addActiveStart(today);
+
+        List<SysProject> sysProjects = sysProjectMapper.selectByExample(example);
+        List<String> data = new ArrayList<>();
+        if(sysProjects != null && sysProjects.size() > 0){
+            for(SysProject sysProject : sysProjects){
+                data.add(sysProject.getName());
+            }
+        }
+        return data;
     }
 
     @Override

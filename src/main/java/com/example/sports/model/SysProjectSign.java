@@ -3,45 +3,55 @@ package com.example.sports.model;
 import java.io.Serializable;
 import java.util.Date;
 
+
 /**
- * 
- *
- * @author hjr
- * @date 2018-05-03
- *
+ * @author xingchao.lxc
  */
 public class SysProjectSign implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     /**  */
     private Long id;
 
-    /** 学号 */
-    private String sysUserSid;
-
-    /** 学院id */
-    private Integer sysCollegeId;
-
-    /** 项目id */
-    private Integer sysProjectId;
-
-    /** 运动员号 */
-    private String sportId;
-
-    /** 1、女子组 2、男子组 */
-    private Integer teamType;
-
-    /** 1、田赛 2、径赛 */
-    private Integer sportType;
-
-    /** 个人成绩 */
-    private Integer achievement;
-
     /** 创建时间 */
-    private Date createTime;
+    private long createTime;
 
     /** 更新时间 */
-    private Date updateTime;
+    private long updateTime;
 
-    private static final long serialVersionUID = 1L;
+    /** 参赛编号 */
+    private String sysUserSid;
+
+    /**
+     * 姓名
+     */
+    private String username;
+
+    /** 所属团队 */
+    private String groupName;
+
+    /** 项目代号 */
+    private String projectId;
+
+    /**
+     * 组别
+     */
+    private String teamType;
+
+
+    /**
+     * 场地
+     */
+    private String place;
+
+    /** 个人成绩 */
+    private Double  score;
+
+    /**
+     * 扩展字段信息
+     */
+    private String ext;
 
     public Long getId() {
         return id;
@@ -59,88 +69,75 @@ public class SysProjectSign implements Serializable {
         this.sysUserSid = sysUserSid == null ? null : sysUserSid.trim();
     }
 
-    public Integer getSysCollegeId() {
-        return sysCollegeId;
+    public String getUsername() {
+        return username;
     }
 
-    public void setSysCollegeId(Integer sysCollegeId) {
-        this.sysCollegeId = sysCollegeId;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public Integer getSysProjectId() {
-        return sysProjectId;
+    public String getExt() {
+        return ext;
     }
 
-    public void setSysProjectId(Integer sysProjectId) {
-        this.sysProjectId = sysProjectId;
+    public void setExt(String ext) {
+        this.ext = ext;
     }
 
-    public String getSportId() {
-        return sportId;
+    public String getProjectId() {
+        return projectId;
     }
 
-    public void setSportId(String sportId) {
-        this.sportId = sportId == null ? null : sportId.trim();
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
     }
 
-    public Integer getTeamType() {
+    public String getTeamType() {
         return teamType;
     }
 
-    public void setTeamType(Integer teamType) {
+    public void setTeamType(String teamType) {
         this.teamType = teamType;
     }
 
-    public Integer getSportType() {
-        return sportType;
+    public double getScore() {
+        return score;
     }
 
-    public void setSportType(Integer sportType) {
-        this.sportType = sportType;
+    public void setScore(double score) {
+        this.score = score;
     }
 
-    public Integer getAchievement() {
-        return achievement;
+    public String getPlace() {
+        return place;
     }
 
-    public void setAchievement(Integer achievement) {
-        this.achievement = achievement;
+    public void setPlace(String place) {
+        this.place = place;
     }
 
-    public Date getCreateTime() {
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
+    public long getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(long createTime) {
         this.createTime = createTime;
     }
 
-    public Date getUpdateTime() {
+    public long getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(long updateTime) {
         this.updateTime = updateTime;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", sysUserSid=").append(sysUserSid);
-        sb.append(", sysCollegeId=").append(sysCollegeId);
-        sb.append(", sysProjectId=").append(sysProjectId);
-        sb.append(", sportId=").append(sportId);
-        sb.append(", teamType=").append(teamType);
-        sb.append(", sportType=").append(sportType);
-        sb.append(", achievement=").append(achievement);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", updateTime=").append(updateTime);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
     }
 }

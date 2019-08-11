@@ -15,10 +15,8 @@
     <link rel="stylesheet" href="assets/css/ace-skins.min.css" />
     <script src="assets/js/ace-extra.min.js"></script>
     <script src="assets/js/myjs/my.js"></script>
-    <script src="assets/css/header.css"></script>
 
-<!--
-    <style>
+    <!--<style>
         .navbar{background: #5dce3f;}
         .ace-nav>li.light-blue>a{background: #63b14e;}
         .breadcrumb>li>a{color:#5dce3f;}
@@ -32,8 +30,7 @@
         .nav-list>li.open>a{color:#5dce3f;}
         .nav-list>li.open>a:hover::before{color:#5dce3f;}
         .nav-list>li .submenu>li.active>a{color:#5dce3f;}
-    </style>
--->
+    </style>-->
 
 </head>
 
@@ -43,8 +40,7 @@
     <script type="text/javascript">
         try {
             ace.settings.check('navbar', 'fixed')
-        } catch (e) {
-        }
+        } catch(e) {}
     </script>
 
     <div class="navbar-container" id="navbar-container">
@@ -61,11 +57,10 @@
             <ul class="nav ace-nav">
                 <li class="light-blue">
                     <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                        <img class="nav-user-photo" src="assets/avatars/user.jpg" alt="Jason's Photo"/>
+                        <img class="nav-user-photo" src="assets/avatars/user.jpg" alt="Jason's Photo" />
                         <span class="user-info">
 									<small>欢迎光临</small>
 									<strong id="username"></strong>
-
 								</span>
 
                         <i class="icon-caret-down"></i>
@@ -94,8 +89,7 @@
     <script type="text/javascript">
         try {
             ace.settings.check('main-container', 'fixed')
-        } catch (e) {
-        }
+        } catch(e) {}
     </script>
 
     <div class="main-container-inner">
@@ -108,8 +102,7 @@
             <script type="text/javascript">
                 try {
                     ace.settings.check('sidebar', 'fixed')
-                } catch (e) {
-                }
+                } catch(e) {}
             </script>
 
             <ul class="nav nav-list" id="navlist">
@@ -207,8 +200,7 @@
                 <script type="text/javascript">
                     try {
                         ace.settings.check('breadcrumbs', 'fixed')
-                    } catch (e) {
-                    }
+                    } catch(e) {}
                 </script>
 
                 <ul class="breadcrumb">
@@ -226,78 +218,49 @@
                     <div class="col-xs-12">
                         <!-- PAGE CONTENT BEGINS -->
 
-                        <form class="form-horizontal" role="form" id="addRoleForm">
+                        <form class="form-horizontal" role="form" id="newCatalog">
+                            <div class="space-4"></div>
+
                             <div class="form-group">
-                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1">学号：</label>
+                                <label class="col-sm-3 control-label no-padding-right" for="form-field-0">赛事：</label>
 
                                 <div class="col-sm-6">
-                                    <input type="text" id="form-field-1" placeholder="" class="col-xs-10 col-sm-5" name="sId"/>
+                                    <select id="gameType" placeholder="" class="col-xs-10 col-sm-5" name="gameType">
+                                    </select>
                                 </div>
                             </div>
 
                             <div class="space-4"></div>
 
                             <div class="form-group">
-                                <label class="col-sm-3 control-label no-padding-right" for="form-field-2">姓名：</label>
+                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1">项目名：</label>
 
                                 <div class="col-sm-6">
-                                    <input type="text" id="form-field-2" placeholder="" class="col-xs-10 col-sm-5" name="name"/>
+                                    <input type="text" name="project" placeholder="" class="col-xs-10 col-sm-5" />
                                 </div>
                             </div>
 
                             <div class="space-4"></div>
 
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label no-padding-right"
-                                           for="form-field-3">权限：</label>
 
-                                   <!-- <div class="col-sm-6">
-                                        <select id="form-field-1" placeholder="" class="col-xs-10 col-sm-5" name="roleId">
-                                            <option value="0">普通用户</option>
-                                            <option value="1">管理员</option>
-                                            <option value="2">超级管理员</option>
-                                        </select>
-                                    </div>
+                            <div class="clearfix form-actions">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button class="btn btn-info" type="button" onclick="enter()">
+                                        <i class="icon-ok bigger-110"></i>
+                                        提交
+                                    </button>
 
-                                    <label for="name">内联的复选框和单选按钮的实例</label>-->
-                                    <div>
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" id="inlineCheckbox1" value="option1"> 选项 1
-                                        </label>
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" id="inlineCheckbox2" value="option2"> 选项 2
-                                        </label>
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" id="inlineCheckbox3" value="option3"> 选项 3
-                                        </label>
-                                        <label class="radio-inline">
-                                            <input type="radio" name="optionsRadiosinline" id="optionsRadios3" value="option1" checked> 选项 1
-                                        </label>
-                                        <label class="radio-inline">
-                                            <input type="radio" name="optionsRadiosinline" id="optionsRadios4"  value="option2"> 选项 2
-                                        </label>
-                                    </div>
+                                    &nbsp; &nbsp; &nbsp;
+                                    <button class="btn" type="reset">
+                                        <i class="icon-undo bigger-110"></i>
+                                        重置
+                                    </button>
                                 </div>
+                            </div>
 
-                                <div class="space-4"></div>
-
-                                <div class="clearfix form-actions">
-                                    <div class="col-md-offset-3 col-md-9">
-                                        <button class="btn btn-info" type="button" onclick="addAdminstrator()">
-                                            <i class="icon-ok bigger-110"></i>
-                                            提交
-                                        </button>
-
-                                        &nbsp; &nbsp; &nbsp;
-                                        <button class="btn" type="reset">
-                                            <i class="icon-undo bigger-110"></i>
-                                            重置
-                                        </button>
-                                    </div>
-                                </div>
+                            </form>
 
 
-                        </form>
                     </div><!-- /.col -->
                 </div>
             </div>
@@ -312,30 +275,35 @@
     window.jQuery || document.write("<script src='assets/js/jquery-2.0.3.min.js'>" + "<" + "script>");
 </script>
 <script type="text/javascript">
-    if ("ontouchend" in document) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>" + "<" + "script>");
+    if("ontouchend" in document) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>" + "<" + "script>");
 </script>
 <script type="text/javascript">
-    function addAdminstrator(){
-        // alert($('#addRoleForm').serialize());
+    window.onload = showGames();
+    function showGames(){
         $.ajax({
-            type: "POST",//方法类型
-            // contentType: "application/json",
+            type: "GET",//方法类型
+            contentType: "application/json",
             dataType: "json",//预期服务器返回的数据类型
-            url: "/roleController/addAdmin",//url
-            data: $('#addRoleForm').serialize(),
+            url: "/projectController/queryGameList",
             async: false,
             success: function (result) {
-                // console.log(result);//打印服务端返回的数据(调试用)
                 if (result.httpStatus == 200) {
-                    alert("添加成功！");
-                }
+                    var content = "";
+                    var dataArr = result.data;
+                    var nameOpt = "<option value='' selected='selected'>--请选择--</option>";
+                    for (var i = 0; i < dataArr.length; i++) {
+                        nameOpt+="<option value='"+dataArr[i]+"' >"+dataArr[i]+"</option>"
+                    }
+                    $('#gameType').html(nameOpt);
+                };
             },
             error: function () {
-                alert("添加失败！");
+                alert("异常！");
             }
         })
     }
 </script>
+
 <script src="assets/js/bootstrap.min.js"></script>
 <script src="assets/js/typeahead-bs2.min.js"></script>
 <script src="assets/js/jquery-ui-1.10.3.custom.min.js"></script>

@@ -5,10 +5,11 @@ import com.example.sports.dto.request.ProjectRequest;
 import com.example.sports.dto.response.ProjectRes;
 import com.github.pagehelper.PageInfo;
 
+import java.util.List;
+
+
 /**
- * @title
- * @Author huangjiarui
- * @date: 2018-05-02
+ * @author xingchao.lxc
  */
 public interface ProjectService {
 
@@ -19,6 +20,13 @@ public interface ProjectService {
      * @return
      */
     PageInfo<ProjectRes> adminRoleList(PageRequestBean requestBean);
+
+
+    /**
+     * 查询即将进行的赛事
+     * @return
+     */
+    List<String> queryProceedGames();
 
     /**
      * 添加新的项目

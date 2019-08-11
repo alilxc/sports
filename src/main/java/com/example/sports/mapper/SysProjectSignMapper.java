@@ -5,18 +5,23 @@ import com.example.sports.model.SysProjectSignExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
+/**
+ * @author xingchao.lxc
+ */
 public interface SysProjectSignMapper {
-    int countByExample(SysProjectSignExample example);
+    /*int countByExample(SysProjectSignExample example);
 
     int deleteByExample(SysProjectSignExample example);
 
-    int deleteByPrimaryKey(Long id);
+    int deleteByPrimaryKey(Long id);*/
 
     int insert(SysProjectSign record);
 
     int insertSelective(SysProjectSign record);
 
-    List<SysProjectSign> selectByExample(SysProjectSignExample example);
+    int batchInsert(@Param("records") List<SysProjectSign> records);
+
+    /*List<SysProjectSign> selectByExample(SysProjectSignExample example);
 
     SysProjectSign selectByPrimaryKey(Long id);
 
@@ -26,5 +31,5 @@ public interface SysProjectSignMapper {
 
     int updateByPrimaryKeySelective(SysProjectSign record);
 
-    int updateByPrimaryKey(SysProjectSign record);
+    int updateByPrimaryKey(SysProjectSign record);*/
 }

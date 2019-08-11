@@ -450,6 +450,11 @@ public class SysProjectExample {
             return (Criteria) this;
         }
 
+        public Criteria addActiveStart(Long value1){
+            addCriterion("active_start >", value1, "activeStart");
+            return (Criteria) this;
+        }
+
     }
 
     public static class Criteria extends GeneratedCriteria {

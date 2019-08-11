@@ -8,6 +8,7 @@ import com.example.sports.dto.response.EnterInfoRes;
 import com.example.sports.dto.response.SchoolScoreRes;
 import com.example.sports.model.SysCollege;
 import com.example.sports.model.SysProject;
+import com.example.sports.service.ImportService;
 import com.example.sports.service.ScoreAddService;
 import com.example.sports.util.ResponseObject;
 import com.example.sports.util.ResponseObjectUtil;
@@ -17,9 +18,13 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @title
@@ -33,6 +38,9 @@ public class ScoreAddController {
 
     @Autowired
     private ScoreAddService scoreAddService;
+
+    @Autowired
+    private ImportService importService;
 
     @PostMapping("/sysProject")
     @ApiOperation(value = "项目列表")
@@ -59,6 +67,14 @@ public class ScoreAddController {
     @ApiOperation(value = "成绩录入")
     public ResponseObject<Void> addScore(ScoreAddRequest request) {
         scoreAddService.addScore(request);
+        return ResponseObjectUtil.success();
+    }
+
+    @PostMapping("/importMember")
+    @ApiOperation(value = "分组名单导入")
+    public ResponseObject<Void> importMember(@RequestParam(value = "fileinfo", required = false) MultipartFile file){
+        Map<String, Object> map = new HashMap<String, Object>();
+        boolean ret = importService.readExcelFile(file);
         return ResponseObjectUtil.success();
     }
 }

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.sports.mapper.SysGroupingModuleMapper" >
+    <resultMap id="BaseResultMap" type="com.example.sports.model.SysGroupingModule" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="BIGINT" />
+        <result column="update_time" property="updateTime" jdbcType="BIGINT" />
+        <result column="competition_id" property="competitionId" jdbcType="INTEGER" />
+        <result column="project_id" property="projectId" jdbcType="VARCHAR" />
+        <result column="team_type" property="teamType" jdbcType="VARCHAR" />
+        <result column="competitors" property="competitors" jdbcType="INTEGER" />
+        <result column="records" property="records" jdbcType="INTEGER" />
+        <result column="printed" property="printed" jdbcType="INTEGER" />
+        <result column="ext" property="ext" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Example_Where_Clause" >
+        <where >
+            <foreach collection="oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause" >
+        <where >
+            <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="Base_Column_List" >
+        id, create_time, update_time, competition_id, project_id, team_type, competitors, records, printed, ext
+    </sql>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        insert into sys_project_sign
+        (create_time, update_time, competition_id, project_id, team_type, competitors, records, printed, ext)
+        VALUES
+        <foreach collection ="groupingModules" item="module" index= "index" separator =",">
+            (
+            #{module.createTime}, #{module.updateTime},
+            #{module.competitionId},#{module.projectId},
+            #{module.teamType}, #{module.competitors},#{module.records}, #{module.printed},#{module.ext}
+            )
+        </foreach >
+    </insert>
+
+</mapper>

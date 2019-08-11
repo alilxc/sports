@@ -36,7 +36,7 @@ public class ScoreSerchController {
     }
 
     @PostMapping("/collegeInfo")
-    @ApiOperation(value = "院系成绩查询", notes = "collegeId 为学院id")
+    @ApiOperation(value = "团队成绩查询", notes = "collegeId 为学院id")
     public ResponseObject<PageInfo<ScoreSerchRes>> collegeInfo(PageRequestBean requestBean, Long collegeId) {
         PageInfo<ScoreSerchRes> scoreSerchResPageInfo = scoreSerchService.collegeInfo(requestBean, collegeId);
         return ResponseObjectUtil.success(scoreSerchResPageInfo);
