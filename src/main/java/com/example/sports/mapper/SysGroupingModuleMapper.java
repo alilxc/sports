@@ -13,5 +13,12 @@ import java.util.List;
  **/
 public interface SysGroupingModuleMapper {
 
-    int batchInsert(@Param("groupingModules") List<SysGroupingModule> sysGroupingModuleList);
+    int insert(SysGroupingModule module);
+
+    SysGroupingModule select(@Param("competitionId") int competitionId, @Param("projectId") String projectId,
+                             @Param("teamType") String teamType);
+
+    int update(@Param("module") SysGroupingModule module);
+
+
 }

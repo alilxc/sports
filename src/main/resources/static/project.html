@@ -233,6 +233,7 @@
 									<th>比赛名称</th>
 									<th>组办方</th>
 									<th>起止日期</th>
+									<th>导入名单</th>
 									<th>修改</th>
 									<th>删除</th>
 								</tr>
@@ -392,6 +393,61 @@
 		</div>
 	</div>
 </div>
+
+
+
+<div class="dialogbody importExcel">
+	<div class="dialogbox">
+		<span class="close"></span>
+		<div class="row" style="padding-top: 50px;">
+			<div class="col-xs-12">
+
+				<form class="form-horizontal" role="form" id="importMembers" enctype="multipart/form-data">
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right">赛事 </label>
+
+						<div class="col-sm-6">
+							<input type="text" id="gameName" name="gameName" placeholder="" class="col-xs-10 col-sm-5" />
+						</div>
+					</div>
+
+					<div class="space-6"></div>
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1">参赛名单 </label>
+
+						<div class="col-sm-7">
+							<input type="file" name="members" placeholder="" id="memberFile" class="col-xs-10 col-sm-8" />
+						</div>
+					</div>
+
+					<div class="space-4"></div>
+
+					<div class="clearfix form-actions" style="margin-top: 120px;">
+						<div class="col-md-offset-4 col-sm-offset-4 col-md-7 col-sm-7">
+							<button class="btn btn-info btn_sub" type="button" id="importMember">
+								<i class="icon-ok bigger-110"></i>
+								上传
+							</button>
+
+							&nbsp; &nbsp; &nbsp;
+							<button class="btn" type="reset">
+								<i class="icon-undo bigger-110"></i>
+								重置
+							</button>
+						</div>
+					</div>
+				</form>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
 <!--弹框 End-->
 <script src="assets/js/jquery-2.0.3.min.js"></script>
 <script src="assets/js/bootstrap.min.js"></script>
@@ -498,8 +554,11 @@
                         "<td>" + item.name+"</td>" +
                         "<td>"+item.organization+ "</td>" +
 						"<td>"+aa+"</td>" +
-                        "<td class='hidden-480'>" +
-                        "<div class='visible-md visible-lg hidden-sm hidden-xs action-buttons'>" +
+                        "<td><div class='visible-md visible-lg hidden-sm hidden-xs action-buttons'>" +
+                        "<a class='black '>" +
+                        "<i class='icon-save bigger-130'></i></a></div></td>" +
+                    //    "<td class='hidden-480'>" +
+                        "<td><div class='visible-md visible-lg hidden-sm hidden-xs action-buttons'>" +
                         "<a class='green '>" +
                         "<i class='icon-pencil bigger-130'></i></a></div></td>" +
                         "<td><div class='visible-md visible-lg hidden-sm hidden-xs action-buttons '>" +
@@ -517,6 +576,52 @@
         });
         // return datalist;
     }
+    
+    $('.black').click(function () {
+        $('.dialogbody.importExcel').css({'display':'block'})
+        var aname = $(this).parents('tr').children('td').eq(1).text();
+        $('#gameName').val(aname);
+        $('#importMember').click(function () {
+            var uploadFile = $("#memberFile").val();
+            var gameType = $("#gameName").val();
+            if(gameType == null || gameType == ''){
+                alert("请选择赛事");
+            }
+            if (uploadFile == '') {
+                alert("请择excel,再上传");
+            } else if (uploadFile.lastIndexOf(".xls") < 0 && uploadFile.lastIndexOf(".xlsx") < 0
+                && uploadFile.lastIndexOf(".xlsm") < 0) {//可判断以.xls和.xlsx结尾的excel
+                alert("只能上传Excel文件");
+            }else{
+                var formData = new FormData();
+                var file = $("#memberFile")[0].files[0];
+                //此处将所要传递的数据append到formData中
+                formData.append("fileinfo", file);
+                formData.append("gameType", gameType);
+                $.ajax({
+                    //几个参数需要注意一下
+                    type: "POST",//方法类型
+                    // contentType: "application/json",
+                    dataType: "json",//预期服务器返回的数据类型
+                    url: "/scoreAddController/importMember",//url
+                    data:formData,
+                    async: false,
+                    processData: false,       //必不可缺
+                    contentType: false,       //必不可缺
+                    success: function (result) {
+                        if (result) {
+                            alert("导入成功！");
+                            window.location.href = "/static/project.html";
+                        };
+                    },
+                    error: function () {
+                        alert("异常！");
+                        //window.location.href = "/static/addscore.html";
+                    }
+                });
+            }
+        })
+    })
 
     // 编辑
     $('.green').click(function () {

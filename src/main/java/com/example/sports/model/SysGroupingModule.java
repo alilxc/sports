@@ -13,17 +13,17 @@ public class SysGroupingModule implements Serializable{
 
     private static final long serialVersionUID = -1;
 
-    private int id;
+    private Long id;
 
-    private long createTime;
+    private Long createTime;
 
     /** 更新时间 */
-    private long updateTime;
+    private Long updateTime;
 
     /**
      * 赛事id
      */
-    private int competitionId;
+    private Integer competitionId;
 
     /**
      * 项目代码
@@ -38,44 +38,44 @@ public class SysGroupingModule implements Serializable{
     /**
      * 参赛人数
      */
-    private int competitors;
+    private Integer competitors;
 
     /**
      * 成绩记录数
      */
-    private int records;
+    private Integer records;
 
     /**
      * 是否打印完毕, 1：已打印，0：未打印
      */
-    private int printed;
+    private Integer printed;
 
     /**
      * 扩展字段
      */
     private String ext;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public long getCreateTime() {
+    public Long getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(long createTime) {
+    public void setCreateTime(Long createTime) {
         this.createTime = createTime;
     }
 
-    public int getCompetitionId() {
+    public Long getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Long updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public Integer getCompetitionId() {
         return competitionId;
     }
 
-    public void setCompetitionId(int competitionId) {
+    public void setCompetitionId(Integer competitionId) {
         this.competitionId = competitionId;
     }
 
@@ -95,16 +95,28 @@ public class SysGroupingModule implements Serializable{
         this.teamType = teamType;
     }
 
-    public int getCompetitors() {
+    public Integer getCompetitors() {
         return competitors;
     }
 
-    public void setCompetitors(int competitors) {
+    public void setCompetitors(Integer competitors) {
         this.competitors = competitors;
     }
 
-    public int getRecords() {
+    public Integer getRecords() {
         return records;
+    }
+
+    public void setRecords(Integer records) {
+        this.records = records;
+    }
+
+    public Integer getPrinted() {
+        return printed;
+    }
+
+    public void setPrinted(Integer printed) {
+        this.printed = printed;
     }
 
     public String getExt() {
@@ -115,23 +127,11 @@ public class SysGroupingModule implements Serializable{
         this.ext = ext;
     }
 
-    public void setRecords(int records) {
-        this.records = records;
+    public Long getId() {
+        return id;
     }
 
-    public int getPrinted() {
-        return printed;
-    }
-
-    public void setPrinted(int printed) {
-        this.printed = printed;
-    }
-
-    public long getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(long updateTime) {
-        this.updateTime = updateTime;
+    public void setId(Long id) {
+        this.id = id;
     }
 }

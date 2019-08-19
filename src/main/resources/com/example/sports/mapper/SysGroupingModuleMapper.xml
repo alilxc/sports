@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.sports.mapper.SysGroupingModuleMapper" >
     <resultMap id="BaseResultMap" type="com.example.sports.model.SysGroupingModule" >
-        <id column="id" property="id" jdbcType="INTEGER" />
+        <id column="id" property="id" jdbcType="BIGINT" />
         <result column="create_time" property="createTime" jdbcType="BIGINT" />
         <result column="update_time" property="updateTime" jdbcType="BIGINT" />
         <result column="competition_id" property="competitionId" jdbcType="INTEGER" />
@@ -77,7 +77,7 @@
     </sql>
 
     <insert id="batchInsert" parameterType="java.util.List">
-        insert into sys_project_sign
+        insert into sys_grouping_info
         (create_time, update_time, competition_id, project_id, team_type, competitors, records, printed, ext)
         VALUES
         <foreach collection ="groupingModules" item="module" index= "index" separator =",">
@@ -87,6 +87,95 @@
             #{module.teamType}, #{module.competitors},#{module.records}, #{module.printed},#{module.ext}
             )
         </foreach >
+    </insert>
+
+    <select id="select" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_grouping_info
+        WHERE competition_id=#{competitionId} and project_id=#{projectId} and team_type=#{teamType}
+    </select>
+
+    <update id="update">
+        UPDATE sys_grouping_info
+        SET
+        <if test="module.competitors!=null">
+            competitors=competitors+#{module.competitors},
+        </if>
+        <if test="module.records!=null">
+            records=records+#{module.records},
+        </if>
+        <if test="module.printed!=null">
+            printed=#{module.printed},
+        </if>
+        update_time=#{module.updateTime}
+        WHERE
+        competition_id=#{module.competitionId} and project_id=#{module.projectId} and team_type=#{module.teamType}
+    </update>
+
+    <insert id="insert" parameterType="com.example.sports.model.SysGroupingModule" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into sys_grouping_info
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="updateTime != null" >
+                update_time,
+            </if>
+            <if test="competitionId != null" >
+                competition_id,
+            </if>
+            <if test="projectId != null" >
+                project_id,
+            </if>
+            <if test="teamType != null" >
+                team_type,
+            </if>
+            <if test="competitors != null" >
+                competitors,
+            </if>
+            <if test="records != null" >
+                records,
+            </if>
+            <if test="printed != null" >
+                printed,
+            </if>
+            <if test="ext != null" >
+                ext,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="createTime != null" >
+                #{createTime,jdbcType=BIGINT},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=BIGINT},
+            </if>
+            <if test="competitionId != null" >
+                #{competitionId,jdbcType=INTEGER},
+            </if>
+            <if test="projectId != null" >
+                #{projectId,jdbcType=VARCHAR},
+            </if>
+            <if test="teamType != null" >
+                #{teamType,jdbcType=VARCHAR},
+            </if>
+            <if test="competitors != null" >
+                #{competitors,jdbcType=INTEGER},
+            </if>
+            <if test="records != null" >
+                #{records,jdbcType=INTEGER},
+            </if>
+            <if test="printed != null" >
+                #{printed,jdbcType=INTEGER},
+            </if>
+            <if test="ext != null" >
+                #{ext,jdbcType=VARCHAR},
+            </if>
+        </trim>
     </insert>
 
 </mapper>

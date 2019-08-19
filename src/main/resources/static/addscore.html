@@ -350,6 +350,17 @@
 							<div class="space-4"></div>
 
 							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-0">赛事</label>
+
+								<div class="col-sm-6">
+									<select id="gameType" placeholder="" class="col-xs-10 col-sm-5" name="gameType">
+									</select>
+								</div>
+							</div>
+
+							<div class="space-4"></div>
+
+							<div class="form-group">
 								<label class="col-sm-3 control-label no-padding-right" for="form-field-1">名单</label>
 
 								<div class="col-sm-6">
@@ -385,7 +396,7 @@
 							<div class="space-4"></div>
 
 							<div class="form-group">
-								<label class="col-sm-5 control-label no-padding-right" for="form-field-1">学号:</label>
+								<label class="col-sm-5 control-label no-padding-right" for="form-field-1">场地</label>
 
 								<div class="col-sm-6">
 									<input type="text" name="sysUserSid" placeholder="" class="col-xs-10 col-sm-5" />
@@ -396,10 +407,10 @@
 
 							<div class="form-group">
 
-								<label class="col-sm-5 control-label no-padding-right" for="form-field-2">项目名称:</label>
+								<label class="col-sm-5 control-label no-padding-right" for="form-field-2">赛事</label>
 
 								<div class="col-sm-6">
-									<select id="projectname" placeholder="" class="col-xs-10 col-sm-5" name="sysProjectId">
+									<select id="gameType" placeholder="" class="col-xs-10 col-sm-5" name="gameType">
 									</select>
 								</div>
 							</div>
@@ -518,6 +529,10 @@
             function importMember() {
 
                 var uploadFile = $("#memberFile").val();
+                var gameType = $("#gameType").val();
+                if(gameType == null || gameType == ''){
+                    alert("请选择赛事");
+				}
                 if (uploadFile == '') {
                     alert("请择excel,再上传");
                 } else if (uploadFile.lastIndexOf(".xls") < 0 && uploadFile.lastIndexOf(".xlsx") < 0
@@ -528,6 +543,7 @@
                     var file = $("#memberFile")[0].files[0];
                     //此处将所要传递的数据append到formData中
                     formData.append("fileinfo", file);
+                    formData.append("gameType", gameType);
                     $.ajax({
                         //几个参数需要注意一下
                         type: "POST",//方法类型
@@ -553,6 +569,33 @@
             }
 
 
+		</script>
+
+		<script type="text/javascript">
+            window.onload = showGames();
+            function showGames(){
+                $.ajax({
+                    type: "GET",//方法类型
+                    contentType: "application/json",
+                    dataType: "json",//预期服务器返回的数据类型
+                    url: "/projectController/queryGameList",
+                    async: false,
+                    success: function (result) {
+                        if (result.httpStatus == 200) {
+                            var content = "";
+                            var dataArr = result.data;
+                            var nameOpt = "<option value='' selected='selected'>--请选择--</option>";
+                            for (var i = 0; i < dataArr.length; i++) {
+                                nameOpt+="<option value='"+dataArr[i]+"' >"+dataArr[i]+"</option>"
+                            }
+                            $('#gameType').html(nameOpt);
+                        };
+                    },
+                    error: function () {
+                        alert("异常！");
+                    }
+                })
+            }
 		</script>
 
 		<script type="text/javascript">

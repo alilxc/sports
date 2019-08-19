@@ -72,9 +72,9 @@ public class ScoreAddController {
 
     @PostMapping("/importMember")
     @ApiOperation(value = "分组名单导入")
-    public ResponseObject<Void> importMember(@RequestParam(value = "fileinfo", required = false) MultipartFile file){
-        Map<String, Object> map = new HashMap<String, Object>();
-        boolean ret = importService.readExcelFile(file);
-        return ResponseObjectUtil.success();
+    public ResponseObject<Void> importMember(@RequestParam(value = "fileinfo", required = false) MultipartFile file,
+                                             @RequestParam(value = "gameType", required = true) String gameName){
+        boolean ret = importService.readExcelFile(file, gameName);
+        return ret ? ResponseObjectUtil.success() : ResponseObjectUtil.fail("导入名单失败");
     }
 }

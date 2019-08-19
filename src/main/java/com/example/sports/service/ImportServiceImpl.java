@@ -21,8 +21,8 @@ public class ImportServiceImpl implements ImportService{
     private ReadExcelManager readExcelManager;
 
     @Override
-    public boolean readExcelFile(MultipartFile file) {
+    public boolean readExcelFile(MultipartFile file, String gameName) {
         //解析excel，获取上传的事件单
-        return readExcelManager.getExcelInfo(file);
+        return readExcelManager.getExcelInfo(file, gameName);
     }
 }

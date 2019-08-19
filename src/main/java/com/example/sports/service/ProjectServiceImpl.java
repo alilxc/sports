@@ -89,7 +89,7 @@ public class ProjectServiceImpl implements ProjectService {
         c.set(Calendar.SECOND, 0);
         c.set(Calendar.MILLISECOND, 0);
         Long today=c.getTimeInMillis();
-        criteria.addActiveStart(today);
+        criteria.addActiveFinish(today);
 
         List<SysProject> sysProjects = sysProjectMapper.selectByExample(example);
         List<String> data = new ArrayList<>();

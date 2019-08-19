@@ -10,5 +10,5 @@ import org.springframework.web.multipart.MultipartFile;
  **/
 public interface ImportService {
 
-    boolean readExcelFile(MultipartFile file);
+    boolean readExcelFile(MultipartFile file, String gameName);
 }
