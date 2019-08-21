@@ -288,10 +288,10 @@
 											<div class="row">
 													<div class="col-xs-12">
 
-														<button class="btn btn-info dialogalert"  type="button" style="float: right;" data-toggle="modal" data-target="#myMember">
+														<!--<button class="btn btn-info dialogalert"  type="button" style="float: right;" data-toggle="modal" data-target="#myMember">
 															名单导入
 															<i class="icon-print  align-top bigger-125 icon-on-right"></i>
-														</button>
+														</button>-->
 
 														<button class="btn btn-info dialogalert"  type="button" style="float: right;" data-toggle="modal" data-target="#myModal">
 															录入成绩
@@ -334,7 +334,7 @@
 				<!--右侧内容 End-->
 		</div>
 
-			<div class="modal fade" id="myMember" tabindex="-1" role="dialog" aria-labelledby="myMemberLabel" aria-hidden="true">
+			<!--<div class="modal fade" id="myMember" tabindex="-1" role="dialog" aria-labelledby="myMemberLabel" aria-hidden="true">
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
@@ -344,7 +344,7 @@
 
 						<div class="space-2"></div>
 
-						<!-- 名单录入弹框BEGINS -->
+						&lt;!&ndash; 名单录入弹框BEGINS &ndash;&gt;
 
 						<form class="form-horizontal" role="form" id="importMembers" enctype="multipart/form-data">
 							<div class="space-4"></div>
@@ -377,13 +377,13 @@
 						</form>
 
 
-					</div><!-- /.modal-content -->
-				</div><!-- /.modal -->
+					</div>&lt;!&ndash; /.modal-content &ndash;&gt;
+				</div>&lt;!&ndash; /.modal &ndash;&gt;
 			</div>
-
+-->
 			<!--弹框（Modal） -->
 			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-				<div class="modal-dialog">
+				<div class="modal-dialog" style="width:800px; height:500px;">
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -391,69 +391,29 @@
 						</div>
 
 						<!-- 成绩录入弹框BEGINS -->
+						<div class="space-4"></div>
 
 						<form class="form-horizontal" role="form" id="addscores">
-							<div class="space-4"></div>
 
 							<div class="form-group">
-								<label class="col-sm-5 control-label no-padding-right" for="form-field-1">场地</label>
 
-								<div class="col-sm-6">
-									<input type="text" name="sysUserSid" placeholder="" class="col-xs-10 col-sm-5" />
+								<div class="input-group-btn">
+
+									<label class="col-sm-5 control-label no-padding-right" for="form-field-2">赛事</label>
+
+									<div class="col-sm-6">
+										<select id="gameType" placeholder="" class="col-xs-10 col-sm-5 form-control" name="gameType" >
+										</select>
+									</div>
 								</div>
-							</div>
 
-							<div class="space-4"></div>
+								<div class="input-group-btn">
+									<label class="col-sm-2 control-label no-padding-right" for="form-field-1">场地</label>
 
-							<div class="form-group">
-
-								<label class="col-sm-5 control-label no-padding-right" for="form-field-2">赛事</label>
-
-								<div class="col-sm-6">
-									<select id="gameType" placeholder="" class="col-xs-10 col-sm-5" name="gameType">
-									</select>
-								</div>
-							</div>
-
-							<div class="space-4"></div>
-
-							<div class="form-group">
-								<label class="col-sm-5 control-label no-padding-right" for="form-field-3">组别:</label>
-
-								<div class="col-sm-6">
-									<select  placeholder="" name ="teamType"class="col-xs-10 col-sm-5" name="teamType">
-										<option value="2" selected>男子组</option>
-										<option value="1">女子组</option>
-									</select>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-5 control-label no-padding-right" for="form-field-4">项目类别:</label>
-
-								<div class="col-sm-6">
-									<select  placeholder="" class="col-xs-10 col-sm-5" name="sportType">
-										<option value="1" selected>田赛</option>
-										<option value="2">径赛</option>
-									</select>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-5 control-label no-padding-right" for="form-field-6">个人成绩:</label>
-
-								<div class="col-sm-6">
-									<input type="text" id="score" name="achievement" placeholder="" class="col-xs-10 col-sm-5" />
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-5 control-label no-padding-right" for="form-field-7">比赛类型:</label>
-
-								<div class="col-sm-6">
-									<select  placeholder="" name ="matchType" class="col-xs-10 col-sm-5">
-										<option value="1" selected>小组赛</option>
-										<option value="2">初赛</option>
-										<option value="3">决赛</option>
-
-									</select>
+									<div class="col-sm-6">
+										<select id="place" placeholder="" class="col-xs-10 col-sm-5 form-control" name="place" onchange="placeChange()">
+										</select>
+									</div>
 								</div>
 							</div>
 
@@ -494,7 +454,7 @@
 		<script src="assets/js/ace-elements.min.js"></script>
 		<script src="assets/js/ace.min.js"></script>
 		<script src="assets/js/myjs/index.js"></script>
-		<script type="text/javascript">
+		<!--<script type="text/javascript">
             window.onload = showProjects();
             function showProjects(){
                 $.ajax({
@@ -523,9 +483,9 @@
                     }
                 })
             }
-		</script>
+		</script>-->
 
-		<script type="text/javascript">
+		<!--<script type="text/javascript">
             function importMember() {
 
                 var uploadFile = $("#memberFile").val();
@@ -569,7 +529,7 @@
             }
 
 
-		</script>
+		</script>-->
 
 		<script type="text/javascript">
             window.onload = showGames();
@@ -589,6 +549,34 @@
                                 nameOpt+="<option value='"+dataArr[i]+"' >"+dataArr[i]+"</option>"
                             }
                             $('#gameType').html(nameOpt);
+                        };
+                    },
+                    error: function () {
+                        alert("异常！");
+                    }
+                })
+            }
+		</script>
+
+
+		<script type="text/javascript">
+            window.onload = showPlaces();
+            function showPlaces(){
+                $.ajax({
+                    type: "GET",//方法类型
+                    contentType: "application/json",
+                    dataType: "json",//预期服务器返回的数据类型
+                    url: "/projectController/queryGameList",
+                    async: false,
+                    success: function (result) {
+                        if (result.httpStatus == 200) {
+                            var content = "";
+                            var dataArr = result.data;
+                            var nameOpt = "<option value='' selected='selected'>--请选择--</option>";
+                            for (var i = 0; i < dataArr.length; i++) {
+                                nameOpt+="<option value='"+dataArr[i]+"' >"+dataArr[i]+"</option>"
+                            }
+                            $('#place').html(nameOpt);
                         };
                     },
                     error: function () {

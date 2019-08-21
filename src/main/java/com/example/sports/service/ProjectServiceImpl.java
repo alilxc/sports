@@ -141,4 +141,9 @@ public class ProjectServiceImpl implements ProjectService {
             sysProjectMapper.updateByExampleSelective(sysProject, example);
         }
     }
+
+    @Override
+    public List<String> queryProceedPlaces(String competition) {
+        return null;
+    }
 }

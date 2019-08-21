@@ -7,13 +7,11 @@ import java.util.concurrent.TimeUnit;
 
 import com.alibaba.fastjson.JSON;
 import com.example.sports.dto.response.ProjectRes;
+import com.example.sports.mapper.SysCompetitionGroupMapper;
 import com.example.sports.mapper.SysGroupingModuleMapper;
 import com.example.sports.mapper.SysProjectMapper;
 import com.example.sports.mapper.SysProjectSignMapper;
-import com.example.sports.model.SysGroupingModule;
-import com.example.sports.model.SysProject;
-import com.example.sports.model.SysProjectExample;
-import com.example.sports.model.SysProjectSign;
+import com.example.sports.model.*;
 import com.github.pagehelper.PageHelper;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -48,6 +46,9 @@ public class ReadExcelManager {
 
     @Autowired
     private SysGroupingModuleMapper sysGroupingModuleMapper;
+
+    @Autowired
+    private SysCompetitionGroupMapper sysCompetitionGroupMapper;
 
     //sheet名匹配
     private static final String SUFFIX = "场地";
@@ -184,8 +185,10 @@ public class ReadExcelManager {
                         continue;
                     }
                     place = infos.get(0);
+                    //存储比赛分组信息
+                    storeCompetitionGroup(competitionId, place);
                 }else if(CellType.NUMERIC.equals(cell.getCellType())){
-                    SysProjectSign sysProjectSign = buildSysProjectSign(row, place, null);
+                    SysProjectSign sysProjectSign = buildSysProjectSign(row, competitionId, place, null);
                     sysProjectSignList.add(sysProjectSign);
                     String projectAndTeam = competitionId + "#" + sysProjectSign.getProjectId() + "#" + sysProjectSign.getTeamType();
                     Integer count = 1;
@@ -205,6 +208,26 @@ public class ReadExcelManager {
             }
         }
         return true;
+    }
+
+    private void storeCompetitionGroup(Long competitionId, String place){
+        SysCompetitionGroup sysCompetitionGroup = new SysCompetitionGroup();
+        long timestamp = System.currentTimeMillis();
+        sysCompetitionGroup.setCreateTime(timestamp);
+        sysCompetitionGroup.setUpdateTime(timestamp);
+        sysCompetitionGroup.setCompetitionId(competitionId.intValue());
+        sysCompetitionGroup.setPlace(place);
+        sysCompetitionGroup.setExt(null);
+        try{
+            for(int i = 0; i < retryTime; i++){
+                int insertResult = sysCompetitionGroupMapper.insert(sysCompetitionGroup);
+                if(insertResult > 0){
+                    break;
+                }
+            }
+        }catch (Exception e){
+            log.error("insert competitionGroup failed! competitionId={}, place={}", competitionId, place, e);
+        }
     }
 
     private void storeProjectSign(List<SysProjectSign> sysProjectSignList){
@@ -277,11 +300,12 @@ public class ReadExcelManager {
         return filePath.matches("^.+\\.(?i)(xlsx)$") || filePath.matches("^.+\\.(?i)(xlsm)$");
     }
 
-    private SysProjectSign buildSysProjectSign(Row row, String place, Map<String, String> ext){
+    private SysProjectSign buildSysProjectSign(Row row, Long competitionId, String place, Map<String, String> ext){
         long timestamp = System.currentTimeMillis();
         SysProjectSign sysProjectSign = new SysProjectSign();
         sysProjectSign.setCreateTime(timestamp);
         sysProjectSign.setUpdateTime(timestamp);
+        sysProjectSign.setCompetitionId(competitionId);
         sysProjectSign.setUsername(row.getCell(2).getStringCellValue());
         sysProjectSign.setSysUserSid(row.getCell(3).getStringCellValue());
         sysProjectSign.setGroupName(row.getCell(4).getStringCellValue());

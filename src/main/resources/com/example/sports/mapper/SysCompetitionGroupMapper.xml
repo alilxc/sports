@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.sports.mapper.SysCompetitionGroupMapper" >
+    <resultMap id="BaseResultMap" type="com.example.sports.model.SysCompetitionGroup" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="create_time" property="createTime" jdbcType="BIGINT" />
+        <result column="update_time" property="updateTime" jdbcType="BIGINT" />
+        <result column="competition_id" property="competitionId" jdbcType="INTEGER" />
+        <result column="place" property="place" jdbcType="VARCHAR" />
+        <result column="ext" property="ext" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="Example_Where_Clause" >
+        <where >
+            <foreach collection="oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause" >
+        <where >
+            <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="Base_Column_List" >
+        id, create_time, update_time, competition_id, place, ext
+    </sql>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        insert into sys_competition_group
+        (create_time, update_time, competition_id, place, ext)
+        VALUES
+        <foreach collection ="competitionGroup" item="module" index= "index" separator =",">
+            (
+            #{module.createTime}, #{module.updateTime},
+            #{module.competitionId},#{module.place},#{module.ext}
+            )
+        </foreach >
+    </insert>
+
+    <select id="select" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_competition_group
+        WHERE competition_id=#{competitionId}
+    </select>
+
+
+    <insert id="insert" parameterType="com.example.sports.model.SysCompetitionGroup" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into sys_competition_group
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="updateTime != null" >
+                update_time,
+            </if>
+            <if test="competitionId != null" >
+                competition_id,
+            </if>
+            <if test="place != null" >
+                place,
+            </if>
+            <if test="ext != null" >
+                ext,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="createTime != null" >
+                #{createTime,jdbcType=BIGINT},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=BIGINT},
+            </if>
+            <if test="competitionId != null" >
+                #{competitionId,jdbcType=INTEGER},
+            </if>
+            <if test="place != null" >
+                #{place,jdbcType=VARCHAR},
+            </if>
+            <if test="ext != null" >
+                #{ext,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>

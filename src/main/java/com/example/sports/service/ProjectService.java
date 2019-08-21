@@ -52,4 +52,11 @@ public interface ProjectService {
      */
     void modifyProject(ProjectRequest request, Long id);
 
+
+    /**
+     * 查询当前比赛进行的场次
+     */
+    List<String> queryProceedPlaces(String competition);
+
+
 }

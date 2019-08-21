@@ -81,4 +81,11 @@ public class ProjectController {
         List<String> data = projectService.queryProceedGames();
         return ResponseObjectUtil.success(data);
     }
+
+    @GetMapping("/queryGamePlaces")
+    @ApiOperation(value = "比赛场次")
+    public ResponseObject<List<String>> queryGamePlaces(String gameName){
+        List<String> data = null;
+        return ResponseObjectUtil.success(data);
+    }
 }

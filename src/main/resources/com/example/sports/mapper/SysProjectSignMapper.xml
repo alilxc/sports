@@ -7,6 +7,7 @@
     <result column="update_time" property="updateTime" jdbcType="BIGINT" />
     <result column="sys_user_sid" property="sysUserSid" jdbcType="VARCHAR" />
     <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="competition_id" property="competitionId" jdbcType="BIGINT" />
     <result column="group_name" property="groupName" jdbcType="VARCHAR" />
     <result column="project_id" property="projectId" jdbcType="VARCHAR" />
     <result column="team_type" property="teamType" jdbcType="VARCHAR" />
@@ -75,16 +76,17 @@
 
 
   <sql id="Base_Column_List" >
-    id, create_time, update_time, sys_user_sid, username, group_name, project_id, team_type, score, place, ext
+    id, create_time, update_time, sys_user_sid, username, competition_id group_name, project_id, team_type, score, place, ext
   </sql>
 
   <insert id="insert" parameterType="com.example.sports.model.SysProjectSign" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into sys_project_sign (create_time, update_time, sys_user_sid, username, group_name, project_id, team_type, score, place, ext
+    insert into sys_project_sign (create_time, update_time, sys_user_sid, username, competition_id, group_name, project_id, team_type, score, place, ext
     )
-    values (#{createTime,jdbcType=BIGINT}, , #{updateTime,jdbcType=BIGINT}, #{sysUserSid,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{groupName,jdbcType=VARCHAR},
+    values (#{createTime,jdbcType=BIGINT}, , #{updateTime,jdbcType=BIGINT}, #{sysUserSid,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR},
+    #{competitionId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR},
     #{projectId,jdbcType=VARCHAR}, #{teamType,jdbcType=VARCHAR}, #{score,jdbcType=DOUBLE},
     #{place,jdbcType=VARCHAR}, #{ext,jdbcType=VARCHAR}
     )
@@ -107,6 +109,9 @@
       </if>
       <if test="username != null" >
         username,
+      </if>
+      <if test="competitionId != null" >
+        competition_id,
       </if>
       <if test="groupName != null" >
         group_name,
@@ -140,6 +145,9 @@
       <if test="username != null" >
         #{username,jdbcType=VARCHAR},
       </if>
+      <if test="competitionId != null" >
+        #{competition_id,jdbcType=BIGINT},
+      </if>
       <if test="groupName != null" >
         #{groupName,jdbcType=VARCHAR},
       </if>
@@ -164,12 +172,12 @@
   
   <insert id="batchInsert" parameterType="java.util.List">
     insert into sys_project_sign
-    (create_time, update_time, sys_user_sid, username, group_name, project_id, team_type,  place, ext)
+    (create_time, update_time, sys_user_sid, username, competition_id, group_name, project_id, team_type,  place, ext)
     VALUES
     <foreach collection ="records" item="record" index= "index" separator =",">
       (
       #{record.createTime}, #{record.updateTime},
-      #{record.sysUserSid},#{record.username},
+      #{record.sysUserSid},#{record.username},#{record.competitionId},
       #{record.groupName}, #{record.projectId},#{record.teamType}, #{record.place},#{record.ext}
       )
     </foreach >

@@ -28,6 +28,11 @@ public class SysProjectSign implements Serializable {
      */
     private String username;
 
+    /**
+     * 赛事id
+     */
+    private Long competitionId;
+
     /** 所属团队 */
     private String groupName;
 
@@ -101,14 +106,6 @@ public class SysProjectSign implements Serializable {
         this.teamType = teamType;
     }
 
-    public double getScore() {
-        return score;
-    }
-
-    public void setScore(double score) {
-        this.score = score;
-    }
-
     public String getPlace() {
         return place;
     }
@@ -123,6 +120,18 @@ public class SysProjectSign implements Serializable {
 
     public void setGroupName(String groupName) {
         this.groupName = groupName;
+    }
+
+    public Long getCompetitionId() {
+        return competitionId;
+    }
+
+    public void setCompetitionId(Long competitionId) {
+        this.competitionId = competitionId;
+    }
+
+    public void setScore(Double score) {
+        this.score = score;
     }
 
     public long getCreateTime() {

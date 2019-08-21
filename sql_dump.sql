@@ -4,6 +4,7 @@ create table sys_project_sign(
 	update_time BIGINT,
 	sys_user_sid VARCHAR(32),
 	username VARCHAR(100),
+	competition_id BIGINT,
 	group_name VARCHAR(128),
 	project_id VARCHAR(64),
 	team_type VARCHAR(32),
@@ -25,6 +26,17 @@ create table sys_grouping_info(
 	competitors int,
 	records int,
 	printed int,
+	ext VARCHAR(1024),
+	primary key(id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+create table sys_competition_group(
+	id int UNSIGNED AUTO_INCREMENT,
+	create_time BIGINT,
+	update_time BIGINT,
+	competition_id int,
+	place VARCHAR(32),
 	ext VARCHAR(1024),
 	primary key(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
