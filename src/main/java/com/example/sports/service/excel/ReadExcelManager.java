@@ -306,6 +306,7 @@ public class ReadExcelManager {
         sysProjectSign.setCreateTime(timestamp);
         sysProjectSign.setUpdateTime(timestamp);
         sysProjectSign.setCompetitionId(competitionId);
+        sysProjectSign.setOrderId((int)row.getCell(1).getNumericCellValue());
         sysProjectSign.setUsername(row.getCell(2).getStringCellValue());
         sysProjectSign.setSysUserSid(row.getCell(3).getStringCellValue());
         sysProjectSign.setGroupName(row.getCell(4).getStringCellValue());

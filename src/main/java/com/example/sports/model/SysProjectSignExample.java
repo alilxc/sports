@@ -165,6 +165,16 @@ public class SysProjectSignExample {
             return (Criteria) this;
         }
 
+        public Criteria andCompetitionIdEqual(int competitionId) {
+            addCriterion("competition_id =", competitionId, "competition_id");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlaceEqual(String place) {
+            addCriterion("place =", place, "place");
+            return (Criteria) this;
+        }
+
         public Criteria andIdIn(List<Long> values) {
             addCriterion("id in", values, "id");
             return (Criteria) this;
@@ -744,6 +754,7 @@ public class SysProjectSignExample {
             addCriterion("update_time not between", value1, value2, "updateTime");
             return (Criteria) this;
         }
+
     }
 
     public static class Criteria extends GeneratedCriteria {

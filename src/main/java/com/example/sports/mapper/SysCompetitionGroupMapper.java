@@ -2,6 +2,8 @@ package com.example.sports.mapper;
 
 import com.example.sports.model.SysCompetitionGroup;
 
+import java.util.List;
+
 /**
  * @program: sports
  * @description:
@@ -11,4 +13,9 @@ import com.example.sports.model.SysCompetitionGroup;
 public interface SysCompetitionGroupMapper {
 
     int insert(SysCompetitionGroup module);
+
+    /**
+     * 根据比赛id获取当前场地分布情况
+     */
+    List<SysCompetitionGroup> select(int competitionId);
 }

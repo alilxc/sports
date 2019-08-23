@@ -11,7 +11,6 @@ public class SysProjectSign implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /**  */
     private Long id;
 
     /** 创建时间 */
@@ -19,6 +18,11 @@ public class SysProjectSign implements Serializable {
 
     /** 更新时间 */
     private long updateTime;
+
+    /**
+     * 分组内的顺序id
+     */
+    private Integer orderId;
 
     /** 参赛编号 */
     private String sysUserSid;
@@ -112,6 +116,18 @@ public class SysProjectSign implements Serializable {
 
     public void setPlace(String place) {
         this.place = place;
+    }
+
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
+    }
+
+    public Double getScore() {
+        return score;
     }
 
     public String getGroupName() {

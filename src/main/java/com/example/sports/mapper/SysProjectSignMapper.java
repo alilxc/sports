@@ -21,6 +21,8 @@ public interface SysProjectSignMapper {
 
     int batchInsert(@Param("records") List<SysProjectSign> records);
 
+    List<SysProjectSign> selectByExample(SysProjectSignExample example);
+
     /*List<SysProjectSign> selectByExample(SysProjectSignExample example);
 
     SysProjectSign selectByPrimaryKey(Long id);

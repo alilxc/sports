@@ -6,8 +6,10 @@ import com.example.sports.dto.request.EnterRequest;
 import com.example.sports.dto.request.ScoreAddRequest;
 import com.example.sports.dto.response.EnterInfoRes;
 import com.example.sports.dto.response.SchoolScoreRes;
+import com.example.sports.dto.response.SysProjectSignDTO;
 import com.example.sports.model.SysCollege;
 import com.example.sports.model.SysProject;
+import com.example.sports.model.SysProjectSign;
 import com.example.sports.service.ImportService;
 import com.example.sports.service.ScoreAddService;
 import com.example.sports.util.ResponseObject;
@@ -16,20 +18,16 @@ import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 /**
- * @title
- * @Author huangjiarui
- * @date: 2018-05-02
+ * @author xingchao.lxc
  */
 @RequestMapping("/scoreAddController")
 @RestController
@@ -76,5 +74,12 @@ public class ScoreAddController {
                                              @RequestParam(value = "gameType", required = true) String gameName){
         boolean ret = importService.readExcelFile(file, gameName);
         return ret ? ResponseObjectUtil.success() : ResponseObjectUtil.fail("导入名单失败");
+    }
+
+    @GetMapping("/queryGroupMember")
+    @ApiOperation(value = "查询分组名单信息")
+    public ResponseObject<List<SysProjectSignDTO>> queryGroupMember(String gameName, String place){
+        List<SysProjectSignDTO> data = scoreAddService.groupSignMemberInfo(gameName, place);
+        return ResponseObjectUtil.success(data);
     }
 }

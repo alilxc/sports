@@ -3,7 +3,9 @@ package com.example.sports.service;
 import com.example.sports.dto.PageRequestBean;
 import com.example.sports.dto.request.ProjectRequest;
 import com.example.sports.dto.response.ProjectRes;
+import com.example.sports.mapper.SysCompetitionGroupMapper;
 import com.example.sports.mapper.SysProjectMapper;
+import com.example.sports.model.SysCompetitionGroup;
 import com.example.sports.model.SysProject;
 import com.example.sports.model.SysProjectExample;
 import com.example.sports.util.DateUtil;
@@ -17,10 +19,8 @@ import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -35,6 +35,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Autowired
     private SysProjectMapper sysProjectMapper;
+
+    @Autowired
+    private SysCompetitionGroupMapper sysCompetitionGroupMapper;
 
     @Override
     public PageInfo<ProjectRes> adminRoleList(PageRequestBean requestBean) {
@@ -143,7 +146,24 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<String> queryProceedPlaces(String competition) {
-        return null;
+    public List<String> queryProceedPlaces(String gameName) {
+        try{
+            SysProjectExample example = new SysProjectExample();
+            SysProjectExample.Criteria criteria = example.createCriteria();
+            criteria.andNameEqualTo(gameName);
+            List<SysProject> projectList = sysProjectMapper.selectByExample(example);
+            if(projectList == null || projectList.size() <= 0){
+                return Collections.emptyList();
+            }
+            int competitionId = projectList.get(0).getId().intValue();
+            List<SysCompetitionGroup> groupList = sysCompetitionGroupMapper.select(competitionId);
+            if(groupList == null || groupList.size() <= 0){
+                return Collections.emptyList();
+            }
+            return groupList.stream().map(SysCompetitionGroup::getPlace).collect(Collectors.toList());
+        }catch (Exception e){
+            log.error("[ProjectService].queryProceedPlaces exception. {}", gameName, e);
+        }
+        return Collections.emptyList();
     }
 }

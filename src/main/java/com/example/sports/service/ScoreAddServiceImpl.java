@@ -3,16 +3,20 @@ package com.example.sports.service;
 import com.example.sports.dto.PageRequestBean;
 import com.example.sports.dto.request.ScoreAddRequest;
 import com.example.sports.dto.response.SchoolScoreRes;
+import com.example.sports.dto.response.SysProjectSignDTO;
 import com.example.sports.mapper.*;
 import com.example.sports.mapper.sys.SysMapper;
 import com.example.sports.model.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -21,6 +25,8 @@ import java.util.List;
  */
 @Service
 public class ScoreAddServiceImpl implements ScoreAddService {
+
+    private static final Logger log = LoggerFactory.getLogger(ScoreAddServiceImpl.class);
 
     @Autowired
     private SysGradingModuleMapper sysGradingModuleMapper;
@@ -39,6 +45,11 @@ public class ScoreAddServiceImpl implements ScoreAddService {
 
     @Autowired
     private SysCollegeMapper sysCollegeMapper;
+
+    @Autowired
+    private SysProjectSignMapper sysProjectSignMapper;
+
+
     @Override
     public List<SysProject> sysProject() {
         SysProjectExample example = new SysProjectExample();
@@ -156,5 +167,50 @@ public class ScoreAddServiceImpl implements ScoreAddService {
 
 
         }
+    }
+
+    @Override
+    public List<SysProjectSignDTO> groupSignMemberInfo(String gameName, String place) {
+        try{
+            SysProjectExample example = new SysProjectExample();
+            SysProjectExample.Criteria criteria = example.createCriteria();
+            criteria.andNameEqualTo(gameName);
+            List<SysProject> projectList = sysProjectMapper.selectByExample(example);
+            if(projectList == null || projectList.size() <= 0){
+                return Collections.emptyList();
+            }
+            int competitionId = projectList.get(0).getId().intValue();
+
+            SysProjectSignExample projectSignExample = new SysProjectSignExample();
+            SysProjectSignExample.Criteria projectSignCriteria = projectSignExample.createCriteria();
+            projectSignCriteria.andCompetitionIdEqual(competitionId);
+            projectSignCriteria.andPlaceEqual(place);
+            projectSignExample.setOrderByClause("order_id asc");
+            List<SysProjectSign> sysProjectSignList = sysProjectSignMapper.selectByExample(projectSignExample);
+            return convert(sysProjectSignList);
+        }catch (Exception e){
+            log.error("[ScoreAddService].groupSignMemberInfo exception! gameName={}, place={}", gameName, place, e);
+        }
+        return Collections.emptyList();
+    }
+
+    private List<SysProjectSignDTO> convert(List<SysProjectSign> sysProjectSignList){
+        if(sysProjectSignList == null || sysProjectSignList.size() <= 0){
+            return Collections.emptyList();
+        }
+        List<SysProjectSignDTO> data = new ArrayList<>();
+        sysProjectSignList.forEach(sysProjectSign -> {
+            SysProjectSignDTO sysProjectSignDTO = new SysProjectSignDTO();
+            sysProjectSignDTO.setGroupName(sysProjectSign.getGroupName());
+            sysProjectSignDTO.setProjectId(sysProjectSign.getProjectId());
+            //todo 做一个项目名的本地缓存
+            sysProjectSignDTO.setProjectName("XXXXX");
+            sysProjectSignDTO.setSysUserSid(sysProjectSign.getSysUserSid());
+            sysProjectSignDTO.setTeamType(sysProjectSign.getTeamType());
+            sysProjectSignDTO.setUsername(sysProjectSign.getUsername());
+            sysProjectSignDTO.setId(sysProjectSign.getOrderId());
+            data.add(sysProjectSignDTO);
+        });
+        return data;
     }
 }

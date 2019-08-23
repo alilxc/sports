@@ -383,7 +383,7 @@
 -->
 			<!--弹框（Modal） -->
 			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-				<div class="modal-dialog" style="width:800px; height:500px;">
+				<div class="modal-dialog" style="width:800px;">
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -391,7 +391,7 @@
 						</div>
 
 						<!-- 成绩录入弹框BEGINS -->
-						<div class="space-4"></div>
+						<div class="modal-body">
 
 						<form class="form-horizontal" role="form" id="addscores">
 
@@ -402,7 +402,8 @@
 									<label class="col-sm-5 control-label no-padding-right" for="form-field-2">赛事</label>
 
 									<div class="col-sm-6">
-										<select id="gameType" placeholder="" class="col-xs-10 col-sm-5 form-control" name="gameType" >
+										<select id="gameType" placeholder="" class="col-xs-10 col-sm-5 form-control"
+												name="gameType" onchange="gameChange($('#gameType option:selected').val())">
 										</select>
 									</div>
 								</div>
@@ -411,19 +412,44 @@
 									<label class="col-sm-2 control-label no-padding-right" for="form-field-1">场地</label>
 
 									<div class="col-sm-6">
-										<select id="place" placeholder="" class="col-xs-10 col-sm-5 form-control" name="place" onchange="placeChange()">
+										<select id="place" placeholder="" class="col-xs-10 col-sm-5 form-control"
+												name="place" onchange="placeChange($('#place option:selected').val())">
 										</select>
 									</div>
 								</div>
+
+								<div class="space-8"></div>
+
+								<div class="table-responsive" style="height:300px;overflow:auto; ">
+									<table id="table2" class="table table-striped table-bordered table-hover" width="100%">
+										<thead>
+										<tr>
+											<th>编号</th>
+											<th class="hidden-480">姓名</th>
+											<th>团队</th>
+											<th>组别</th>
+											<th>项目代码</th>
+											<th>项目名称</th>
+											<th>成绩</th>
+										</tr>
+										</thead>
+
+										<tbody>
+
+										</tbody>
+									</table>
+								</div>
 							</div>
+
+						</form>
+
+						</div>
 
 							<div class="space-4"></div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
 								<button type="button" class="btn btn-primary" onclick="addScore()">提交</button>
 							</div>
-
-						</form>
 
 
 					</div><!-- /.modal-content -->
@@ -454,28 +480,34 @@
 		<script src="assets/js/ace-elements.min.js"></script>
 		<script src="assets/js/ace.min.js"></script>
 		<script src="assets/js/myjs/index.js"></script>
-		<!--<script type="text/javascript">
-            window.onload = showProjects();
-            function showProjects(){
+
+		<script type="text/javascript">
+            function placeChange(place){
+                var gameType = document.getElementById("gameType").value;
                 $.ajax({
-                    type: "POST",//方法类型
+                    type: "GET",//方法类型
                     contentType: "application/json",
                     dataType: "json",//预期服务器返回的数据类型
-                    url: "/scoreAddController/sysProject",//url
+                    data: {gameName: gameType, place: place},
+                    url: "/scoreAddController/queryGroupMember",
                     async: false,
                     success: function (result) {
-                        // console.log(result);//打印服务端返回的数据(调试用)
-                        /* <option value="0">田径</option>
-                         <option value="0">羽毛球</option>*/
                         if (result.httpStatus == 200) {
                             var content = "";
                             var dataArr = result.data;
                             $.each(dataArr, function(index, item){
-                                console.log(item);
-                                content += '<option value=' + item.id + '>' + item.name + '</option>';
+                                content += "<tr>" +
+                                    "<td class='center'><a>"+item.id+"</a></td>" +
+                                    "<td>" + item.username+"</td>" +
+                                    "<td>" + item.groupName+ "</td>" +
+                                    "<td>" + item.teamType + "</td>" +
+                                    "<td>" + item.projectId + "</td>" +
+                                    "<td>" + item.projectName + "</td>" +
+                                    "<td class='hidden-480'><input type='text' name='score' class='col-xs-10 col-sm-5' /></td>" +
+                                    "</tr>";
                             });
-                            $("#projectname").empty();
-                            $("#projectname").html(content);
+                            $("#table2 tbody").empty();
+                            $("#table2 tbody").html(content);
                         };
                     },
                     error: function () {
@@ -483,53 +515,36 @@
                     }
                 })
             }
-		</script>-->
+		</script>
 
-		<!--<script type="text/javascript">
-            function importMember() {
 
-                var uploadFile = $("#memberFile").val();
-                var gameType = $("#gameType").val();
-                if(gameType == null || gameType == ''){
-                    alert("请选择赛事");
-				}
-                if (uploadFile == '') {
-                    alert("请择excel,再上传");
-                } else if (uploadFile.lastIndexOf(".xls") < 0 && uploadFile.lastIndexOf(".xlsx") < 0
-							&& uploadFile.lastIndexOf(".xlsm") < 0) {//可判断以.xls和.xlsx结尾的excel
-                    alert("只能上传Excel文件");
-                }else{
-                    var formData = new FormData();
-                    var file = $("#memberFile")[0].files[0];
-                    //此处将所要传递的数据append到formData中
-                    formData.append("fileinfo", file);
-                    formData.append("gameType", gameType);
-                    $.ajax({
-                        //几个参数需要注意一下
-                        type: "POST",//方法类型
-                        // contentType: "application/json",
-                        dataType: "json",//预期服务器返回的数据类型
-                        url: "/scoreAddController/importMember",//url
-                        data:formData,
-                        async: false,
-                        processData: false,       //必不可缺
-                        contentType: false,       //必不可缺
-                        success: function (result) {
-                            if (result) {
-                                alert("导入成功！");
-                                //window.location.href = "/static/addscore.html";
-                            };
-                        },
-                        error: function () {
-                            alert("异常！");
-                            //window.location.href = "/static/addscore.html";
-                        }
-                    });
-				}
+		<script type="text/javascript">
+            function gameChange(gameName){
+                $.ajax({
+                    type: "GET",//方法类型
+                    contentType: "application/json",
+                    dataType: "json",//预期服务器返回的数据类型
+                    data: {gameName: gameName},
+                    url: "/projectController/queryGamePlaces",
+                    async: false,
+                    success: function (result) {
+                        if (result.httpStatus == 200) {
+                            var content = "";
+                            var dataArr = result.data;
+                            var nameOpt = "<option value='' selected='selected'>--请选择--</option>";
+                            for (var i = 0; i < dataArr.length; i++) {
+                                nameOpt+="<option value='"+dataArr[i]+"' >"+dataArr[i]+"</option>"
+                            }
+                            $('#place').html(nameOpt);
+                        };
+                    },
+                    error: function () {
+                        alert("异常！");
+                    }
+                })
             }
+		</script>
 
-
-		</script>-->
 
 		<script type="text/javascript">
             window.onload = showGames();
@@ -558,33 +573,6 @@
             }
 		</script>
 
-
-		<script type="text/javascript">
-            window.onload = showPlaces();
-            function showPlaces(){
-                $.ajax({
-                    type: "GET",//方法类型
-                    contentType: "application/json",
-                    dataType: "json",//预期服务器返回的数据类型
-                    url: "/projectController/queryGameList",
-                    async: false,
-                    success: function (result) {
-                        if (result.httpStatus == 200) {
-                            var content = "";
-                            var dataArr = result.data;
-                            var nameOpt = "<option value='' selected='selected'>--请选择--</option>";
-                            for (var i = 0; i < dataArr.length; i++) {
-                                nameOpt+="<option value='"+dataArr[i]+"' >"+dataArr[i]+"</option>"
-                            }
-                            $('#place').html(nameOpt);
-                        };
-                    },
-                    error: function () {
-                        alert("异常！");
-                    }
-                })
-            }
-		</script>
 
 		<script type="text/javascript">
             /*成绩录入的函数有点问题

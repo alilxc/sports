@@ -2,6 +2,7 @@ create table sys_project_sign(
 	id int UNSIGNED AUTO_INCREMENT,
 	create_time BIGINT,
 	update_time BIGINT,
+	order_id int,
 	sys_user_sid VARCHAR(32),
 	username VARCHAR(100),
 	competition_id BIGINT,

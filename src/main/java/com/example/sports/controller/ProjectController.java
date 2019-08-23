@@ -15,21 +15,17 @@ import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-/**
- * @title
- * @Author huangjiarui
- * @date: 2018-05-02
- */
 
+
+/**
+ * @author xingchao.lxc
+ */
 @RequestMapping("/projectController")
 @RestController
 @Api(description = "赛事管理")
@@ -85,7 +81,7 @@ public class ProjectController {
     @GetMapping("/queryGamePlaces")
     @ApiOperation(value = "比赛场次")
     public ResponseObject<List<String>> queryGamePlaces(String gameName){
-        List<String> data = null;
+        List<String> data = projectService.queryProceedPlaces(gameName);
         return ResponseObjectUtil.success(data);
     }
 }
