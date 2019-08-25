@@ -1,5 +1,7 @@
 package com.example.sports.dto.response;
 
+import java.util.List;
+
 /**
  * @program: sports
  * @description:
@@ -7,19 +9,6 @@ package com.example.sports.dto.response;
  * @create: 2019-08-22 00:58
  **/
 public class SysProjectSignDTO {
-
-    /**
-     * 本组顺序
-     */
-    private long id;
-
-    /** 参赛编号 */
-    private String sysUserSid;
-
-    /**
-     * 姓名
-     */
-    private String username;
 
     /** 所属团队 */
     private String groupName;
@@ -37,24 +26,18 @@ public class SysProjectSignDTO {
      */
     private String teamType;
 
-    /** 个人成绩 */
-    private Double  score;
+    /**
+     * 用户信息
+     */
+    private List<UserAchievementInfo> achievementInfoList;
 
-    public String getSysUserSid() {
-        return sysUserSid;
+    public SysProjectSignDTO(String groupName, String projectId, String projectName, String teamType){
+        this.groupName = groupName;
+        this.projectId = projectId;
+        this.projectName = projectName;
+        this.teamType = teamType;
     }
 
-    public void setSysUserSid(String sysUserSid) {
-        this.sysUserSid = sysUserSid;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     public String getGroupName() {
         return groupName;
@@ -88,19 +71,11 @@ public class SysProjectSignDTO {
         this.teamType = teamType;
     }
 
-    public Double getScore() {
-        return score;
+    public List<UserAchievementInfo> getAchievementInfoList() {
+        return achievementInfoList;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public void setScore(Double score) {
-        this.score = score;
+    public void setAchievementInfoList(List<UserAchievementInfo> achievementInfoList) {
+        this.achievementInfoList = achievementInfoList;
     }
 }

@@ -1,9 +1,12 @@
 package com.example.sports.service;
 
+import com.alibaba.fastjson.JSON;
 import com.example.sports.dto.PageRequestBean;
 import com.example.sports.dto.request.ScoreAddRequest;
 import com.example.sports.dto.response.SchoolScoreRes;
+import com.example.sports.dto.response.SysGroupingDetailDTO;
 import com.example.sports.dto.response.SysProjectSignDTO;
+import com.example.sports.dto.response.UserAchievementInfo;
 import com.example.sports.mapper.*;
 import com.example.sports.mapper.sys.SysMapper;
 import com.example.sports.model.*;
@@ -18,6 +21,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -48,6 +53,9 @@ public class ScoreAddServiceImpl implements ScoreAddService {
 
     @Autowired
     private SysProjectSignMapper sysProjectSignMapper;
+
+    @Autowired
+    private SysCompetitionGroupMapper sysCompetitionGroupMapper;
 
 
     @Override
@@ -170,47 +178,77 @@ public class ScoreAddServiceImpl implements ScoreAddService {
     }
 
     @Override
-    public List<SysProjectSignDTO> groupSignMemberInfo(String gameName, String place) {
+    public SysGroupingDetailDTO groupSignMemberInfo(String gameName, String place) {
+        SysGroupingDetailDTO sysGroupingDetailDTO = new SysGroupingDetailDTO();
         try{
             SysProjectExample example = new SysProjectExample();
             SysProjectExample.Criteria criteria = example.createCriteria();
             criteria.andNameEqualTo(gameName);
             List<SysProject> projectList = sysProjectMapper.selectByExample(example);
             if(projectList == null || projectList.size() <= 0){
-                return Collections.emptyList();
+                sysGroupingDetailDTO.setGroupingMemberDTOList(Collections.emptyList());
             }
             int competitionId = projectList.get(0).getId().intValue();
-
+            SysCompetitionGroup competitionGroup = sysCompetitionGroupMapper.selectByPlace(competitionId, place);
+            boolean isTeam = false;
+            if(competitionGroup.getExt() != null){
+                Map<String, Object> ext = JSON.parseObject(competitionGroup.getExt(), Map.class);
+                if(ext != null && ext.containsKey("team")){
+                    isTeam = (boolean) ext.get("team");
+                }
+            }
             SysProjectSignExample projectSignExample = new SysProjectSignExample();
             SysProjectSignExample.Criteria projectSignCriteria = projectSignExample.createCriteria();
             projectSignCriteria.andCompetitionIdEqual(competitionId);
             projectSignCriteria.andPlaceEqual(place);
             projectSignExample.setOrderByClause("order_id asc");
             List<SysProjectSign> sysProjectSignList = sysProjectSignMapper.selectByExample(projectSignExample);
-            return convert(sysProjectSignList);
+            sysGroupingDetailDTO.setGroupingMemberDTOList(convert(sysProjectSignList, isTeam));
+            sysGroupingDetailDTO.setTeam(isTeam);
         }catch (Exception e){
             log.error("[ScoreAddService].groupSignMemberInfo exception! gameName={}, place={}", gameName, place, e);
+            sysGroupingDetailDTO.setGroupingMemberDTOList(Collections.emptyList());
         }
-        return Collections.emptyList();
+        return sysGroupingDetailDTO;
     }
 
-    private List<SysProjectSignDTO> convert(List<SysProjectSign> sysProjectSignList){
+    private List<SysProjectSignDTO> convert(List<SysProjectSign> sysProjectSignList, boolean isTeam){
         if(sysProjectSignList == null || sysProjectSignList.size() <= 0){
             return Collections.emptyList();
         }
         List<SysProjectSignDTO> data = new ArrayList<>();
-        sysProjectSignList.forEach(sysProjectSign -> {
-            SysProjectSignDTO sysProjectSignDTO = new SysProjectSignDTO();
-            sysProjectSignDTO.setGroupName(sysProjectSign.getGroupName());
-            sysProjectSignDTO.setProjectId(sysProjectSign.getProjectId());
-            //todo 做一个项目名的本地缓存
-            sysProjectSignDTO.setProjectName("XXXXX");
-            sysProjectSignDTO.setSysUserSid(sysProjectSign.getSysUserSid());
-            sysProjectSignDTO.setTeamType(sysProjectSign.getTeamType());
-            sysProjectSignDTO.setUsername(sysProjectSign.getUsername());
-            sysProjectSignDTO.setId(sysProjectSign.getOrderId());
-            data.add(sysProjectSignDTO);
-        });
+        if(isTeam){
+            sysProjectSignList.stream()
+                    .collect(Collectors.groupingBy(SysProjectSign::router))
+                    .forEach((groupName, memberLists)->{
+                        SysProjectSign sysProjectSign = memberLists.get(0);
+                        SysProjectSignDTO sysProjectSignDTO = new SysProjectSignDTO(sysProjectSign.getGroupName(), sysProjectSign.getProjectId(),
+                                                                                    "XXXXX", sysProjectSign.getTeamType());
+                        List<UserAchievementInfo> userAchievementInfoList = new ArrayList<>();
+                        for(SysProjectSign sysProjectSign1 : memberLists){
+                            userAchievementInfoList.add(convert2UserAchievementInfo(sysProjectSign1));
+                        }
+                        sysProjectSignDTO.setAchievementInfoList(userAchievementInfoList);
+                        data.add(sysProjectSignDTO);
+            });
+        }else{
+            for(SysProjectSign sysProjectSign : sysProjectSignList){
+                SysProjectSignDTO sysProjectSignDTO = new SysProjectSignDTO(sysProjectSign.getGroupName(), sysProjectSign.getProjectId(),
+                        "XXXXX", sysProjectSign.getTeamType());
+                List<UserAchievementInfo> userAchievementInfoList = new ArrayList<>();
+                userAchievementInfoList.add(convert2UserAchievementInfo(sysProjectSign));
+                sysProjectSignDTO.setAchievementInfoList(userAchievementInfoList);
+                data.add(sysProjectSignDTO);
+            }
+        }
         return data;
+    }
+
+    private UserAchievementInfo convert2UserAchievementInfo(SysProjectSign sysProjectSign){
+        UserAchievementInfo userAchievementInfo = new UserAchievementInfo();
+        userAchievementInfo.setId(sysProjectSign.getOrderId());
+        userAchievementInfo.setSysUserSid(sysProjectSign.getSysUserSid());
+        userAchievementInfo.setUsername(sysProjectSign.getUsername());
+        return userAchievementInfo;
     }
 }

@@ -494,17 +494,37 @@
                     success: function (result) {
                         if (result.httpStatus == 200) {
                             var content = "";
-                            var dataArr = result.data;
+                            var object = result.data;
+                            var dataArr = object.groupingMemberDTOList;
                             $.each(dataArr, function(index, item){
-                                content += "<tr>" +
-                                    "<td class='center'><a>"+item.id+"</a></td>" +
-                                    "<td>" + item.username+"</td>" +
-                                    "<td>" + item.groupName+ "</td>" +
-                                    "<td>" + item.teamType + "</td>" +
-                                    "<td>" + item.projectId + "</td>" +
-                                    "<td>" + item.projectName + "</td>" +
-                                    "<td class='hidden-480'><input type='text' name='score' class='col-xs-10 col-sm-5' /></td>" +
-                                    "</tr>";
+                                userList = item.achievementInfoList;
+                                num = userList.length;
+                                groupName = item.groupName;
+                                projectId = item.projectId;
+                                projectName = item.projectName;
+                                teamType = item.teamType;
+                                for(var i = 0; i < num; i++){
+                                    user = userList[i];
+                                    content += "<tr>" +
+                                        "<td class='center'><a>"+user.id+"</a></td>" +
+                                        "<td>" + user.username+"</td>";
+									if(i == 0){
+										content += "<td style='text-align:center;vertical-align: middle' rowspan='" + num + "'>" + item.groupName+ "</td>";
+									}
+                                    if(i == 0){
+                                        content += "<td style='text-align:center;vertical-align: middle' rowspan='" + num + "'>" + item.teamType+ "</td>";
+                                    }
+                                    if(i == 0){
+                                        content += "<td style='text-align:center;vertical-align: middle' rowspan='" + num + "'>" + item.projectId+ "</td>";
+                                    }
+                                    if(i == 0){
+                                        content += "<td style='text-align:center;vertical-align: middle' rowspan='" + num + "'>" + item.projectName+ "</td>";
+                                    }
+                                    if(i == 0){
+                                        content += "<td style='text-align:center;vertical-align: middle' class='hidden-480' rowspan='" + num + "'><input type='text' name='score' class='col-xs-10 col-sm-5' /></td>";
+                                    }
+                                    content += "</tr>";
+								}
                             });
                             $("#table2 tbody").empty();
                             $("#table2 tbody").html(content);
@@ -575,18 +595,8 @@
 
 
 		<script type="text/javascript">
-            /*成绩录入的函数有点问题
-            * 需要获取下拉框id然后传过去以下字段，页面的name已对应好
-            * sysUserSid	学号
-            * sysProjectId	项目id
-                teamType	组别 1、女子组 2、男子组
-                sportType	项目类别 1、田赛 2、径赛
-                achievement	个人成绩
-                matchType
-            *
-            * */
             function addScore() {
-                // alert($("#addscores").serialize());
+                var formData = $("#addscores").serialize();
                 $.ajax({
                     //几个参数需要注意一下
                     type: "POST",//方法类型

@@ -91,6 +91,13 @@
         WHERE competition_id=#{competitionId}
     </select>
 
+    <select id="selectByPlace" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_competition_group
+        WHERE competition_id=#{competitionId} and place=#{place}
+    </select>
+
 
     <insert id="insert" parameterType="com.example.sports.model.SysCompetitionGroup" >
         <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >

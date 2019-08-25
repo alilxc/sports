@@ -52,6 +52,10 @@ public class ReadExcelManager {
 
     //sheet名匹配
     private static final String SUFFIX = "场地";
+
+    //是否是团队
+    private static final String TEAM = "团";
+
     // 总行数
     private int totalRows = 0;
 
@@ -157,7 +161,7 @@ public class ReadExcelManager {
         while(sheetIter.hasNext()){
             Sheet sheet = sheetIter.next();
             String sheetName = sheet.getSheetName();
-            if(!StringUtils.endsWith(sheetName, SUFFIX)){
+            if(!StringUtils.contains(sheetName, SUFFIX)){
                 continue;
             }
             // 得到Excel的行数
@@ -167,6 +171,7 @@ public class ReadExcelManager {
             }
             String place = null;
             List<SysProjectSign> sysProjectSignList = new ArrayList<>();
+            boolean isTeam = false;
             for(int i = 0; i < totalRows; i++){
                 Row row = sheet.getRow(i);
                 if(row == null){
@@ -185,15 +190,26 @@ public class ReadExcelManager {
                         continue;
                     }
                     place = infos.get(0);
+                    Map<String, Object> ext = new HashMap<>();
+                    Cell nextCell = row.getCell(2);
+                    if(nextCell != null && CellType.STRING.equals(cell.getCellType())){
+                        isTeam = nextCell.getStringCellValue().contains(TEAM);
+                    }else{
+                        isTeam = false;
+                    }
+                    if(infos.size() > 1){
+                        ext.put("desc", infos.get(1));
+                    }
+                    ext.put("team", isTeam);
                     //存储比赛分组信息
-                    storeCompetitionGroup(competitionId, place);
+                    storeCompetitionGroup(competitionId, place, ext);
                 }else if(CellType.NUMERIC.equals(cell.getCellType())){
-                    SysProjectSign sysProjectSign = buildSysProjectSign(row, competitionId, place, null);
+                    SysProjectSign sysProjectSign = buildSysProjectSign(row, competitionId, place, isTeam);
                     sysProjectSignList.add(sysProjectSign);
                     String projectAndTeam = competitionId + "#" + sysProjectSign.getProjectId() + "#" + sysProjectSign.getTeamType();
                     Integer count = 1;
                     if(localGrouping.containsKey(projectAndTeam)){
-                        count = localGrouping.get(projectAndTeam);
+                        count += localGrouping.get(projectAndTeam);
                     }
                     localGrouping.put(projectAndTeam, count);
                 }
@@ -205,19 +221,21 @@ public class ReadExcelManager {
             }
             if(localGrouping.size() > 0){
                 updateGroupingInfo();
+                localGrouping.clear();
+
             }
         }
         return true;
     }
 
-    private void storeCompetitionGroup(Long competitionId, String place){
+    private void storeCompetitionGroup(Long competitionId, String place, Map<String, Object> ext){
         SysCompetitionGroup sysCompetitionGroup = new SysCompetitionGroup();
         long timestamp = System.currentTimeMillis();
         sysCompetitionGroup.setCreateTime(timestamp);
         sysCompetitionGroup.setUpdateTime(timestamp);
         sysCompetitionGroup.setCompetitionId(competitionId.intValue());
         sysCompetitionGroup.setPlace(place);
-        sysCompetitionGroup.setExt(null);
+        sysCompetitionGroup.setExt(JSON.toJSONString(ext));
         try{
             for(int i = 0; i < retryTime; i++){
                 int insertResult = sysCompetitionGroupMapper.insert(sysCompetitionGroup);
@@ -300,7 +318,7 @@ public class ReadExcelManager {
         return filePath.matches("^.+\\.(?i)(xlsx)$") || filePath.matches("^.+\\.(?i)(xlsm)$");
     }
 
-    private SysProjectSign buildSysProjectSign(Row row, Long competitionId, String place, Map<String, String> ext){
+    private SysProjectSign buildSysProjectSign(Row row, Long competitionId, String place, boolean isTeam){
         long timestamp = System.currentTimeMillis();
         SysProjectSign sysProjectSign = new SysProjectSign();
         sysProjectSign.setCreateTime(timestamp);
@@ -308,22 +326,34 @@ public class ReadExcelManager {
         sysProjectSign.setCompetitionId(competitionId);
         sysProjectSign.setOrderId((int)row.getCell(1).getNumericCellValue());
         sysProjectSign.setUsername(row.getCell(2).getStringCellValue());
-        sysProjectSign.setSysUserSid(row.getCell(3).getStringCellValue());
-        sysProjectSign.setGroupName(row.getCell(4).getStringCellValue());
-        if(CellType.NUMERIC.equals(row.getCell(5).getCellType())){
-            sysProjectSign.setTeamType(String.valueOf((int)row.getCell(5).getNumericCellValue()));
+        if(!isTeam){
+            sysProjectSign.setSysUserSid(row.getCell(3).getStringCellValue());
+            sysProjectSign.setGroupName(row.getCell(4).getStringCellValue());
+            if(CellType.NUMERIC.equals(row.getCell(5).getCellType())){
+                sysProjectSign.setTeamType(String.valueOf((int)row.getCell(5).getNumericCellValue()));
+            }else{
+                sysProjectSign.setTeamType(row.getCell(5).getStringCellValue());
+            }
+            if(CellType.NUMERIC.equals(row.getCell(6).getCellType())){
+                sysProjectSign.setProjectId(String.valueOf((int)row.getCell(6).getNumericCellValue()));
+            }else{
+                sysProjectSign.setProjectId(row.getCell(6).getStringCellValue());
+            }
         }else{
-            sysProjectSign.setTeamType(row.getCell(5).getStringCellValue());
+            sysProjectSign.setGroupName(row.getCell(3).getStringCellValue());
+            if(CellType.NUMERIC.equals(row.getCell(4).getCellType())){
+                sysProjectSign.setTeamType(String.valueOf((int)row.getCell(5).getNumericCellValue()));
+            }else{
+                sysProjectSign.setTeamType(row.getCell(4).getStringCellValue());
+            }
+            if(CellType.NUMERIC.equals(row.getCell(5).getCellType())){
+                sysProjectSign.setProjectId(String.valueOf((int)row.getCell(5).getNumericCellValue()));
+            }else{
+                sysProjectSign.setProjectId(row.getCell(5).getStringCellValue());
+            }
         }
-        if(CellType.NUMERIC.equals(row.getCell(6).getCellType())){
-            sysProjectSign.setProjectId(String.valueOf((int)row.getCell(6).getNumericCellValue()));
-        }else{
-            sysProjectSign.setProjectId(row.getCell(6).getStringCellValue());
-        }
+
         sysProjectSign.setPlace(place);
-        if(ext != null){
-            sysProjectSign.setExt(JSON.toJSONString(ext));
-        }
         return sysProjectSign;
     }
 

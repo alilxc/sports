@@ -3,6 +3,7 @@ package com.example.sports.service;
 import com.example.sports.dto.PageRequestBean;
 import com.example.sports.dto.request.ScoreAddRequest;
 import com.example.sports.dto.response.SchoolScoreRes;
+import com.example.sports.dto.response.SysGroupingDetailDTO;
 import com.example.sports.dto.response.SysProjectSignDTO;
 import com.example.sports.model.SysProject;
 import com.github.pagehelper.PageInfo;
@@ -51,5 +52,5 @@ public interface ScoreAddService {
     /**
      * 查询分组信息
      */
-    List<SysProjectSignDTO> groupSignMemberInfo(String gameName, String place);
+    SysGroupingDetailDTO groupSignMemberInfo(String gameName, String place);
 }

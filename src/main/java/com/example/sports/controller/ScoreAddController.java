@@ -6,6 +6,7 @@ import com.example.sports.dto.request.EnterRequest;
 import com.example.sports.dto.request.ScoreAddRequest;
 import com.example.sports.dto.response.EnterInfoRes;
 import com.example.sports.dto.response.SchoolScoreRes;
+import com.example.sports.dto.response.SysGroupingDetailDTO;
 import com.example.sports.dto.response.SysProjectSignDTO;
 import com.example.sports.model.SysCollege;
 import com.example.sports.model.SysProject;
@@ -78,8 +79,14 @@ public class ScoreAddController {
 
     @GetMapping("/queryGroupMember")
     @ApiOperation(value = "查询分组名单信息")
-    public ResponseObject<List<SysProjectSignDTO>> queryGroupMember(String gameName, String place){
-        List<SysProjectSignDTO> data = scoreAddService.groupSignMemberInfo(gameName, place);
+    public ResponseObject<SysGroupingDetailDTO> queryGroupMember(String gameName, String place){
+        SysGroupingDetailDTO data= scoreAddService.groupSignMemberInfo(gameName, place);
         return ResponseObjectUtil.success(data);
     }
+
+    /*@PostMapping("/addScore")
+    @ApiOperation(value = "提交成绩")
+    public ResponseObject<Void> addScore(){
+        return ResponseObjectUtil.success();
+    }*/
 }

@@ -165,4 +165,8 @@ public class SysProjectSign implements Serializable {
     public void setUpdateTime(long updateTime) {
         this.updateTime = updateTime;
     }
+
+    public String router(){
+        return groupName + "|" + teamType + "|" + projectId;
+    }
 }
