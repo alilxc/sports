@@ -441,19 +441,16 @@
 								</div>
 							</div>
 
-						</form>
-
-						</div>
-
 							<div class="space-4"></div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
 								<button type="button" class="btn btn-primary" onclick="addScore()">提交</button>
 							</div>
+						</form>
 
-
-					</div><!-- /.modal-content -->
-				</div><!-- /.modal -->
+						</div>
+					</div>
+				</div>
 			</div>
 
 		</div>
@@ -482,6 +479,8 @@
 		<script src="assets/js/myjs/index.js"></script>
 
 		<script type="text/javascript">
+            var dataArr = null;
+            var isTeam = false;
             function placeChange(place){
                 var gameType = document.getElementById("gameType").value;
                 $.ajax({
@@ -495,7 +494,8 @@
                         if (result.httpStatus == 200) {
                             var content = "";
                             var object = result.data;
-                            var dataArr = object.groupingMemberDTOList;
+							dataArr = object.groupingMemberDTOList;
+							isTeam = object.team;
                             $.each(dataArr, function(index, item){
                                 userList = item.achievementInfoList;
                                 num = userList.length;
@@ -521,7 +521,8 @@
                                         content += "<td style='text-align:center;vertical-align: middle' rowspan='" + num + "'>" + item.projectName+ "</td>";
                                     }
                                     if(i == 0){
-                                        content += "<td style='text-align:center;vertical-align: middle' class='hidden-480' rowspan='" + num + "'><input type='text' name='score' class='col-xs-10 col-sm-5' /></td>";
+                                        content += "<td style='text-align:center;vertical-align: middle' class='hidden-480' rowspan='" + num + "'>" +
+											"<input type='text' name='score' class='col-xs-10 col-sm-5' /></td>";
                                     }
                                     content += "</tr>";
 								}
@@ -539,6 +540,7 @@
 
 
 		<script type="text/javascript">
+			var competitionId = null;
             function gameChange(gameName){
                 $.ajax({
                     type: "GET",//方法类型
@@ -550,7 +552,9 @@
                     success: function (result) {
                         if (result.httpStatus == 200) {
                             var content = "";
-                            var dataArr = result.data;
+                            var object = result.data;
+                            competitionId = object.competitionId;
+                            dataArr = object.places;
                             var nameOpt = "<option value='' selected='selected'>--请选择--</option>";
                             for (var i = 0; i < dataArr.length; i++) {
                                 nameOpt+="<option value='"+dataArr[i]+"' >"+dataArr[i]+"</option>"
@@ -596,14 +600,39 @@
 
 		<script type="text/javascript">
             function addScore() {
-                var formData = $("#addscores").serialize();
+                /*$('#table2 tr').each(function () {
+					$(this).children('td').each(function () {
+						console.log()
+                    })
+                });*/
+                var tableObj = document.getElementById("table2");
+                var paramArray = new Array();
+                var num = tableObj.rows[0].cells.length;
+                for (var i = 1; i < tableObj.rows.length; i++) {
+                    if(tableObj.rows[i].cells.length == num){
+                        id = tableObj.rows[i].cells[0].innerText;
+                        username = tableObj.rows[i].cells[1].innerText;
+                        groupName = tableObj.rows[i].cells[2].innerText;
+                        teamType = tableObj.rows[i].cells[3].innerText;
+                        sysProjectId = tableObj.rows[i].cells[4].innerText;
+                        projectName = tableObj.rows[i].cells[5].innerText;
+                        score = tableObj.rows[i].cells[6].childNodes[0].value;
+                        paramArray.push({"groupName": groupName, "sysProjectId":sysProjectId, "teamType":teamType,
+						"score":score, "team": isTeam, "id":id})
+					}
+                }
+                var place = $('#place option:selected').val();
+                var scoreAddRequest = {};
+                scoreAddRequest.scoreAddInfoList = paramArray;
+                scoreAddRequest.competitionId = competitionId;
+                scoreAddRequest.place = place;
                 $.ajax({
                     //几个参数需要注意一下
                     type: "POST",//方法类型
-                    // contentType: "application/json",
+					contentType: "application/json",
                     dataType: "json",//预期服务器返回的数据类型
                     url: "/scoreAddController/addScore",//url
-                    data:$("#addscores").serialize(),
+                    data:JSON.stringify(scoreAddRequest),
                     async: false,
                     success: function (result) {
                         if (result) {

@@ -2,6 +2,7 @@ package com.example.sports.service;
 
 import com.example.sports.dto.PageRequestBean;
 import com.example.sports.dto.request.ProjectRequest;
+import com.example.sports.dto.response.CompetitionPlaceInfoDTO;
 import com.example.sports.dto.response.ProjectRes;
 import com.github.pagehelper.PageInfo;
 
@@ -56,7 +57,7 @@ public interface ProjectService {
     /**
      * 查询当前比赛进行的场次
      */
-    List<String> queryProceedPlaces(String competition);
+    CompetitionPlaceInfoDTO queryProceedPlaces(String competition);
 
 
 }

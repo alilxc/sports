@@ -1,6 +1,7 @@
 package com.example.sports.service;
 
 import com.example.sports.dto.PageRequestBean;
+import com.example.sports.dto.request.ScoreAddInfo;
 import com.example.sports.dto.request.ScoreAddRequest;
 import com.example.sports.dto.response.SchoolScoreRes;
 import com.example.sports.dto.response.SysGroupingDetailDTO;
@@ -26,28 +27,12 @@ public interface ScoreAddService {
     List<SysProject> sysProject();
 
     /**
-     * 项目校记录
-     *
-     * @param
-     * @return
-     */
-    List<SchoolScoreRes> schoolScoreInfo(Integer id);
-
-    /**
-     * 项目记录表
-     *
-     * @param
-     * @return
-     */
-    PageInfo<SchoolScoreRes> sysProjectInfo(Integer matchType, PageRequestBean request);
-
-    /**
      * 成绩录入
      *
      * @param
      * @return
      */
-    void addScore(ScoreAddRequest request);
+    void addScore(long competitionId, String place, List<ScoreAddInfo> scoreAddInfos);
 
     /**
      * 查询分组信息

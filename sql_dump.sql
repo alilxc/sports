@@ -41,3 +41,8 @@ create table sys_competition_group(
 	ext VARCHAR(1024),
 	primary key(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+delete from sys_project_sign;
+delete from sys_grouping_info;
+delete from sys_competition_group;

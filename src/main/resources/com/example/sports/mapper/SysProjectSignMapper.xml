@@ -205,4 +205,21 @@
     </if>
   </select>
 
+  <update id="updateByExample" parameterType="map" >
+    update sys_project_sign
+    set score = #{score, jdbcType=DOUBLE}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="batchUpdate" parameterType="java.util.Map">
+    <foreach collection="records" separator=";" item="record">
+      update sys_project_sign set
+      score = #{record.score}
+      where competition_id = #{record.competitionId} and group_name = #{record.groupName} and team_type=#{record.teamType}
+      and project_id = #{record.projectId} and order_id=#{record.orderId} and place=#{record.place}
+    </foreach>
+  </update>
+
 </mapper>

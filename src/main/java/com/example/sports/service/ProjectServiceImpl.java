@@ -2,6 +2,7 @@ package com.example.sports.service;
 
 import com.example.sports.dto.PageRequestBean;
 import com.example.sports.dto.request.ProjectRequest;
+import com.example.sports.dto.response.CompetitionPlaceInfoDTO;
 import com.example.sports.dto.response.ProjectRes;
 import com.example.sports.mapper.SysCompetitionGroupMapper;
 import com.example.sports.mapper.SysProjectMapper;
@@ -146,24 +147,29 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<String> queryProceedPlaces(String gameName) {
+    public CompetitionPlaceInfoDTO queryProceedPlaces(String gameName) {
+        CompetitionPlaceInfoDTO competitionPlaceInfoDTO = new CompetitionPlaceInfoDTO();
+        competitionPlaceInfoDTO.setCompetitionName(gameName);
         try{
             SysProjectExample example = new SysProjectExample();
             SysProjectExample.Criteria criteria = example.createCriteria();
             criteria.andNameEqualTo(gameName);
             List<SysProject> projectList = sysProjectMapper.selectByExample(example);
             if(projectList == null || projectList.size() <= 0){
-                return Collections.emptyList();
+                return competitionPlaceInfoDTO;
             }
             int competitionId = projectList.get(0).getId().intValue();
             List<SysCompetitionGroup> groupList = sysCompetitionGroupMapper.select(competitionId);
             if(groupList == null || groupList.size() <= 0){
-                return Collections.emptyList();
+                return competitionPlaceInfoDTO;
             }
-            return groupList.stream().map(SysCompetitionGroup::getPlace).collect(Collectors.toList());
+            List<String> places = groupList.stream().map(SysCompetitionGroup::getPlace).collect(Collectors.toList());
+            competitionPlaceInfoDTO.setCompetitionId(competitionId);
+            competitionPlaceInfoDTO.setPlaces(places);
+            return competitionPlaceInfoDTO;
         }catch (Exception e){
             log.error("[ProjectService].queryProceedPlaces exception. {}", gameName, e);
         }
-        return Collections.emptyList();
+        return competitionPlaceInfoDTO;
     }
 }

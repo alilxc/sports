@@ -23,5 +23,5 @@ public interface SysCompetitionGroupMapper {
     /**
      *根据比赛id和场地查询
      */
-    SysCompetitionGroup selectByPlace(@Param("competitionId") int competitionId, @Param("place") String place);
+    SysCompetitionGroup selectByPlace(@Param("competitionId") long competitionId, @Param("place") String place);
 }

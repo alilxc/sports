@@ -165,8 +165,13 @@ public class SysProjectSignExample {
             return (Criteria) this;
         }
 
-        public Criteria andCompetitionIdEqual(int competitionId) {
+        public Criteria andCompetitionIdEqual(long competitionId) {
             addCriterion("competition_id =", competitionId, "competition_id");
+            return (Criteria) this;
+        }
+
+        public Criteria addGroupName(String groupName){
+            addCriterion("group_name = ", groupName, "group_name");
             return (Criteria) this;
         }
 
@@ -335,9 +340,14 @@ public class SysProjectSignExample {
             return (Criteria) this;
         }
 
-        public Criteria andSysProjectIdEqualTo(Integer value) {
-            addCriterion("sys_project_id =", value, "sysProjectId");
+        public Criteria andProjectIdEqualTo(String value) {
+            addCriterion("project_id =", value, "projectId");
             return (Criteria) this;
+        }
+
+        public Criteria andTeamType(String teamType){
+            addCriterion("team_type = ", teamType, "teamtype");
+            return (Criteria)this;
         }
 
         public Criteria andSysProjectIdNotEqualTo(Integer value) {

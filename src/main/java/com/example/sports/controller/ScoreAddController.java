@@ -48,24 +48,12 @@ public class ScoreAddController {
         return ResponseObjectUtil.success(sysProjects);
     }
 
-    @PostMapping("/schoolScoreInfo")
-    @ApiOperation(value = "项目校记录", notes = "id 为项目id")
-    public ResponseObject<List<SchoolScoreRes>> schoolScoreInfo(Integer id) {
-        List<SchoolScoreRes> schoolScoreResList = scoreAddService.schoolScoreInfo(id);
-        return ResponseObjectUtil.success(schoolScoreResList);
-    }
-
-    @PostMapping("/sysProjectInfo")
-    @ApiOperation(value = "项目记录表", notes = "Integer matchType 1、小组赛 2、初赛 3、决赛")
-    public ResponseObject<PageInfo<SchoolScoreRes>> sysProjectInfo(Integer matchType, PageRequestBean request) {
-        PageInfo<SchoolScoreRes> schoolScoreResPageInfo = scoreAddService.sysProjectInfo(matchType, request);
-        return ResponseObjectUtil.success(schoolScoreResPageInfo);
-    }
-
     @PostMapping("/addScore")
     @ApiOperation(value = "成绩录入")
-    public ResponseObject<Void> addScore(ScoreAddRequest request) {
-        scoreAddService.addScore(request);
+    public ResponseObject<Void> addScore(@RequestBody ScoreAddRequest scoreAddRequest) {
+        if(scoreAddRequest != null){
+            scoreAddService.addScore(scoreAddRequest.getCompetitionId(), scoreAddRequest.getPlace(), scoreAddRequest.getScoreAddInfoList());
+        }
         return ResponseObjectUtil.success();
     }
 
@@ -84,9 +72,4 @@ public class ScoreAddController {
         return ResponseObjectUtil.success(data);
     }
 
-    /*@PostMapping("/addScore")
-    @ApiOperation(value = "提交成绩")
-    public ResponseObject<Void> addScore(){
-        return ResponseObjectUtil.success();
-    }*/
 }

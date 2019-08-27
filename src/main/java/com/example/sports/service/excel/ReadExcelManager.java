@@ -224,6 +224,10 @@ public class ReadExcelManager {
                 localGrouping.clear();
 
             }
+            if(sysProjectSignList.size() > 0){
+                storeProjectSign(sysProjectSignList);
+                sysProjectSignList.clear();
+            }
         }
         return true;
     }

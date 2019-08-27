@@ -9,11 +9,6 @@ import org.apache.ibatis.annotations.Param;
  * @author xingchao.lxc
  */
 public interface SysProjectSignMapper {
-    /*int countByExample(SysProjectSignExample example);
-
-    int deleteByExample(SysProjectSignExample example);
-
-    int deleteByPrimaryKey(Long id);*/
 
     int insert(SysProjectSign record);
 
@@ -23,15 +18,7 @@ public interface SysProjectSignMapper {
 
     List<SysProjectSign> selectByExample(SysProjectSignExample example);
 
-    /*List<SysProjectSign> selectByExample(SysProjectSignExample example);
+    int updateByExample(@Param("score") double score, @Param("example") SysProjectSignExample example);
 
-    SysProjectSign selectByPrimaryKey(Long id);
-
-    int updateByExampleSelective(@Param("record") SysProjectSign record, @Param("example") SysProjectSignExample example);
-
-    int updateByExample(@Param("record") SysProjectSign record, @Param("example") SysProjectSignExample example);
-
-    int updateByPrimaryKeySelective(SysProjectSign record);
-
-    int updateByPrimaryKey(SysProjectSign record);*/
+    int batchUpdate(@Param("records") List<SysProjectSign> records);
 }

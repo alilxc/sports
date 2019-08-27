@@ -4,6 +4,7 @@ import com.example.sports.dto.PageRequestBean;
 import com.example.sports.dto.request.EnterInfoRequest;
 import com.example.sports.dto.request.ProjectRequest;
 import com.example.sports.dto.request.RegistRequest;
+import com.example.sports.dto.response.CompetitionPlaceInfoDTO;
 import com.example.sports.dto.response.EnterInfoRes;
 import com.example.sports.dto.response.ProjectRes;
 import com.example.sports.service.ProjectService;
@@ -80,8 +81,8 @@ public class ProjectController {
 
     @GetMapping("/queryGamePlaces")
     @ApiOperation(value = "比赛场次")
-    public ResponseObject<List<String>> queryGamePlaces(String gameName){
-        List<String> data = projectService.queryProceedPlaces(gameName);
+    public ResponseObject<CompetitionPlaceInfoDTO> queryGamePlaces(String gameName){
+        CompetitionPlaceInfoDTO data = projectService.queryProceedPlaces(gameName);
         return ResponseObjectUtil.success(data);
     }
 }
