@@ -55,4 +55,12 @@ public class UserAchievementInfo {
     public void setScore(Double score) {
         this.score = score;
     }
+
+    public UserAchievementInfo(String sysUserSid, String userName, double score){
+        this.score = score;
+        this.sysUserSid = sysUserSid;
+        this.username = userName;
+    }
+
+    public UserAchievementInfo(){}
 }

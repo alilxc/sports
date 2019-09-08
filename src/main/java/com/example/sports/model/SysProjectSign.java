@@ -44,6 +44,11 @@ public class SysProjectSign implements Serializable {
     private String projectId;
 
     /**
+     * 项目名称
+     */
+    private String projectName;
+
+    /**
      * 组别
      */
     private String teamType;
@@ -152,6 +157,14 @@ public class SysProjectSign implements Serializable {
 
     public long getCreateTime() {
         return createTime;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 
     public void setCreateTime(long createTime) {

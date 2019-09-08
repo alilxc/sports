@@ -5,8 +5,6 @@ import com.example.sports.annotation.Open;
 import com.example.sports.dto.request.LoginRequest;
 import com.example.sports.dto.request.RegistRequest;
 import com.example.sports.dto.response.LoginRes;
-import com.example.sports.model.SysUser;
-import com.example.sports.service.ScoreSerchService;
 import com.example.sports.service.Session.SessionService;
 import com.example.sports.service.SysService;
 import com.example.sports.util.ResponseObject;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  * @title

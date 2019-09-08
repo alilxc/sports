@@ -3,6 +3,7 @@ package com.example.sports.service;
 import com.example.sports.dto.PageRequestBean;
 import com.example.sports.dto.request.ScoreAddInfo;
 import com.example.sports.dto.request.ScoreAddRequest;
+import com.example.sports.dto.response.CompetitionRankDTO;
 import com.example.sports.dto.response.SchoolScoreRes;
 import com.example.sports.dto.response.SysGroupingDetailDTO;
 import com.example.sports.dto.response.SysProjectSignDTO;
@@ -11,10 +12,9 @@ import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 
+
 /**
- * @title
- * @Author huangjiarui
- * @date: 2018-05-02
+ * @author xingchao.lxc
  */
 public interface ScoreAddService {
 
@@ -38,4 +38,9 @@ public interface ScoreAddService {
      * 查询分组信息
      */
     SysGroupingDetailDTO groupSignMemberInfo(String gameName, String place);
+
+    /**
+     *比赛成绩查询
+     */
+    List<CompetitionRankDTO> rank(Integer competitionId, String projectId);
 }

@@ -1,6 +1,9 @@
 package com.example.sports.mapper;
 
 import com.example.sports.model.SysGroupingModule;
+import com.example.sports.model.SysGroupingModuleExample;
+import com.example.sports.model.SysProjectExample;
+import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -20,5 +23,10 @@ public interface SysGroupingModuleMapper {
 
     int update(@Param("module") SysGroupingModule module);
 
+
+    List<SysGroupingModule> selectByExample(SysGroupingModuleExample example);
+
+    List<SysGroupingModule> selectByPrimaryKey(@Param("competitionId") int competitionId, @Param("id")Long id,
+                                               @Param("pageSize") int pageSize);
 
 }

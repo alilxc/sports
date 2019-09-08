@@ -2,12 +2,11 @@ package com.example.sports.service;
 
 import com.alibaba.fastjson.JSON;
 import com.example.sports.dto.request.ScoreAddInfo;
-import com.example.sports.dto.response.SysGroupingDetailDTO;
-import com.example.sports.dto.response.SysProjectSignDTO;
-import com.example.sports.dto.response.UserAchievementInfo;
+import com.example.sports.dto.response.*;
+import com.example.sports.manager.ProjectManager;
 import com.example.sports.mapper.*;
-import com.example.sports.mapper.sys.SysMapper;
 import com.example.sports.model.*;
+import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -42,6 +38,9 @@ public class ScoreAddServiceImpl implements ScoreAddService {
 
     @Autowired
     private SysGroupingModuleMapper sysGroupingModuleMapper;
+
+    @Autowired
+    private ProjectManager projectManager;
 
 
     @Override
@@ -114,6 +113,7 @@ public class ScoreAddServiceImpl implements ScoreAddService {
         return sysGroupingDetailDTO;
     }
 
+
     private List<SysProjectSignDTO> convert(List<SysProjectSign> sysProjectSignList, boolean isTeam){
         if(sysProjectSignList == null || sysProjectSignList.size() <= 0){
             return Collections.emptyList();
@@ -125,7 +125,7 @@ public class ScoreAddServiceImpl implements ScoreAddService {
                     .forEach((groupName, memberLists)->{
                         SysProjectSign sysProjectSign = memberLists.get(0);
                         SysProjectSignDTO sysProjectSignDTO = new SysProjectSignDTO(sysProjectSign.getGroupName(), sysProjectSign.getProjectId(),
-                                                                                    "XXXXX", sysProjectSign.getTeamType());
+                                                                                    sysProjectSign.getProjectName(), sysProjectSign.getTeamType());
                         List<UserAchievementInfo> userAchievementInfoList = new ArrayList<>();
                         for(SysProjectSign sysProjectSign1 : memberLists){
                             userAchievementInfoList.add(convert2UserAchievementInfo(sysProjectSign1));
@@ -136,7 +136,7 @@ public class ScoreAddServiceImpl implements ScoreAddService {
         }else{
             for(SysProjectSign sysProjectSign : sysProjectSignList){
                 SysProjectSignDTO sysProjectSignDTO = new SysProjectSignDTO(sysProjectSign.getGroupName(), sysProjectSign.getProjectId(),
-                        "XXXXX", sysProjectSign.getTeamType());
+                        sysProjectSign.getProjectName(), sysProjectSign.getTeamType());
                 List<UserAchievementInfo> userAchievementInfoList = new ArrayList<>();
                 userAchievementInfoList.add(convert2UserAchievementInfo(sysProjectSign));
                 sysProjectSignDTO.setAchievementInfoList(userAchievementInfoList);
@@ -232,5 +232,74 @@ public class ScoreAddServiceImpl implements ScoreAddService {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public List<CompetitionRankDTO> rank(Integer competitionId, String projectId) {
+        Set<String> teamTypeList = projectManager.getTeamTypeList(competitionId, projectId);
+        if(CollectionUtils.isEmpty(teamTypeList)){
+            return Collections.emptyList();
+        }
+        List<CompetitionRankDTO> data = new ArrayList<>();
+        SysProjectSignExample example = new SysProjectSignExample();
+        for(String teamType : teamTypeList){
+            example.clear();
+            SysProjectSignExample.Criteria criteria = example.createCriteria();
+            criteria.andCompetitionIdEqual(competitionId);
+            criteria.andProjectIdEqualTo(projectId);
+            criteria.andTeamType(teamType);
+            example.setOrderByClause("score desc");
+            List<SysProjectSign> projectSigns = sysProjectSignMapper.selectByExample(example);
+            if(CollectionUtils.isEmpty(projectSigns)){
+                log.info("rank select empty! teamType={}", teamType);
+                continue;
+            }
+            List<UserAchievementDetail> rankResult = rank(projectSigns);
+            CompetitionRankDTO competitionRankDTO = new CompetitionRankDTO();
+            competitionRankDTO.setTeamType(teamType);
+            competitionRankDTO.setAchievementDetailList(rankResult);
+            data.add(competitionRankDTO);
+        }
+        return data;
+    }
+
+    private List<UserAchievementDetail> rank(List<SysProjectSign> projectSignList){
+        List<UserAchievementDetail> userAchievementDetails = new ArrayList<>();
+        int rank = 1;
+        SysProjectSign sysProjectSign = projectSignList.get(0);
+        UserAchievementDetail userAchievementDetail = new UserAchievementDetail(rank, sysProjectSign.getGroupName(),
+                                                    sysProjectSign.getSysUserSid(), sysProjectSign.getUsername(),
+                                                    sysProjectSign.getScore());
+        userAchievementDetail.setProjectId(sysProjectSign.getProjectId());
+        userAchievementDetail.setProjectName(sysProjectSign.getProjectName());
+        double preScore = userAchievementDetail.getScore();
+        userAchievementDetails.add(userAchievementDetail);
+        for(int i = 1; i < projectSignList.size(); i++){
+            sysProjectSign = projectSignList.get(i);
+            if(sysProjectSign.getScore() < preScore){
+                rank++;
+                if(rank >= 9){
+                    break;
+                }
+            }
+            userAchievementDetail = new UserAchievementDetail(rank, sysProjectSign.getGroupName(),
+                    sysProjectSign.getSysUserSid(), sysProjectSign.getUsername(),
+                    sysProjectSign.getScore());
+            userAchievementDetail.setProjectId(sysProjectSign.getProjectId());
+            userAchievementDetail.setProjectName(sysProjectSign.getProjectName());
+            preScore = userAchievementDetail.getScore();
+            userAchievementDetails.add(userAchievementDetail);
+        }
+        return userAchievementDetails;
+    }
+
+
+    //todo 需要加载项目，并且判断是否是团赛
+    private boolean isTeam(String projectId){
+        Integer id = Integer.valueOf(projectId);
+        if(id >= 7100){
+            return true;
+        }
+        return false;
     }
 }

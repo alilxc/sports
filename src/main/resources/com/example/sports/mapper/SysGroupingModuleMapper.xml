@@ -73,7 +73,8 @@
     </sql>
 
     <sql id="Base_Column_List" >
-        id, create_time, update_time, competition_id, project_id, team_type, competitors, records, printed, ext
+        id, create_time, update_time, competition_id, project_id,
+        team_type, competitors, records, printed, ext
     </sql>
 
     <insert id="batchInsert" parameterType="java.util.List">
@@ -177,5 +178,29 @@
             </if>
         </trim>
     </insert>
+
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.example.sports.model.SysGroupingModuleExample" >
+        select
+        <if test="distinct" >
+            distinct
+        </if>
+        <include refid="Base_Column_List" />
+        from sys_grouping_info
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+        <if test="orderByClause != null" >
+            order by ${orderByClause}
+        </if>
+    </select>
+
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_grouping_info
+        WHERE id > #{id} and  competition_id=#{competitionId} limit #{pageSize}
+    </select>
+
 
 </mapper>

@@ -8,6 +8,7 @@ create table sys_project_sign(
 	competition_id BIGINT,
 	group_name VARCHAR(128),
 	project_id VARCHAR(64),
+	project_name VARCHAR(128),
 	team_type VARCHAR(32),
 	score DOUBLE(5,2),
 	place VARCHAR(32),
@@ -46,3 +47,9 @@ create table sys_competition_group(
 delete from sys_project_sign;
 delete from sys_grouping_info;
 delete from sys_competition_group;
+
+
+drop table sys_project_sign;
+drop table sys_grouping_info;
+drop table sys_competition_group;
+

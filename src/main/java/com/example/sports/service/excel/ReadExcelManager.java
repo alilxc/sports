@@ -3,10 +3,12 @@ package com.example.sports.service.excel;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import com.alibaba.fastjson.JSON;
 import com.example.sports.dto.response.ProjectRes;
+import com.example.sports.manager.ProjectManager;
 import com.example.sports.mapper.SysCompetitionGroupMapper;
 import com.example.sports.mapper.SysGroupingModuleMapper;
 import com.example.sports.mapper.SysProjectMapper;
@@ -50,6 +52,9 @@ public class ReadExcelManager {
     @Autowired
     private SysCompetitionGroupMapper sysCompetitionGroupMapper;
 
+    @Autowired
+    private ProjectManager projectManager;
+
     //sheet名匹配
     private static final String SUFFIX = "场地";
 
@@ -66,7 +71,7 @@ public class ReadExcelManager {
     /**
      * 分组
      */
-    public LoadingCache<String, Optional<Boolean>> groupingCache = CacheBuilder.newBuilder().refreshAfterWrite(15, TimeUnit.MINUTES)
+    public LoadingCache<String, Optional<Boolean>> groupingCache = CacheBuilder.newBuilder().refreshAfterWrite(30, TimeUnit.MINUTES)
             //缓存的最大记录数，默认10000条
             .maximumSize(15000)
             .build(new CacheLoader<String, Optional<Boolean>>() {
@@ -75,6 +80,8 @@ public class ReadExcelManager {
                     return Optional.ofNullable(exist(key));
                 }
             });
+
+
 
 
     private Boolean exist(String key){
@@ -273,7 +280,7 @@ public class ReadExcelManager {
                 String[] infos = key.split("#");
                 int value = enrty.getValue();
                 Optional<Boolean> exist = groupingCache.get(key);
-                if(exist != null && exist.get()){
+                if(exist.isPresent() && exist.get()){
                     SysGroupingModule sysGroupingModule = new SysGroupingModule();
                     sysGroupingModule.setUpdateTime(timestamp);
                     sysGroupingModule.setCompetitionId(Integer.valueOf(infos[0]));
@@ -293,6 +300,8 @@ public class ReadExcelManager {
                     sysGroupingModule.setCompetitors(value);
                     sysGroupingModuleMapper.insert(sysGroupingModule);
                 }
+                //缓存中暂存项目列表
+                projectManager.addProjectTeam(infos);
             }
         }catch (Exception e){
             log.error("updateGroupingInfo failed! ", e);
@@ -343,6 +352,11 @@ public class ReadExcelManager {
             }else{
                 sysProjectSign.setProjectId(row.getCell(6).getStringCellValue());
             }
+            if(CellType.NUMERIC.equals(row.getCell(7).getCellType())){
+                sysProjectSign.setProjectName(String.valueOf((int)row.getCell(7).getNumericCellValue()));
+            }else{
+                sysProjectSign.setProjectName(row.getCell(7).getStringCellValue());
+            }
         }else{
             sysProjectSign.setGroupName(row.getCell(3).getStringCellValue());
             if(CellType.NUMERIC.equals(row.getCell(4).getCellType())){
@@ -354,6 +368,11 @@ public class ReadExcelManager {
                 sysProjectSign.setProjectId(String.valueOf((int)row.getCell(5).getNumericCellValue()));
             }else{
                 sysProjectSign.setProjectId(row.getCell(5).getStringCellValue());
+            }
+            if(CellType.NUMERIC.equals(row.getCell(6).getCellType())){
+                sysProjectSign.setProjectName(String.valueOf((int)row.getCell(6).getNumericCellValue()));
+            }else{
+                sysProjectSign.setProjectName(row.getCell(6).getStringCellValue());
             }
         }
 
