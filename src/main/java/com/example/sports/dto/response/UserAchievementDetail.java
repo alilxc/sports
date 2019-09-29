@@ -22,6 +22,8 @@ public class UserAchievementDetail extends UserAchievementInfo{
 
     private String projectName;
 
+    private String teamType;
+
     public int getRank() {
         return rank;
     }
@@ -46,6 +48,14 @@ public class UserAchievementDetail extends UserAchievementInfo{
         this.rank = rank;
     }
 
+    public String getTeamType() {
+        return teamType;
+    }
+
+    public void setTeamType(String teamType) {
+        this.teamType = teamType;
+    }
+
     public String getGroupName() {
         return groupName;
     }
@@ -54,9 +64,10 @@ public class UserAchievementDetail extends UserAchievementInfo{
         this.groupName = groupName;
     }
 
-    public UserAchievementDetail(Integer rank, String groupName, String sysUserId, String userName, double score){
+    public UserAchievementDetail(Integer rank, String groupName, String sysUserId, String userName, double score, String teamType){
         super(sysUserId, userName, score);
         this.rank = rank;
         this.groupName = groupName;
+        this.teamType = teamType;
     }
 }

@@ -6,6 +6,8 @@ import com.example.sports.dto.response.RoleRes;
 import com.example.sports.dto.response.ScoreSerchRes;
 import com.github.pagehelper.PageInfo;
 
+import java.io.File;
+
 
 /**
  * @author xingchao.lxc
@@ -15,4 +17,5 @@ public interface SearchService {
 
     CompetitionResultDTO searchCompetitionStatus(PageRequestBean requestBean, String gameName, int status);
 
+    boolean judge(int competitionId, String projectId, String teamType, int status);
 }

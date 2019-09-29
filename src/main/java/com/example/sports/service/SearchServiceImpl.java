@@ -1,5 +1,6 @@
 package com.example.sports.service;
 
+import com.alibaba.fastjson.JSON;
 import com.example.sports.constant.StatusEnum;
 import com.example.sports.dto.PageRequestBean;
 import com.example.sports.dto.response.CompetitionResultDTO;
@@ -7,13 +8,18 @@ import com.example.sports.dto.response.GroupingProjectInfoDTO;
 import com.example.sports.manager.ProjectManager;
 import com.example.sports.mapper.*;
 import com.example.sports.model.*;
+import com.example.sports.service.excel.ComplexExportExcelManager;
+import com.google.common.collect.Lists;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;;
 
 
@@ -33,6 +39,12 @@ public class SearchServiceImpl implements SearchService {
 
     @Autowired
     private ProjectManager projectManager;
+
+    @Autowired
+    private ComplexExportExcelManager exportExcelManager;
+
+    @Autowired
+    private SysProjectSignMapper sysProjectSignMapper;
 
 
     @Override
@@ -75,7 +87,8 @@ public class SearchServiceImpl implements SearchService {
         return data;
     }
 
-    private boolean judge(int competitionId, String projectId, String teamType, int status){
+    @Override
+    public boolean judge(int competitionId, String projectId, String teamType, int status){
         StatusEnum statusEnum = StatusEnum.getByStatus(status);
         if(statusEnum == null){
             return false;

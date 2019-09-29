@@ -6,6 +6,8 @@ import com.example.sports.dto.response.*;
 import com.example.sports.manager.ProjectManager;
 import com.example.sports.mapper.*;
 import com.example.sports.model.*;
+import com.example.sports.service.excel.ComplexExportExcelManager;
+import com.google.common.collect.Lists;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -41,6 +44,12 @@ public class ScoreAddServiceImpl implements ScoreAddService {
 
     @Autowired
     private ProjectManager projectManager;
+
+    @Autowired
+    private ComplexExportExcelManager exportExcelManager;
+
+    @Autowired
+    private SearchService searchService;
 
 
     @Override
@@ -263,13 +272,74 @@ public class ScoreAddServiceImpl implements ScoreAddService {
         return data;
     }
 
+    @Override
+    public File buildCompetitionCandidate(String gameName, int status) {
+        try{
+            //查询比赛id
+            SysProjectExample sysProjectExample = new SysProjectExample();
+            SysProjectExample.Criteria projectExampleCriteria = sysProjectExample.createCriteria();
+            projectExampleCriteria.andNameEqualTo(gameName);
+            List<SysProject> projectList = sysProjectMapper.selectByExample(sysProjectExample);
+            if(CollectionUtils.isEmpty(projectList)){
+                return null;
+            }
+            int competitionId = projectList.get(0).getId().intValue();
+
+            Set<String> projectSet = projectManager.getProjects(competitionId);
+            List<UserAchievementDetail> individual = Lists.newArrayList();
+            List<UserAchievementDetail> team = Lists.newArrayList();
+            projectSet.forEach(project -> {
+                if(CollectionUtils.isNotEmpty(projectSet)){
+                    Set<String> teamTypeList = projectManager.getTeamTypeList(competitionId, project);
+                    if(CollectionUtils.isNotEmpty(teamTypeList)){
+                        SysProjectSignExample example = new SysProjectSignExample();
+                        boolean finish = true;
+                        for(String teamType : teamTypeList) {
+                            boolean result = searchService.judge(competitionId, project, teamType, status);
+                            if (!result) {
+                                finish = false;
+                                break;
+                            }
+                        }
+                        if(finish){
+                            for(String teamType : teamTypeList) {
+                                example.clear();
+                                SysProjectSignExample.Criteria criteria = example.createCriteria();
+                                criteria.andCompetitionIdEqual(competitionId);
+                                criteria.andProjectIdEqualTo(project);
+                                criteria.andTeamType(teamType);
+                                example.setOrderByClause("score desc");
+                                List<SysProjectSign> projectSigns = sysProjectSignMapper.selectByExample(example);
+                                if (CollectionUtils.isEmpty(projectSigns)) {
+                                    continue;
+                                }
+                                List<UserAchievementDetail> rankResult = rank(projectSigns);
+                                if (isTeam(project)) {
+                                    team.addAll(rankResult);
+                                } else {
+                                    individual.addAll(rankResult);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            return exportExcelManager.generateExcel(gameName, individual, team);
+        }catch (Exception e){
+
+        }
+        /*Resource resource = new ClassPathResource("poi/运费模板.xlsx");
+        File file = resource.getFile();*/
+        return null;
+    }
+
     private List<UserAchievementDetail> rank(List<SysProjectSign> projectSignList){
         List<UserAchievementDetail> userAchievementDetails = new ArrayList<>();
         int rank = 1;
         SysProjectSign sysProjectSign = projectSignList.get(0);
         UserAchievementDetail userAchievementDetail = new UserAchievementDetail(rank, sysProjectSign.getGroupName(),
                                                     sysProjectSign.getSysUserSid(), sysProjectSign.getUsername(),
-                                                    sysProjectSign.getScore());
+                                                    sysProjectSign.getScore(), sysProjectSign.getTeamType());
         userAchievementDetail.setProjectId(sysProjectSign.getProjectId());
         userAchievementDetail.setProjectName(sysProjectSign.getProjectName());
         double preScore = userAchievementDetail.getScore();
@@ -284,7 +354,7 @@ public class ScoreAddServiceImpl implements ScoreAddService {
             }
             userAchievementDetail = new UserAchievementDetail(rank, sysProjectSign.getGroupName(),
                     sysProjectSign.getSysUserSid(), sysProjectSign.getUsername(),
-                    sysProjectSign.getScore());
+                    sysProjectSign.getScore(), sysProjectSign.getTeamType());
             userAchievementDetail.setProjectId(sysProjectSign.getProjectId());
             userAchievementDetail.setProjectName(sysProjectSign.getProjectName());
             preScore = userAchievementDetail.getScore();

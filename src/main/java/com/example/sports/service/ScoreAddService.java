@@ -10,6 +10,7 @@ import com.example.sports.dto.response.SysProjectSignDTO;
 import com.example.sports.model.SysProject;
 import com.github.pagehelper.PageInfo;
 
+import java.io.File;
 import java.util.List;
 
 
@@ -43,4 +44,9 @@ public interface ScoreAddService {
      *比赛成绩查询
      */
     List<CompetitionRankDTO> rank(Integer competitionId, String projectId);
+
+    /**
+     * 下载获奖名单
+     */
+    File buildCompetitionCandidate(String gameName, int status);
 }

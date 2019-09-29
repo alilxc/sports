@@ -1,12 +1,15 @@
 package com.example.sports.service.excel;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.io.File;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import com.example.sports.dto.response.GroupingProjectInfoDTO;
+import com.example.sports.dto.response.UserAchievementDetail;
 import com.example.sports.manager.ProjectManager;
 import com.example.sports.mapper.SysProjectSignMapper;
+import com.example.sports.model.SysProjectSign;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -28,163 +31,129 @@ import org.springframework.stereotype.Component;
 @Component
 public class ComplexExportExcelManager {
 
-    static HSSFWorkbook wb = new HSSFWorkbook();
-    static HSSFSheet sheet = wb.createSheet();
+    private static final String[] titles = {"序号","单位名称","姓名","名次","成绩","项目号","项目名", "组别"};
 
-    @Autowired
-    private ProjectManager projectManager;
+    private static final int colSize = 8;
 
-    @Autowired
-    private SysProjectSignMapper sysProjectSignMapper;
+    public File generateExcel(String gameName, List<UserAchievementDetail> individual, List<UserAchievementDetail> team){
 
-    private static final String[] titles = {"序号","单位名称","姓名","名次","成绩","项目号","项目名"};
+        HSSFWorkbook wb = new HSSFWorkbook();
+        AtomicInteger curRow = new AtomicInteger(0);
 
-    /*public void generateExcel(int competitionId){
-        try{
-            Set<String> projectSet = projectManager.getProjects(competitionId);
-            if(CollectionUtils.isNotEmpty(projectSet)){
-                projectSet.forEach(project -> {
-                    Set<String> teamTypeList = projectManager.getTeamTypeList(competitionId, project);
-                    if(CollectionUtils.isNotEmpty(teamTypeList)){
-                        for(String teamType : teamTypeList){
+        HSSFSheet individualSheet = wb.createSheet("单练发放单");
+        //HSSFSheet teamSheet = wb.createSheet("集体发放单");
 
-                        }
+        ExportExcel exportExcel = new ExportExcel(wb, individualSheet);
+
+        // 给工作表列定义列宽(实际应用自己更改列数)
+        for (int i = 0; i < colSize; i++) {
+            individualSheet.setColumnWidth(i, 3000);
+        }
+        // 创建单元格样式
+        HSSFCellStyle cellStyle = wb.createCellStyle();
+
+        // 指定单元格居中对齐
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+
+        // 指定单元格垂直居中对齐
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        // 指定当单元格内容显示不下时自动换行
+        cellStyle.setWrapText(true);
+
+        // 设置单元格字体
+        HSSFFont font = wb.createFont();
+        //font.setBold(true);
+        font.setFontName("宋体");
+        font.setFontHeight((short) 200);
+        cellStyle.setFont(font);
+
+        // 创建报表头部
+        exportExcel.createNormalHead(gameName, curRow.getAndIncrement(),  colSize);
+
+        if(CollectionUtils.isNotEmpty(individual)){
+            Map<String, List<UserAchievementDetail>> userAchievementMap = individual.stream().
+                    collect(Collectors.groupingBy(UserAchievementDetail::getGroupName));
+            userAchievementMap.forEach((groupName, userAchievementDetailList) -> {
+                // 设置第二行
+                exportExcel.createNormalHead(groupName, curRow.getAndIncrement(), colSize);
+
+                // 设置列头
+                HSSFRow row2 = individualSheet.createRow(curRow.getAndIncrement());
+                for(int i = 0; i < colSize; i++){
+                    HSSFCell cell = row2.createCell(i);
+                    cell.setCellStyle(cellStyle);
+                    cell.setCellValue(new HSSFRichTextString(titles[i]));
+                }
+                int[] prize = new int[3];
+                Arrays.fill(prize, 0);
+                userAchievementDetailList.forEach(userAchievementDetail -> {
+                    HSSFRow row = individualSheet.createRow(curRow.getAndIncrement());
+                    exportExcel
+                            .cteateCell(wb, row, 0,
+                                    HorizontalAlignment.CENTER,userAchievementDetail.getSysUserSid());
+                    exportExcel
+                            .cteateCell(wb, row, 1,
+                                    HorizontalAlignment.CENTER,userAchievementDetail.getGroupName());
+                    exportExcel
+                            .cteateCell(wb, row, 2,
+                                    HorizontalAlignment.CENTER,userAchievementDetail.getUsername());
+                    int rank = userAchievementDetail.getRank();
+                    if(rank <= 3){
+                        prize[rank - 1]++;
                     }
-                    boolean find = true;
-                    if(CollectionUtils.isNotEmpty(teamTypeList)){
-                        for(String teamType : teamTypeList){
-                            find = judge(competitionId, project, teamType, status);
-                            if(!find){
-                                break;
-                            }
-                        }
-                        if(find){
-                            //todo 需要设置projectName
-                            data.addGroupingProject(new GroupingProjectInfoDTO(project, "XXXXX"));
-                        }
-                    }
+                    exportExcel
+                            .cteateCell(wb, row, 3,
+                                    HorizontalAlignment.CENTER, String.valueOf(rank));
+                    exportExcel
+                            .cteateCell(wb, row, 4,
+                                    HorizontalAlignment.CENTER, String.valueOf(userAchievementDetail.getScore()));
+                    exportExcel
+                            .cteateCell(wb, row, 5,
+                                    HorizontalAlignment.CENTER,userAchievementDetail.getProjectId());
+                    exportExcel
+                            .cteateCell(wb, row, 6,
+                                    HorizontalAlignment.CENTER,userAchievementDetail.getProjectName());
+                    exportExcel
+                            .cteateCell(wb, row, 7,
+                                    HorizontalAlignment.CENTER,userAchievementDetail.getTeamType());
                 });
-            }
-        }
+                //浪费多余的一行
+                individualSheet.createRow(curRow.getAndIncrement());
 
-
-        ExportExcel exportExcel = new ExportExcel(wb, sheet);
-
-        int colSize = titles.length;
-
-        // 给工作表列定义列宽(实际应用自己更改列数)
-        for (int i = 0; i < colSize; i++) {
-            sheet.setColumnWidth(i, 3000);
-        }
-        wb.setSheetName(0, "单项奖品发放单");
-        // 创建单元格样式
-        HSSFCellStyle cellStyle = wb.createCellStyle();
-
-        // 指定单元格居中对齐
-        cellStyle.setAlignment(HorizontalAlignment.CENTER);
-
-        // 指定单元格垂直居中对齐
-        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-
-        // 指定当单元格内容显示不下时自动换行
-        cellStyle.setWrapText(true);
-
-        // 设置单元格字体
-        HSSFFont font = wb.createFont();
-        font.setBold(true);
-        font.setFontName("宋体");
-        font.setFontHeight((short) 200);
-        cellStyle.setFont(font);
-
-        // 创建报表头部
-        exportExcel.createNormalHead("lxc测试表格", 0,  colSize);
-
-        // 设置第二行
-        exportExcel.createNormalHead("ABC队奖品获奖名单", 1, colSize);
-
-        // 设置列头
-        HSSFRow row2 = sheet.createRow(2);
-        for(int i = 0; i < colSize; i++){
-            HSSFCell cell = row2.createCell(i);
-            cell.setCellStyle(cellStyle);
-            cell.setCellValue(new HSSFRichTextString(titles[i]));
-        }
-
-        for(int i = 3; i < 10; i++){
-            HSSFRow row = sheet.createRow(i);
-            for (int j = 0; j < colSize; j++) {
+                HSSFRow row = individualSheet.createRow(curRow.getAndIncrement());
                 exportExcel
-                        .cteateCell(wb, row, (short) j,
-                                HorizontalAlignment.CENTER, String
-                                        .valueOf(j));
-            }
-        }
-    }*/
-
-    public static void main(String[] args) {
-
-        ExportExcel exportExcel = new ExportExcel(wb, sheet);
-
-        int colSize = titles.length;
-
-        // 给工作表列定义列宽(实际应用自己更改列数)
-        for (int i = 0; i < colSize; i++) {
-            sheet.setColumnWidth(i, 3000);
-        }
-        wb.setSheetName(0, "单项奖品发放单");
-        // 创建单元格样式
-        HSSFCellStyle cellStyle = wb.createCellStyle();
-
-        // 指定单元格居中对齐
-        cellStyle.setAlignment(HorizontalAlignment.CENTER);
-
-        // 指定单元格垂直居中对齐
-        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-
-        // 指定当单元格内容显示不下时自动换行
-        cellStyle.setWrapText(true);
-
-        // 设置单元格字体
-        HSSFFont font = wb.createFont();
-        font.setBold(true);
-        font.setFontName("宋体");
-        font.setFontHeight((short) 200);
-        cellStyle.setFont(font);
-
-        // 创建报表头部
-        exportExcel.createNormalHead("lxc测试表格", 0,  colSize);
-
-        // 设置第二行
-        exportExcel.createNormalHead("ABC队奖品获奖名单", 1, colSize);
-
-        // 设置列头
-        HSSFRow row2 = sheet.createRow(2);
-        for(int i = 0; i < colSize; i++){
-            HSSFCell cell = row2.createCell(i);
-            cell.setCellStyle(cellStyle);
-            cell.setCellValue(new HSSFRichTextString(titles[i]));
-        }
-
-        for(int i = 3; i < 10; i++){
-            HSSFRow row = sheet.createRow(i);
-            for (int j = 0; j < colSize; j++) {
+                        .cteateCell(wb, row, 1,
+                                HorizontalAlignment.CENTER, "奖牌累计：");
                 exportExcel
-                        .cteateCell(wb, row, (short) j,
-                                HorizontalAlignment.CENTER, String
-                                        .valueOf(j));
-            }
+                        .cteateCell(wb, row, 2,
+                                HorizontalAlignment.CENTER, String.valueOf(prize[0] + prize[1] + prize[2]));
+                exportExcel
+                        .cteateCell(wb, row, 3,
+                                HorizontalAlignment.CENTER, "其中:");
+                exportExcel
+                        .cteateCell(wb, row, 4,
+                                HorizontalAlignment.CENTER, String.valueOf(prize[0]) + "块金牌");
+                exportExcel
+                        .cteateCell(wb, row, 5,
+                                HorizontalAlignment.CENTER, String.valueOf(prize[1]) + "块银牌");
+                exportExcel
+                        .cteateCell(wb, row, 6,
+                                HorizontalAlignment.CENTER, String.valueOf(prize[2]) + "块铜牌");
+
+                row = individualSheet.createRow(curRow.getAndIncrement());
+                exportExcel
+                        .cteateCell(wb, row, 1,
+                                HorizontalAlignment.CENTER, "奖状累计：");
+                exportExcel
+                        .cteateCell(wb, row, 2,
+                                HorizontalAlignment.CENTER, String.valueOf(userAchievementDetailList.size()));
+
+                //浪费多余的两行
+                individualSheet.createRow(curRow.getAndIncrement());
+                individualSheet.createRow(curRow.getAndIncrement());
+            });
         }
-
-
-        // 创建最后一行的合计行
-        /*String[] cellValue = new String[number - 1];
-        for (int i = 0; i < number - 1; i++) {
-            cellValue[i] = String.valueOf(i);
-
-        }*/
-        //exportExcel.createLastSumRow(1, cellValue);
-
-        exportExcel.outputExcel("/Users/xingchao.lxc/xingchao/project/sports/测试.xls");
-
+        return exportExcel.outputExcel("/Users/xingchao.lxc/xingchao/project/sports/测试.xls");
     }
 }

@@ -230,16 +230,19 @@ public class ExportExcel {
      * @param fileName
      *            文件名
      */
-    public void outputExcel(String fileName) {
+    public File outputExcel(String fileName) {
         FileOutputStream fos = null;
         try {
+            File file = new File(fileName);
             fos = new FileOutputStream(new File(fileName));
             wb.write(fos);
             fos.close();
+            return file;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
     }
 }

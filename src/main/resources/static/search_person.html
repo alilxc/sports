@@ -258,8 +258,8 @@
 								</button>
 								<div></div>
 								<button class="btn btn-info dialogalert"  type="button" style="float:right" onclick="doPrint()">
-									打印
-									<i class="icon-print  align-top bigger-125 icon-on-search"></i>
+									导出
+									<i class="icon-download  align-top bigger-125 icon-on-search"></i>
 								</button>
 
 								<!--输入框 End-->
@@ -369,10 +369,15 @@
                         if (result.httpStatus == 200) {
                             var content = "";
                             var dataArr = result.data;
-                            var nameOpt = "<option value='' selected='selected'>--请选择--</option>";
-                            for (var i = 0; i < dataArr.length; i++) {
-                                nameOpt+="<option value='"+dataArr[i]+"' >"+dataArr[i]+"</option>"
-                            }
+                            var nameOpt = "";
+                            if(dataArr.length > 0){
+                                nameOpt+="<option value='"+dataArr[0]+"' >"+dataArr[0]+"</option>"
+                                for (var i = 1; i < dataArr.length; i++) {
+                                    nameOpt+="<option value='"+dataArr[i]+"' >"+dataArr[i]+"</option>"
+                                }
+							}else{
+								nameOpt = "<option value='' selected='selected'>--请选择--</option>";
+							}
                             $('#gameType').html(nameOpt);
                         };
                     },
@@ -385,41 +390,76 @@
 
 		<script type="text/javascript">
 
+            var gameName = document.getElementById("gameType").value;
+            var status = document.getElementById("status").value;
+
             function doPrint() {
-                var gameName = document.getElementById("gameType").value;
+                var url = '/statusSerch/download';
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', url, true);        // 也可以使用POST方式，根据接口
+                xhr.setRequestHeader('Content-Type', 'application/json;charset=utf-8');
+                xhr.responseType = "blob";    // 返回类型blob
+                // 定义请求完成的处理函数，请求前也可以增加加载框/禁用下载按钮逻辑
+                xhr.onload = function () {
+                    // 请求完成
+
+                    if (this.status === 200) {
+
+                        // 返回200
+
+                        var blob = this.response;
+
+                        var reader = new FileReader();
+
+                        reader.readAsDataURL(blob);    // 转换为base64，可以直接放入a表情href
+
+                        reader.onload = function (e) {
+
+                            // 转换完成，创建一个a标签用于下载
+
+                            var a = document.createElement('a');
+
+                            a.download = 'data.xls';
+
+                            a.href = e.target.result;
+
+                            $("body").append(a);    // 修复firefox中无法触发click
+
+                            a.click();
+
+                            $(a).remove();
+
+                        }
+
+                    }
+
+                };
+
+                // 发送ajax请求
+
+                xhr.send(JSON.stringify({
+                    "gameName" : gameName,
+                    "status" : status
+                }));
+                /*var gameName = document.getElementById("gameType").value;
                 var status = document.getElementById("status").value;
 
                 $.ajax({
-                    type: "GET",
+                    type: "POST",
                     contentType: "application/json",
                     dataType: "json",
                     data:{gameName:gameName, status: status},
-                    url: "/statusSerch/competition",
+                    url: "/statusSerch/download",
                     async: false,
                     success: function (result) {
                         if (result.httpStatus == 200) {
-                            var content = "";
-                            var dataArr = result.data.groupingProjectInfoS;
-                            var competitionId = result.data.competitionId;
-                            if(dataArr != null){
-                                $.each(dataArr, function(index, item){
-                                    content += "<tr>" +
-                                        "<td>" + item.projectId+"</td>" +
-                                        "<td class='hidden-480'>"+item.projectName+ "</td>" +
-                                        "<td><div class='visible-md visible-lg hidden-sm hidden-xs action-buttons'>" +
-                                        "<a class='green' onclick='doRank("+competitionId+", "+item.projectId+")'>" +
-                                        "<i class='icon-pencil bigger-130'></i></a></div></td>" +
-                                        "</tr>";
-                                });
-                            }
-                            $("#table tbody").empty();
-                            $("#table tbody").html(content);
+                            alert("下载成功!");
                         };
                     },
                     error: function () {
                         alert("异常！");
                     }
-                });
+                });*/
             }
 		</script>
 
