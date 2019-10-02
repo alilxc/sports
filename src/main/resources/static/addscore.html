@@ -616,7 +616,8 @@
                     success: function (result) {
                         if (result) {
                             alert("录入成绩成功！");
-                            window.location.href = "/static/addscore.html";
+                            placeChange(place)
+                            //window.location.href = "/static/addscore.html";
                         };
                     },
                     error: function () {
