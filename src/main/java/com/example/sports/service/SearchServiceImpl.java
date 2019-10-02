@@ -65,7 +65,11 @@ public class SearchServiceImpl implements SearchService {
             Set<String> projectSet = projectManager.getProjects(competitionId);
             if(CollectionUtils.isNotEmpty(projectSet)){
                 projectSet.forEach(project -> {
-                    Set<String> teamTypeList = projectManager.getTeamTypeList(competitionId, project);
+                    boolean flag = judge(competitionId, project, status);
+                    if(flag){
+                        data.addGroupingProject(new GroupingProjectInfoDTO(project, "XXXXX"));
+                    }
+                    /*Set<String> teamTypeList = projectManager.getTeamTypeList(competitionId, project);
                     boolean find = true;
                     if(CollectionUtils.isNotEmpty(teamTypeList)){
                         for(String teamType : teamTypeList){
@@ -78,7 +82,7 @@ public class SearchServiceImpl implements SearchService {
                             //todo 需要设置projectName
                             data.addGroupingProject(new GroupingProjectInfoDTO(project, "XXXXX"));
                         }
-                    }
+                    }*/
                 });
             }
         }catch (Exception e){
@@ -88,37 +92,46 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public boolean judge(int competitionId, String projectId, String teamType, int status){
+    public boolean judge(int competitionId, String projectId, int status){
         StatusEnum statusEnum = StatusEnum.getByStatus(status);
         if(statusEnum == null){
             return false;
         }
-        boolean result = false;
         SysGroupingModuleExample groupingModuleExample = new SysGroupingModuleExample();
         SysGroupingModuleExample.Criteria groupingModuleCriteria = groupingModuleExample.createCriteria();
         groupingModuleCriteria.addCompetitionId(competitionId);
         groupingModuleCriteria.addProjectId(projectId);
-        groupingModuleCriteria.addTeamType(teamType);
         List<SysGroupingModule> sysGroupingModules = sysGroupingModuleMapper.selectByExample(groupingModuleExample);
         if(CollectionUtils.isNotEmpty(sysGroupingModules)){
-            SysGroupingModule sysGroupingModule = sysGroupingModules.get(0);
             switch (statusEnum){
                 //待打印
                 case PRINTED:
-                    result = sysGroupingModule.getCompetitors().intValue() == sysGroupingModule.getRecords().intValue();
-                    break;
+                    for(SysGroupingModule sysGroupingModule : sysGroupingModules){
+                        if(!sysGroupingModule.getCompetitors().equals(sysGroupingModule.getRecords())){
+                            return false;
+                        }
+                    }
+                    return true;
                 //已完成
                 case FINISHED:
-                    result = sysGroupingModule.getPrinted() > 0;
-                    break;
+                    for(SysGroupingModule sysGroupingModule : sysGroupingModules){
+                        if(sysGroupingModule.getPrinted() <= 0){
+                            return false;
+                        }
+                    }
+                    return true;
                 //进行中
                 case PROCEEDING:
-                    result = sysGroupingModule.getCompetitors() > sysGroupingModule.getRecords();
-                    break;
+                    for(SysGroupingModule sysGroupingModule : sysGroupingModules){
+                        if(sysGroupingModule.getCompetitors() > (sysGroupingModule.getRecords())){
+                            return true;
+                        }
+                    }
+                    return false;
                 default:
                     break;
             }
         }
-        return result;
+        return true;
     }
 }

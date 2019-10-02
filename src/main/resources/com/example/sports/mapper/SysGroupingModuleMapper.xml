@@ -104,12 +104,14 @@
             competitors=competitors+#{module.competitors},
         </if>
         <if test="module.records!=null">
-            records=records+#{module.records},
+            records=#{module.records},
         </if>
         <if test="module.printed!=null">
             printed=#{module.printed},
         </if>
-        update_time=#{module.updateTime}
+        <if test="module.updateTime!=null">
+            update_time=#{module.updateTime}
+        </if>
         WHERE
         competition_id=#{module.competitionId} and project_id=#{module.projectId} and team_type=#{module.teamType}
     </update>

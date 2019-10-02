@@ -218,16 +218,26 @@ public class ScoreAddServiceImpl implements ScoreAddService {
                                                                 .collect(Collectors.groupingBy(ScoreAddInfo::router));
                 scoreAndInfoMap.forEach((key, values)->{
                     String[] teamAndProject = key.split("#");
-                    SysGroupingModule sysGroupingModule = new SysGroupingModule();
-                    sysGroupingModule.setCompetitionId((int)competitionId);
-                    sysGroupingModule.setTeamType(teamAndProject[1]);
-                    sysGroupingModule.setProjectId(teamAndProject[0]);
-                    sysGroupingModule.setRecords(values.size());
-                    int updateNum = sysGroupingModuleMapper.update(sysGroupingModule);
-                    if(updateNum <= 0){
-                        log.info("[ScoreAndService].updateScore affect sysGroupingModule num=0, competitionId={}, place={}, " +
-                                        "info={}",
-                                competitionId, place, JSON.toJSONString(sysGroupingModule));
+                    SysProjectSignExample example = new SysProjectSignExample();
+                    SysProjectSignExample.Criteria criteria = example.createCriteria();
+                    criteria.andCompetitionIdEqual(competitionId);
+                    criteria.andProjectIdEqualTo(teamAndProject[0]);
+                    criteria.andTeamType(teamAndProject[1]);
+                    criteria.andScoreNotNull();
+                    List<SysProjectSign> data = sysProjectSignMapper.selectByExample(example);
+                    if(CollectionUtils.isNotEmpty(data)){
+                        SysGroupingModule sysGroupingModule = new SysGroupingModule();
+                        sysGroupingModule.setUpdateTime(System.currentTimeMillis());
+                        sysGroupingModule.setCompetitionId((int)competitionId);
+                        sysGroupingModule.setTeamType(teamAndProject[1]);
+                        sysGroupingModule.setProjectId(teamAndProject[0]);
+                        sysGroupingModule.setRecords(data.size());
+                        int updateNum = sysGroupingModuleMapper.update(sysGroupingModule);
+                        if(updateNum <= 0){
+                            log.info("[ScoreAndService].updateScore affect sysGroupingModule num=0, competitionId={}, place={}, " +
+                                            "info={}",
+                                    competitionId, place, JSON.toJSONString(sysGroupingModule));
+                        }
                     }
                 });
             }else{
@@ -293,14 +303,7 @@ public class ScoreAddServiceImpl implements ScoreAddService {
                     Set<String> teamTypeList = projectManager.getTeamTypeList(competitionId, project);
                     if(CollectionUtils.isNotEmpty(teamTypeList)){
                         SysProjectSignExample example = new SysProjectSignExample();
-                        boolean finish = true;
-                        for(String teamType : teamTypeList) {
-                            boolean result = searchService.judge(competitionId, project, teamType, status);
-                            if (!result) {
-                                finish = false;
-                                break;
-                            }
-                        }
+                        boolean finish = searchService.judge(competitionId, project, status);
                         if(finish){
                             for(String teamType : teamTypeList) {
                                 example.clear();

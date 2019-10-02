@@ -350,6 +350,11 @@ public class SysProjectSignExample {
             return (Criteria)this;
         }
 
+        public Criteria andScoreNotNull() {
+            addCriterion("score is not null");
+            return (Criteria) this;
+        }
+
         public Criteria andSysProjectIdNotEqualTo(Integer value) {
             addCriterion("sys_project_id <>", value, "sysProjectId");
             return (Criteria) this;

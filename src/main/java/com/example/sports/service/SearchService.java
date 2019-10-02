@@ -17,5 +17,5 @@ public interface SearchService {
 
     CompetitionResultDTO searchCompetitionStatus(PageRequestBean requestBean, String gameName, int status);
 
-    boolean judge(int competitionId, String projectId, String teamType, int status);
+    boolean judge(int competitionId, String projectId, int status);
 }
