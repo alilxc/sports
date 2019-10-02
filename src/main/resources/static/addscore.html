@@ -202,10 +202,95 @@
 					<!--内容 Begin-->
 					<div class="page-content">
 						<div class="row">
+							<div class="col-xs-12">
+								<h3 class="header smaller lighter blue">
+									成绩录入
+								</h3>
+								<!--输入框 Begin-->
+								<form class="form-horizontal" role="form">
+
+									<div class="form-group">
+
+										<div class="input-group-btn">
+
+											<label class="col-sm-4 control-label no-padding-right" for="form-field-2">赛事</label>
+
+											<div class="col-sm-4">
+												<select id="gameType" placeholder="" class="col-xs-10 col-sm-5 form-control"
+														name="gameType" onchange="gameChange($('#gameType option:selected').val())">
+												</select>
+											</div>
+										</div>
+
+										<div class="input-group-btn">
+											<label class="col-sm-4 control-label no-padding-right" for="form-field-1">场地</label>
+
+											<div class="col-sm-4">
+												<select id="place" placeholder="" class="col-xs-10 col-sm-5 form-control"
+														name="place" onchange="placeChange($('#place option:selected').val())">
+												</select>
+											</div>
+										</div>
+
+										<!--<div class="col-sm-4">
+
+										</div>-->
+									</div>
+								</form>
+
+								<!--输入框 End-->
+
+								<!--查询后显示 Begin-->
+								<div class="space-8"></div>
+
+								<div class="table-responsive" style="height:400px;overflow:auto; ">
+									<table id="table2" class="table table-striped table-bordered table-hover" width="100%">
+										<thead>
+										<tr>
+											<th>编号</th>
+											<th class="hidden-480">姓名</th>
+											<th>团队</th>
+											<th>组别</th>
+											<th>项目代码</th>
+											<th>项目名称</th>
+											<th>成绩</th>
+											<th>修改</th>
+										</tr>
+										</thead>
+
+										<tbody>
+
+										</tbody>
+									</table>
+								</div>
+								<!--查询后显示 End-->
+							</div>
+						</div>
+
+						<div class="space-10"></div>
+
+						<div>
+							<div class="col-md-offset-3 col-md-9">
+								<button class="btn btn-info" type="button" onclick="addScore()">
+									<i class="icon-ok bigger-110"></i>
+									提交
+								</button>
+
+								&nbsp; &nbsp; &nbsp;
+								<button class="btn" type="button" onclick="reset()">
+									<i class="icon-undo bigger-110"></i>
+									重置
+								</button>
+							</div>
+						</div>
+
+					<!--内容 Begin-->
+					<!--<div class="page-content">
+						<div class="row">
 							<div class="col-sm-10">
 								<div class="tabbable">
 
-									<!--选项内容 Begin-->
+									&lt;!&ndash;选项内容 Begin&ndash;&gt;
 									<div class="tab-content">
 
 										<div id="home" class="tab-pane in active">
@@ -242,13 +327,14 @@
 
 										
 									</div>
-									<!--选项内容 End-->
+									&lt;!&ndash;选项内容 End&ndash;&gt;
 								</div>
 							</div>
-							<!-- /span -->
+							&lt;!&ndash; /span &ndash;&gt;
 						</div>
-					</div>
+					</div>-->
 					<!--内容 End-->
+				</div>
 				</div>
 				<!--右侧内容 End-->
 		</div>
@@ -301,7 +387,7 @@
 			</div>
 -->
 			<!--弹框（Modal） -->
-			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<!--<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 				<div class="modal-dialog" style="width:800px;">
 					<div class="modal-content">
 						<div class="modal-header">
@@ -309,7 +395,7 @@
 							<h4 class="modal-title" id="myModalLabel">成绩录入</h4>
 						</div>
 
-						<!-- 成绩录入弹框BEGINS -->
+						&lt;!&ndash; 成绩录入弹框BEGINS &ndash;&gt;
 						<div class="modal-body">
 
 						<form class="form-horizontal" role="form" id="addscores">
@@ -370,10 +456,9 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div>-->
 
 		</div>
-
 
 		<script src="assets/js/jquery-2.0.3.min.js"></script>
 		<script type="text/javascript">
@@ -415,6 +500,7 @@
                             var object = result.data;
 							dataArr = object.groupingMemberDTOList;
 							isTeam = object.team;
+							var count = 0;
                             $.each(dataArr, function(index, item){
                                 userList = item.achievementInfoList;
                                 num = userList.length;
@@ -441,49 +527,24 @@
                                     }
                                     if(i == 0){
                                         content += "<td style='text-align:center;vertical-align: middle' class='hidden-480' rowspan='" + num + "'>" +
-											"<input type='text' name='score' class='col-xs-10 col-sm-5' ";
+											"<input type='text' name='score' class='col-xs-6 col-sm-5' ";
                                         if(user.score != null){
                                             content += "value='" + user.score + "' disabled='disabled'";
 										}
 										content += "/></td>";
                                     }
+                                    if(i == 0){
+                                        content += "<td style='text-align:center;vertical-align: middle' class='hidden-480' rowspan='" + num + "'>" +
+											"<div class='visible-md visible-lg hidden-sm hidden-xs action-buttons'>" +
+                                            "<a class='green' onclick='doChange(this)'>" +
+                                            "<i class='icon-pencil bigger-130'></i></a></div></td>";
+									}
                                     content += "</tr>";
 								}
                             });
                             $("#table2 tbody").empty();
                             $("#table2 tbody").html(content);
-                        };
-                    },
-                    error: function () {
-                        alert("异常！");
-                    }
-                })
-            }
-		</script>
-
-
-		<script type="text/javascript">
-			var competitionId = null;
-            function gameChange(gameName){
-                $.ajax({
-                    type: "GET",//方法类型
-                    contentType: "application/json",
-                    dataType: "json",//预期服务器返回的数据类型
-                    data: {gameName: gameName},
-                    url: "/projectController/queryGamePlaces",
-                    async: false,
-                    success: function (result) {
-                        if (result.httpStatus == 200) {
-                            var content = "";
-                            var object = result.data;
-                            competitionId = object.competitionId;
-                            dataArr = object.places;
-                            var nameOpt = "<option value='' selected='selected'>--请选择--</option>";
-                            for (var i = 0; i < dataArr.length; i++) {
-                                nameOpt+="<option value='"+dataArr[i]+"' >"+dataArr[i]+"</option>"
-                            }
-                            $('#place').html(nameOpt);
-                        };
+                        }
                     },
                     error: function () {
                         alert("异常！");
@@ -595,37 +656,29 @@
                 })
             }
 		</script>
+
+
 		<script type="text/javascript">
-            function showSchoolScoreInfo(){
-                var sid;//传过去projectid
-                sid = $("#projectid").val();
-                // alert(sid);
+            var competitionId = null;
+            function gameChange(gameName){
                 $.ajax({
-                    type: "POST",//方法类型
-                    // contentType: "application/json",
+                    type: "GET",//方法类型
+                    contentType: "application/json",
                     dataType: "json",//预期服务器返回的数据类型
-                    data: {id: sid},
-                    url: "/scoreAddController/schoolScoreInfo",//url
+                    data: {gameName: gameName},
+                    url: "/projectController/queryGamePlaces",
                     async: false,
                     success: function (result) {
                         if (result.httpStatus == 200) {
                             var content = "";
-                            var dataArr = result.data;
-                            $.each(dataArr, function(index, item){
-
-                                console.log(item);
-                                content += "<tr>" +
-                                    "<td class='center'><a>"+item.sysCollegeName+"</a></td>" +
-                                    "<td>" + item.sid+"</td>" +
-                                    "<td class='hidden-480'>"+item.name+ "</td>" +
-                                    "<td>" + item.sysProjectName + "</td>" +
-                                    "<td>" + item.sportType + "</td>" +
-                                    "<td>" + item.teamType + "</td>" +
-                                    "<td class='hidden-480'>"+item.achievement+ "</td>" +
-                                    "</tr>";
-                            });
-                            $("#table4").empty();
-                            $("#table4").html(content);
+                            var object = result.data;
+                            competitionId = object.competitionId;
+                            dataArr = object.places;
+                            var nameOpt = "<option value='' selected='selected'>--请选择--</option>";
+                            for (var i = 0; i < dataArr.length; i++) {
+                                nameOpt+="<option value='"+dataArr[i]+"' >"+dataArr[i]+"</option>"
+                            }
+                            $('#place').html(nameOpt);
                         };
                     },
                     error: function () {
@@ -634,42 +687,63 @@
                 })
             }
 		</script>
+
+
 		<script type="text/javascript">
-            function showProjectInfo(matchType){
-                // alert("matchType="+matchType);
-                matchType = matchType || 1;
+            window.onload = showGames();
+            function showGames(){
+                var gameName = null;
                 $.ajax({
-                    type: "POST",//方法类型
+                    type: "GET",//方法类型
+                    contentType: "application/json",
                     dataType: "json",//预期服务器返回的数据类型
-                    data: {matchType: matchType},
-                    url: "/scoreAddController/sysProjectInfo",//url
+                    url: "/projectController/queryGameList",
                     async: false,
                     success: function (result) {
                         if (result.httpStatus == 200) {
                             var content = "";
-                            var dataArr = result.data.list;
-                            $.each(dataArr, function(index, item){
-                                console.log(item);
-                                content += "<tr>" +
-                                    "<td class='center'><a >"+item.sysCollegeName+"</a></td>" +
-                                    "<td>" + item.sid+"</td>" +
-                                    "<td class='hidden-480'>"+item.name+ "</td>" +
-                                    "<td class='hidden-480'>"+item.sysProjectName+ "</td>" +
-                                    "<td>" + item.sportType + "</td>" +
-                                    "<td>" + item.teamType + "</td>" +
-                                    "<td class='hidden-480'>"+item.achievement+ "</td>" +
-                                    "</tr>";
-                            });
-                            $("#table" + matchType).empty();
-                            $("#table" + matchType).html(content);
+                            var dataArr = result.data;
+                            var nameOpt = "";
+                            if(dataArr.length > 0){
+                                nameOpt+="<option value='"+dataArr[0]+"' >"+dataArr[0]+"</option>";
+                                gameName = dataArr[0];
+                                for (var i = 1; i < dataArr.length; i++) {
+                                    nameOpt+="<option value='"+dataArr[i]+"' >"+dataArr[i]+"</option>"
+                                }
+							}else{
+                                nameOpt = "<option value='' selected='selected'>--请选择--</option>";
+							}
+                            $('#gameType').html(nameOpt);
                         };
                     },
                     error: function () {
                         alert("异常！");
                     }
-                })
+                });
+				if(gameName != null){
+                    gameChange(gameName);
+				}
             }
+		</script>
 
+
+		<script type="text/javascript">
+            function doChange(item) {
+                $(item).parents('tr').find("input[name='score']").removeAttr('disabled')
+            }
+		</script>
+
+		<script type="text/javascript">
+            function reset() {
+                var tableObj = document.getElementById("table2");
+                var num = tableObj.rows[0].cells.length;
+                for (var i = 1; i < tableObj.rows.length; i++) {
+                    status = $(tableObj.rows[i]).find("input[name='score']").is(":disabled");
+                    if(status == "false"){
+                        $(tableObj.rows[i]).find("input[name='score']").val("")
+					}
+                }
+            }
 		</script>
 
 	</body>
