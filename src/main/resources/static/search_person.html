@@ -269,8 +269,8 @@
 									<table id="table" class="table table-striped table-bordered table-hover">
 										<thead>
 											<tr>
-												<th>项目代码</th>
-												<th>项目名称</th>
+												<th class="center">项目代码</th>
+												<th class="center">项目名称</th>
 												<th class="hidden-480">名单预览</th>
 											</tr>
 										</thead>
@@ -484,10 +484,10 @@
                             if(dataArr != null){
                                 $.each(dataArr, function(index, item){
                                     content += "<tr>" +
-                                        "<td>" + item.projectId+"</td>" +
-                                        "<td class='hidden-480'>"+item.projectName+ "</td>" +
+                                        "<td class='center'>" + item.projectId+"</td>" +
+                                        "<td class='hidden-480 center'>"+item.projectName+ "</td>" +
                                         "<td><div class='visible-md visible-lg hidden-sm hidden-xs action-buttons'>" +
-                                        "<a class='green' onclick='doRank("+competitionId+", "+item.projectId+")'>" +
+                                        "<a class='green' onclick='doRank("+competitionId+", "+item.projectId+", "+status+")'>" +
                                         "<i class='icon-pencil bigger-130'></i></a></div></td>" +
                                     "</tr>";
                                 });
@@ -504,7 +504,11 @@
 		</script>
 
 		<script type="text/javascript">
-			function doRank(competitionId, projectId) {
+			function doRank(competitionId, projectId, status) {
+			    if(status == 1){
+			        alert("该比赛项目正在火热进行中，请稍后重试。。。。");
+					return;
+				}
                 $('.dialogbody.rank').css({'display':'block'});
                 console.log(competitionId + ", " + projectId);
                 $.ajax({

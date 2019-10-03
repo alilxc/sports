@@ -37,6 +37,11 @@ public class ProjectManager {
      */
     private Map<String, Set<String>> projectAndTeam = new ConcurrentHashMap<>();
 
+    /**
+     * 项目名称映射关系
+     */
+    private Map<String, String> projectName = new ConcurrentHashMap<>();
+
     @Autowired
     private SysProjectMapper sysProjectMapper;
 
@@ -79,6 +84,9 @@ public class ProjectManager {
                             }
                             projectAndTeam.get(key).add(groupingModule.getTeamType());
                             id = groupingModule.getId() > id ? groupingModule.getId() : id;
+                            if(!projectName.containsKey(key)){
+                                projectName.put(key, groupingModule.getProjectName());
+                            }
                         }
                     }
                     if(groupingModules == null || groupingModules.size() < pageSize){
@@ -121,5 +129,13 @@ public class ProjectManager {
             return projectAndTeam.get(key);
         }
         return Collections.emptySet();
+    }
+
+    public String getProjectName(Integer competitionId, String projectId){
+        String key = competitionId + "|" + projectId;
+        if(projectName.containsKey(key)){
+            return projectName.get(key);
+        }
+        return "未定义项目名";
     }
 }

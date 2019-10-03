@@ -7,6 +7,7 @@
         <result column="update_time" property="updateTime" jdbcType="BIGINT" />
         <result column="competition_id" property="competitionId" jdbcType="INTEGER" />
         <result column="project_id" property="projectId" jdbcType="VARCHAR" />
+        <result column="project_name" property="projectName" jdbcType="VARCHAR" />
         <result column="team_type" property="teamType" jdbcType="VARCHAR" />
         <result column="competitors" property="competitors" jdbcType="INTEGER" />
         <result column="records" property="records" jdbcType="INTEGER" />
@@ -73,18 +74,18 @@
     </sql>
 
     <sql id="Base_Column_List" >
-        id, create_time, update_time, competition_id, project_id,
+        id, create_time, update_time, competition_id, project_id,project_name,
         team_type, competitors, records, printed, ext
     </sql>
 
     <insert id="batchInsert" parameterType="java.util.List">
         insert into sys_grouping_info
-        (create_time, update_time, competition_id, project_id, team_type, competitors, records, printed, ext)
+        (create_time, update_time, competition_id, project_id, project_name, team_type, competitors, records, printed, ext)
         VALUES
         <foreach collection ="groupingModules" item="module" index= "index" separator =",">
             (
             #{module.createTime}, #{module.updateTime},
-            #{module.competitionId},#{module.projectId},
+            #{module.competitionId},#{module.projectId},#{module.projectName},
             #{module.teamType}, #{module.competitors},#{module.records}, #{module.printed},#{module.ext}
             )
         </foreach >
@@ -134,6 +135,9 @@
             <if test="projectId != null" >
                 project_id,
             </if>
+            <if test="projectName != null" >
+                project_name,
+            </if>
             <if test="teamType != null" >
                 team_type,
             </if>
@@ -162,6 +166,9 @@
             </if>
             <if test="projectId != null" >
                 #{projectId,jdbcType=VARCHAR},
+            </if>
+            <if test="projectName != null" >
+                #{projectName,jdbcType=VARCHAR},
             </if>
             <if test="teamType != null" >
                 #{teamType,jdbcType=VARCHAR},

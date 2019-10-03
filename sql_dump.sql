@@ -24,6 +24,7 @@ create table sys_grouping_info(
 	update_time BIGINT,
 	competition_id int,
 	project_id varchar(64),
+	project_name varchar(256),
 	team_type VARCHAR(32),
 	competitors int,
 	records int,

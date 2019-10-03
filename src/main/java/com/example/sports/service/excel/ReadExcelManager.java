@@ -68,6 +68,8 @@ public class ReadExcelManager {
 
     private Map<String, Integer> localGrouping = new HashMap<>();
 
+    private Map<String, String> projectNameMap = new HashMap<>();
+
     /**
      * 分组
      */
@@ -219,6 +221,9 @@ public class ReadExcelManager {
                         count += localGrouping.get(projectAndTeam);
                     }
                     localGrouping.put(projectAndTeam, count);
+                    if(!projectNameMap.containsKey(projectAndTeam)){
+                        projectNameMap.put(projectAndTeam, sysProjectSign.getProjectName());
+                    }
                 }
                 //db持久化报名用户信息
                 if(sysProjectSignList.size() >= 10){
@@ -229,6 +234,7 @@ public class ReadExcelManager {
             if(localGrouping.size() > 0){
                 updateGroupingInfo();
                 localGrouping.clear();
+                projectNameMap.clear();
 
             }
             if(sysProjectSignList.size() > 0){
@@ -296,6 +302,7 @@ public class ReadExcelManager {
                     sysGroupingModule.setPrinted(0);
                     sysGroupingModule.setRecords(0);
                     sysGroupingModule.setProjectId(infos[1]);
+                    sysGroupingModule.setProjectName(projectNameMap.get(key));
                     sysGroupingModule.setTeamType(infos[2]);
                     sysGroupingModule.setCompetitors(value);
                     sysGroupingModuleMapper.insert(sysGroupingModule);

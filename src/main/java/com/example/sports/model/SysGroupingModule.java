@@ -30,6 +30,12 @@ public class SysGroupingModule implements Serializable{
      */
     private String projectId;
 
+
+    /**
+     * 项目名称
+     */
+    private String projectName;
+
     /**
      * 组别
      */
@@ -113,6 +119,14 @@ public class SysGroupingModule implements Serializable{
 
     public Integer getPrinted() {
         return printed;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 
     public void setPrinted(Integer printed) {

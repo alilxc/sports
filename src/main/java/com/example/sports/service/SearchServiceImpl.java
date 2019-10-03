@@ -1,6 +1,5 @@
 package com.example.sports.service;
 
-import com.alibaba.fastjson.JSON;
 import com.example.sports.constant.StatusEnum;
 import com.example.sports.dto.PageRequestBean;
 import com.example.sports.dto.response.CompetitionResultDTO;
@@ -8,18 +7,13 @@ import com.example.sports.dto.response.GroupingProjectInfoDTO;
 import com.example.sports.manager.ProjectManager;
 import com.example.sports.mapper.*;
 import com.example.sports.model.*;
-import com.example.sports.service.excel.ComplexExportExcelManager;
-import com.google.common.collect.Lists;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;;
 
 
@@ -39,12 +33,6 @@ public class SearchServiceImpl implements SearchService {
 
     @Autowired
     private ProjectManager projectManager;
-
-    @Autowired
-    private ComplexExportExcelManager exportExcelManager;
-
-    @Autowired
-    private SysProjectSignMapper sysProjectSignMapper;
 
 
     @Override
@@ -67,22 +55,9 @@ public class SearchServiceImpl implements SearchService {
                 projectSet.forEach(project -> {
                     boolean flag = judge(competitionId, project, status);
                     if(flag){
-                        data.addGroupingProject(new GroupingProjectInfoDTO(project, "XXXXX"));
+                        data.addGroupingProject(new GroupingProjectInfoDTO(project,
+                                projectManager.getProjectName(competitionId, project)));
                     }
-                    /*Set<String> teamTypeList = projectManager.getTeamTypeList(competitionId, project);
-                    boolean find = true;
-                    if(CollectionUtils.isNotEmpty(teamTypeList)){
-                        for(String teamType : teamTypeList){
-                            find = judge(competitionId, project, teamType, status);
-                            if(!find){
-                                break;
-                            }
-                        }
-                        if(find){
-                            //todo 需要设置projectName
-                            data.addGroupingProject(new GroupingProjectInfoDTO(project, "XXXXX"));
-                        }
-                    }*/
                 });
             }
         }catch (Exception e){
