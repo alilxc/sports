@@ -20,6 +20,8 @@
 		<style>
 			.page-content .left img {
 				width: 100%;
+				position:fixed;
+				height: 500px;
 			}
 
 			/*弹框*/
@@ -29,6 +31,31 @@
 			.dialogbox{position: absolute;display: block;width: 800px;height: 600px;background: #fff;border-radius: 15px;top: 0;left: 0;right: 0;bottom: 0;margin: auto;}
 			.dialogbox .close{position: absolute;display: block;width: 50px;height: 50px;background: url(assets/images/Close.png) no-repeat 100% center;top: 20px;right: 20px;}
 
+			#pagination{
+				margin: 0 auto;
+				text-align:center;
+			}
+
+			.ui{
+				width:700px;
+				height:50px;
+				list-style: none;
+				padding:0;
+			}
+			.ui li{
+				width:70px;
+				float: left;/*该处换为display:inline-block;同样效果*/
+
+			}
+
+			.ui li a{
+				width:70px;
+				height:50px;
+				/*padding:0 20px;*/
+				font-size: 12px;
+				line-height:50px;
+				display: inline;
+			}
 		</style>
 	</head>
 	<body>
@@ -265,7 +292,7 @@
 								<!--输入框 End-->
 								
 								<!--查询后显示 Begin-->
-								<div class="table-responsive">
+								<div class="table-responsive" style="height:400px;">
 									<table id="table" class="table table-striped table-bordered table-hover">
 										<thead>
 											<tr>
@@ -280,15 +307,35 @@
 										</tbody>
 									</table>
 								</div>
+
 								<!--查询后显示 End-->
 							</div>
 						</div>
+					</div>
+
+					<div id="pagination">
+
+						<div class="space-4"></div>
+
+						<span id="summary"></span>
+
+						<ul class="ui">
+
+							<li id="01"><a onclick="index()" style="font-size: 5px">首页</a></li>
+
+							<li id="02"><a onclick="last()" style="font-size: 5px" >上一页</a></li>
+
+							<li id="03"><a onclick="next()" style="font-size: 5px">下一页</a></li>
+
+							<li id="04"><a onclick="zuihou()" style="font-size: 5px">最后一页</a></li>
+						</ul>
 					</div>
 					<!--内容 End-->
 				</div>
 				<!--右侧内容 End-->
 			</div>
 		</div>
+
 
 		<!--弹框（Modal） -->
 		<div class="dialogbody rank">
@@ -469,7 +516,9 @@
                 var gameName = document.getElementById("gameType").value;
                 var status = document.getElementById("status").value;
 
-                $.ajax({
+                loadData(gameName, status, 1, 10);
+
+                /*$.ajax({
                     type: "GET",
                     contentType: "application/json",
                     dataType: "json",
@@ -499,7 +548,7 @@
                     error: function () {
                         alert("异常！");
                     }
-                });
+                });*/
             }
 		</script>
 
@@ -544,6 +593,122 @@
                     }
                 })
             }
+		</script>
+
+
+		<script type="text/javascript">
+
+            var pageNo = 1;
+
+            var pageSize = 10;
+
+            var pages = 0;
+
+
+            function loadData(gameName,status,pageNo,pageSize){
+                $.ajax({
+                    type: "GET",
+                    contentType: "application/json",
+                    dataType: "json",
+                    data:{gameName:gameName, status: status, pageNum:pageNo,pageSize:pageSize},
+                    url: "/statusSerch/competition",
+                    async: false,
+
+                    success:function(result){
+
+                        if (result.httpStatus == 200) {
+                            var content = "";
+                            var dataArr = result.data.data.groupingProjectInfoS;
+                            var competitionId = result.data.data.competitionId;
+                            var totalCount = result.data.total;
+							pages = result.data.pages;
+                            if(dataArr != null){
+                                $.each(dataArr, function(index, item){
+                                    content += "<tr>" +
+                                        "<td class='center'>" + item.projectId+"</td>" +
+                                        "<td class='hidden-480 center'>"+item.projectName+ "</td>" +
+                                        "<td><div class='visible-md visible-lg hidden-sm hidden-xs action-buttons'>" +
+                                        "<a class='green' onclick='doRank("+competitionId+", "+item.projectId+", "+status+")'>" +
+                                        "<i class='icon-pencil bigger-130'></i></a></div></td>" +
+                                        "</tr>";
+                                });
+                            }
+                            $("#table tbody").empty();
+                            $("#table tbody").html(content);
+                        }
+
+                        var newText = "共" + totalCount + "条，" + "第" + pageNo + "页，" + "共" + pages + "页";
+
+                        $("#summary").text(newText);
+                    }
+
+                });
+
+            }
+
+		</script>
+
+		<script>
+
+            function index(){
+
+                pageNo = 1;
+
+                var gameName = document.getElementById("gameType").value;
+                var status = document.getElementById("status").value;
+
+                loadData(gameName, status, pageNo, pageSize);
+
+            }
+
+			function last(){
+
+                var gameName = document.getElementById("gameType").value;
+                var status = document.getElementById("status").value;
+
+				if(pageNo == 1){
+
+					return false;
+
+				} else{
+
+					pageNo--;
+
+					loadData(gameName, status, pageNo, pageSize);
+
+				}
+
+			}
+
+			function next(){
+
+                var gameName = document.getElementById("gameType").value;
+                var status = document.getElementById("status").value;
+
+				if(pageNo == pages){
+
+					return false;
+
+				} else{
+
+					pageNo++;
+
+                    loadData(gameName, status, pageNo, pageSize);
+
+				}
+
+			}
+
+			function zuihou(){
+
+				pageNo = pages;
+
+                var gameName = document.getElementById("gameType").value;
+                var status = document.getElementById("status").value;
+
+                loadData(gameName, status, pageNo, pageSize);
+
+			}
 		</script>
 
 	</body>

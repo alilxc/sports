@@ -7,12 +7,15 @@ import com.example.sports.dto.response.GroupingProjectInfoDTO;
 import com.example.sports.manager.ProjectManager;
 import com.example.sports.mapper.*;
 import com.example.sports.model.*;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;;
 
@@ -36,10 +39,11 @@ public class SearchServiceImpl implements SearchService {
 
 
     @Override
-    public CompetitionResultDTO searchCompetitionStatus(PageRequestBean requestBean, String gameName, int status) {
+    public CompetitionResultDTO searchCompetitionStatus(String gameName, int status) {
         CompetitionResultDTO data = new CompetitionResultDTO();
         data.setGameName(gameName);
         data.setStatus(status);
+        List<GroupingProjectInfoDTO> pageGroupingList = new ArrayList<>();
         try{
             SysProjectExample example = new SysProjectExample();
             SysProjectExample.Criteria criteria = example.createCriteria();
@@ -55,7 +59,7 @@ public class SearchServiceImpl implements SearchService {
                 projectSet.forEach(project -> {
                     boolean flag = judge(competitionId, project, status);
                     if(flag){
-                        data.addGroupingProject(new GroupingProjectInfoDTO(project,
+                        pageGroupingList.add(new GroupingProjectInfoDTO(project,
                                 projectManager.getProjectName(competitionId, project)));
                     }
                 });
@@ -63,6 +67,7 @@ public class SearchServiceImpl implements SearchService {
         }catch (Exception e){
             log.error("[SearchServiceImpl].searchCompetitionStatus failed! gameName={}, status={}", gameName, status);
         }
+        data.setGroupingProjectInfoS(pageGroupingList);
         return data;
     }
 

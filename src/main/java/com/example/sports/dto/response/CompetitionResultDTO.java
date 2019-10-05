@@ -1,5 +1,7 @@
 package com.example.sports.dto.response;
 
+import com.github.pagehelper.PageInfo;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,13 @@ public class CompetitionResultDTO implements Serializable{
      */
     private int status;
 
+    public List<GroupingProjectInfoDTO> getGroupingProjectInfoS() {
+        return groupingProjectInfoS;
+    }
+
+    public void setGroupingProjectInfoS(List<GroupingProjectInfoDTO> groupingProjectInfoS) {
+        this.groupingProjectInfoS = groupingProjectInfoS;
+    }
 
     private List<GroupingProjectInfoDTO> groupingProjectInfoS;
 
@@ -52,20 +61,5 @@ public class CompetitionResultDTO implements Serializable{
 
     public void setStatus(int status) {
         this.status = status;
-    }
-
-    public List<GroupingProjectInfoDTO> getGroupingProjectInfoS() {
-        return groupingProjectInfoS;
-    }
-
-    public void setGroupingProjectInfoS(List<GroupingProjectInfoDTO> groupingProjectInfoS) {
-        this.groupingProjectInfoS = groupingProjectInfoS;
-    }
-
-    public void addGroupingProject(GroupingProjectInfoDTO groupingProjectInfoDTO){
-        if(groupingProjectInfoS == null){
-            groupingProjectInfoS = new ArrayList<>();
-        }
-        groupingProjectInfoS.add(groupingProjectInfoDTO);
     }
 }

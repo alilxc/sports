@@ -1,23 +1,18 @@
 package com.example.sports.controller;
 
-import com.example.sports.dto.PageRequestBean;
 import com.example.sports.dto.request.DownloadRequest;
-import com.example.sports.dto.request.EnterInfoRequest;
 import com.example.sports.dto.response.*;
 import com.example.sports.service.ScoreAddService;
 import com.example.sports.service.SearchService;
 import com.example.sports.util.ResponseObject;
 import com.example.sports.util.ResponseObjectUtil;
 import com.example.sports.util.StringUtil;
-import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.models.auth.In;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
@@ -40,20 +35,35 @@ public class StatusSerchController {
 
     @GetMapping("/competition")
     @ApiOperation(value = "比赛进度查询")
-    public ResponseObject<CompetitionResultDTO> comptetitionStatus(String gameName, String status,
+    public ResponseObject<PageInfo<CompetitionResultDTO>> comptetitionStatus(String gameName, String status,
                                                                    Integer pageNum, Integer pageSize) {
         if(StringUtils.isEmpty(gameName) || StringUtils.isEmpty(status)){
             return ResponseObjectUtil.fail("param is null");
         }
-        PageRequestBean requestBean = new PageRequestBean();
-        if(pageNum != null){
-            requestBean.setPageNum(pageNum);
+        if(pageNum <= 0){
+            return ResponseObjectUtil.fail("param pageNum invalid");
         }
-        if(pageSize != null){
-            requestBean.setPageSize(pageSize);
+        if(pageSize <= 0){
+            return ResponseObjectUtil.fail("param pageSize invalid");
         }
-        CompetitionResultDTO data = searchService.searchCompetitionStatus(requestBean, gameName, Integer.valueOf(status));
-        return ResponseObjectUtil.success(data);
+        CompetitionResultDTO data = searchService.searchCompetitionStatus(gameName, Integer.valueOf(status));
+        List<GroupingProjectInfoDTO> groupingProjectInfoDTOList = data.getGroupingProjectInfoS();
+        int total = groupingProjectInfoDTOList.size();
+        int startIndex = 0;
+        if(pageNum > 0){
+            startIndex = (pageNum - 1) * pageSize;
+        }
+        int endIndex = pageNum * pageSize > total ? total : pageNum * pageSize;
+        int pages = total % pageSize == 0 ? total / pageSize : total / pageSize + 1;
+        List<GroupingProjectInfoDTO> groupingProjectInfoDTOS = groupingProjectInfoDTOList.subList(startIndex, endIndex);
+        data.setGroupingProjectInfoS(groupingProjectInfoDTOS);
+        PageInfo<CompetitionResultDTO> pageInfo = new PageInfo<>();
+        pageInfo.setCurPage(pageNum);
+        pageInfo.setTotal(total);
+        pageInfo.setData(data);
+        pageInfo.setPageNum(pageNum);
+        pageInfo.setPages(pages);
+        return ResponseObjectUtil.success(pageInfo);
     }
 
 

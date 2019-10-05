@@ -15,7 +15,7 @@ import java.io.File;
 public interface SearchService {
 
 
-    CompetitionResultDTO searchCompetitionStatus(PageRequestBean requestBean, String gameName, int status);
+    CompetitionResultDTO searchCompetitionStatus(String gameName, int status);
 
     boolean judge(int competitionId, String projectId, int status);
 }

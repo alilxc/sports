@@ -1,7 +1,13 @@
 package com.example.sports;
 
+import com.alibaba.fastjson.JSON;
+import com.example.sports.controller.StatusSerchController;
 import com.example.sports.dto.request.ScoreAddInfo;
+import com.example.sports.dto.response.CompetitionResultDTO;
+import com.example.sports.dto.response.PageInfo;
+import com.example.sports.model.SysGroupingModule;
 import com.example.sports.service.ScoreAddService;
+import com.example.sports.util.ResponseObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +29,9 @@ public class ScoreAddServiceTest {
 
     @Autowired
     private ScoreAddService scoreAddService;
+
+    @Autowired
+    private StatusSerchController statusSerchController;
 
     @Test
     public void addScoreTest(){
@@ -48,5 +57,15 @@ public class ScoreAddServiceTest {
         scoreAddInfoList.add(scoreAddInfo1);
         scoreAddInfoList.add(scoreAddInfo2);
         scoreAddService.addScore(competitionId, place, scoreAddInfoList);
+    }
+
+    @Test
+    public void comptetitionStatusTest(){
+        String gameName = "测试比赛003";
+        String status = "1";
+        int pageSize = 20;
+        int pageNum = 1;
+        ResponseObject<PageInfo<CompetitionResultDTO>> result = statusSerchController.comptetitionStatus(gameName, status, pageNum, pageSize);
+        System.out.println(JSON.toJSONString(result.getData()));
     }
 }
