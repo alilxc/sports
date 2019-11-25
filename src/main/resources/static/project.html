@@ -648,7 +648,7 @@
                 dataType: "json",
                 async:'false',
                 url: "/projectController/modifyProject",
-                data:{id:aid,name:newName,organization:newOrganization},
+                data:{id:aid,name:newName,organization:newOrganization,activeStart:newActiveStart,activeFinish:newActiveFinish},
                 success:function (res) {
                     $('.dialogbody').css({'display':'none'})
                     window.location.href = '/static/project.html'

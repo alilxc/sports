@@ -142,6 +142,8 @@ public class ProjectServiceImpl implements ProjectService {
             SysProject sysProject = new SysProject();
             sysProject.setName(request.getName());
             sysProject.setOrganization(request.getOrganization());
+            sysProject.setActiveStart(DateUtil.stringToDate(request.getActiveStart(), "yyyy-MM-dd").getTime());
+            sysProject.setActiveFinish(DateUtil.stringToDate(request.getActiveFinish(), "yyyy-MM-dd").getTime());
             sysProjectMapper.updateByExampleSelective(sysProject, example);
         }
     }
