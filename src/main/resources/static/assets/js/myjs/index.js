@@ -43,11 +43,13 @@ var mname =localStorage.getItem("username");
 // alert("msid:"+msid);
 // alert("mname:"+mname);
 
-if(mname!=""&&mname!=null)
+if(mname!=null&&mname!=""&&mname!="null")
 {
     $("#username").text(mname);
 }
-else
+else if(msid!=null&&msid!=""&&msid!="null"){
+    $("#username").text(msid);
+}else
 {
     $("#username").text("未登录");
 

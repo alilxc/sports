@@ -175,6 +175,11 @@ public class SysProjectSignExample {
             return (Criteria) this;
         }
 
+        public Criteria andSysUserName(String sysUserName){
+            addCriterion("username = ", sysUserName, "username");
+            return (Criteria)this;
+        }
+
         public Criteria andPlaceEqual(String place) {
             addCriterion("place =", place, "place");
             return (Criteria) this;

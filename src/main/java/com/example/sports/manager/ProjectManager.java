@@ -51,16 +51,16 @@ public class ProjectManager {
     private static final int pageSize = 30;
 
 
-    @PostConstruct
+    /*@PostConstruct
     public void init(){
         try{
             load();
         }catch (Exception e){
             log.error("[ProjectManager].init failed!", e);
         }
-    }
+    }*/
 
-    private void load(){
+    public void load(){
         SysProjectExample example = new SysProjectExample();
         SysProjectExample.Criteria criteria = example.createCriteria();
         criteria.addActiveFinish(System.currentTimeMillis());

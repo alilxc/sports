@@ -1,5 +1,6 @@
 package com.example.sports.controller;
 
+import com.example.sports.annotation.AvoidRepeatableCommit;
 import com.example.sports.dto.PageRequestBean;
 import com.example.sports.dto.request.EnterInfoRequest;
 import com.example.sports.dto.request.EnterRequest;
@@ -57,6 +58,7 @@ public class ScoreAddController {
         return ResponseObjectUtil.success();
     }
 
+    @AvoidRepeatableCommit
     @PostMapping("/importMember")
     @ApiOperation(value = "分组名单导入")
     public ResponseObject<Void> importMember(@RequestParam(value = "fileinfo", required = false) MultipartFile file,

@@ -223,12 +223,23 @@
     </if>
   </update>
 
-  <update id="batchUpdate" parameterType="java.util.Map">
+  <update id="batchUpdateScore" parameterType="java.util.Map">
     <foreach collection="records" separator=";" item="record">
       update sys_project_sign set
       score = #{record.score}
       where competition_id = #{record.competitionId} and group_name = #{record.groupName} and team_type=#{record.teamType}
       and project_id = #{record.projectId} and order_id=#{record.orderId} and place=#{record.place}
+    </foreach>
+  </update>
+
+  <update id="batchUpdate" parameterType="java.util.Map">
+    <foreach collection="records" separator=";" item="record">
+      update sys_project_sign set
+      order_id=#{record.orderId}, sys_user_sid=#{record.sysUserSid},
+      team_type=#{record.teamType}, project_id=#{record.projectId},
+      group_name = #{record.groupName}, project_name=#{record.projectName}
+      place=#{record.place},ext=#{record.ext}
+      where competition_id = #{record.competitionId} and username=#{record.username}
     </foreach>
   </update>
 

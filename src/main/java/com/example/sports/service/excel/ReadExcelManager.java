@@ -1,23 +1,27 @@
 package com.example.sports.service.excel;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.alibaba.fastjson.JSON;
+import com.example.sports.constant.BaseConstants;
 import com.example.sports.dto.response.ProjectRes;
 import com.example.sports.manager.ProjectManager;
-import com.example.sports.mapper.SysCompetitionGroupMapper;
-import com.example.sports.mapper.SysGroupingModuleMapper;
-import com.example.sports.mapper.SysProjectMapper;
-import com.example.sports.mapper.SysProjectSignMapper;
+import com.example.sports.mapper.*;
 import com.example.sports.model.*;
 import com.github.pagehelper.PageHelper;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.collect.Lists;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -71,6 +75,11 @@ public class ReadExcelManager {
     private Map<String, String> projectNameMap = new HashMap<>();
 
     /**
+     * 用于执行异步文件的读取存储
+     */
+    private ExecutorService executorService = Executors.newCachedThreadPool();
+
+    /**
      * 分组
      */
     public LoadingCache<String, Optional<Boolean>> groupingCache = CacheBuilder.newBuilder().refreshAfterWrite(30, TimeUnit.MINUTES)
@@ -116,28 +125,60 @@ public class ReadExcelManager {
                 return false;
             }
             // 根据文件名判断文件是2003版本还是2007版本
-            boolean isExcel2003 = true;
+            AtomicBoolean isExcel2003 = new AtomicBoolean(true);
             if (isExcel2007(fileName)) {
-                isExcel2003 = false;
+                isExcel2003.set(false);
             }
-            return createExcel(mFile.getInputStream(), isExcel2003, gameName);
+            File uploadFile = storeFile(mFile);
+            if(uploadFile != null){
+                executorService.submit(() -> {
+                    if(createExcel(uploadFile, isExcel2003.get(), gameName)){
+                        projectManager.load();
+                    }
+                });
+                return true;
+            }
+            //return createExcel(mFile.getInputStream(), isExcel2003, gameName);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
     }
 
+    private File storeFile(MultipartFile file){
+        //获取上传文件名,包含后缀
+        String originalFilename = file.getOriginalFilename();
+        //获取后缀
+        String substring = originalFilename.substring(originalFilename.lastIndexOf("."));
+        //保存的文件名
+        String dFileName = UUID.randomUUID()+substring;
+        //保存路径
+        //springboot 默认情况下只能加载 resource文件夹下静态资源文件
+        String path = BaseConstants.DIR_PATH + dFileName;
+        //生成保存文件
+        File uploadFile = new File(path);
+        //将上传文件保存到路径
+        try {
+            file.transferTo(uploadFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return uploadFile;
+    }
+
     /**
      * 根据excel里面的内容读取客户信息
      *
-     * @param is      输入流
+     * @param aFile      输入流文件
      * @param isExcel2003   excel是2003还是2007版本
      * @return
      * @throws IOException
      */
-    public boolean createExcel(InputStream is, boolean isExcel2003, String gameName) {
+    public boolean createExcel(File aFile, boolean isExcel2003, String gameName) {
+        Workbook wb = null;
         try {
-            Workbook wb = null;
+            InputStream is = new FileInputStream(aFile);
             // 当excel是2003时,创建excel2003
             if (isExcel2003) {
                 wb = new HSSFWorkbook(is);
@@ -150,6 +191,14 @@ public class ReadExcelManager {
             return readExcelValue(wb, gameName);
         } catch (IOException e) {
             e.printStackTrace();
+        }finally {
+            if(wb != null){
+                try {
+                    wb.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return false;
     }
@@ -275,6 +324,7 @@ public class ReadExcelManager {
             }
         }catch (Exception e){
             log.error("insert sysProject failed! info={}", JSON.toJSONString(sysProjectSignList), e);
+            insertOrUpdate(sysProjectSignList);
         }
     }
 
@@ -434,6 +484,39 @@ public class ReadExcelManager {
         }
         return -1L;
     }
+
+    private boolean insertOrUpdate(List<SysProjectSign> sysProjectSignList){
+        if(CollectionUtils.isEmpty(sysProjectSignList)){
+            return true;
+        }
+        int num = 0;
+        try{
+            num = sysProjectSignMapper.batchUpdate(sysProjectSignList);
+        }catch (Exception e){
+            log.error("insertOrUpdate sysProjectSign failed! info={}", JSON.toJSONString(sysProjectSignList), e);
+        }
+        if(num > 0){
+            return true;
+        }
+        //process exception
+        sysProjectSignList.forEach(sysProjectSign -> {
+            SysProjectSignExample example = new SysProjectSignExample();
+            SysProjectSignExample.Criteria criteria = example.createCriteria();
+            criteria.andCompetitionIdEqual(sysProjectSign.getCompetitionId());
+            criteria.addGroupName(sysProjectSign.getGroupName());
+            criteria.andSysUserName(sysProjectSign.getUsername());
+            List<SysProjectSign> sysProjectSigns = sysProjectSignMapper.selectByExample(example);
+            if(CollectionUtils.isNotEmpty(sysProjectSigns)){
+                sysProjectSignMapper.batchUpdate(Lists.newArrayList(sysProjectSign));
+            }else{
+                sysProjectSignMapper.insert(sysProjectSign);
+            }
+        });
+        return true;
+
+    }
+
+
 
 
 

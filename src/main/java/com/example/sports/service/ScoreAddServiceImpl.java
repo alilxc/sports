@@ -212,7 +212,7 @@ public class ScoreAddServiceImpl implements ScoreAddService {
                 sysProjectSign.setScore(Double.valueOf(scoreAddInfo.getScore()));
                 sysProjectSignList.add(sysProjectSign);
             }
-            int num = sysProjectSignMapper.batchUpdate(sysProjectSignList);
+            int num = sysProjectSignMapper.batchUpdateScore(sysProjectSignList);
             if(num > 0){
                 Map<String, List<ScoreAddInfo>> scoreAndInfoMap = scoreAddInfos.stream()
                                                                 .collect(Collectors.groupingBy(ScoreAddInfo::router));

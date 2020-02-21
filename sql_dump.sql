@@ -44,6 +44,29 @@ create table sys_competition_group(
 	primary key(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+create table sys_user(
+	id int UNSIGNED AUTO_INCREMENT,
+	create_time BIGINT,
+	update_time BIGINT,
+	sid VARCHAR(64),
+	`password` VARCHAR(64),
+	type SMALLINT(6),
+avatar VARCHAR(256),
+frozen bit(1),
+	primary key(id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+create table sys_import_file(
+	id int UNSIGNED AUTO_INCREMENT,
+	create_time BIGINT,
+	update_time BIGINT,
+	competition_id BIGINT,
+	file_name VARCHAR(256),
+	ext VARCHAR(1024),
+	primary key(id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 delete from sys_project_sign;
 delete from sys_grouping_info;

@@ -20,5 +20,7 @@ public interface SysProjectSignMapper {
 
     int updateByExample(@Param("score") double score, @Param("example") SysProjectSignExample example);
 
+    int batchUpdateScore(@Param("records") List<SysProjectSign> records);
+
     int batchUpdate(@Param("records") List<SysProjectSign> records);
 }

@@ -28,10 +28,10 @@ public class ImportServiceImpl implements ImportService{
     public boolean readExcelFile(MultipartFile file, String gameName) {
         //解析excel，获取上传的事件单
         boolean readResult = readExcelManager.getExcelInfo(file, gameName);
-        if(readResult){
+        /*if(readResult){
             //初始化加载项目相关的内容到内存
             projectManager.init();
-        }
+        }*/
         return readResult;
     }
 }
