@@ -89,7 +89,7 @@ drop table sys_project_sign;
 drop table sys_grouping_info;
 drop table sys_competition_group;
 
-create UNIQUE INDEX uk_competition_username ON
+create INDEX uk_competition_username ON
  sys_project_sign(competition_id, group_name, username);
 
  create UNIQUE INDEX uk_competition_place ON
