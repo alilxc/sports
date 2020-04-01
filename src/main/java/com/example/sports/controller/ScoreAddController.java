@@ -4,6 +4,7 @@ import com.example.sports.annotation.AvoidRepeatableCommit;
 import com.example.sports.dto.PageRequestBean;
 import com.example.sports.dto.request.EnterInfoRequest;
 import com.example.sports.dto.request.EnterRequest;
+import com.example.sports.dto.request.ScoreAddInfo;
 import com.example.sports.dto.request.ScoreAddRequest;
 import com.example.sports.dto.response.EnterInfoRes;
 import com.example.sports.dto.response.SchoolScoreRes;
@@ -19,6 +20,8 @@ import com.example.sports.util.ResponseObjectUtil;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -52,6 +55,14 @@ public class ScoreAddController {
     @PostMapping("/addScore")
     @ApiOperation(value = "成绩录入")
     public ResponseObject<Void> addScore(@RequestBody ScoreAddRequest scoreAddRequest) {
+        if(scoreAddRequest == null || CollectionUtils.isEmpty(scoreAddRequest.getScoreAddInfoList())){
+            return ResponseObjectUtil.fail("录入参数不完整，请重新校验");
+        }
+        for(ScoreAddInfo scoreAddInfo : scoreAddRequest.getScoreAddInfoList()){
+            if(StringUtils.isEmpty(scoreAddInfo.getScore())){
+                return ResponseObjectUtil.fail("录入参数不完整，请重新校验");
+            }
+        }
         if(scoreAddRequest != null){
             scoreAddService.addScore(scoreAddRequest.getCompetitionId(), scoreAddRequest.getPlace(), scoreAddRequest.getScoreAddInfoList());
         }

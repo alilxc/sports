@@ -17,6 +17,18 @@ create table sys_project_sign(
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+create table sys_project(
+	id int UNSIGNED AUTO_INCREMENT,
+	create_time BIGINT,
+	update_time BIGINT,
+	active_start BIGINT,
+	active_finish BIGINT,
+	organization VARCHAR(128),
+	name VARCHAR(100),
+	primary key(id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 
 create table sys_grouping_info(
 	id int UNSIGNED AUTO_INCREMENT,
@@ -76,4 +88,10 @@ delete from sys_competition_group;
 drop table sys_project_sign;
 drop table sys_grouping_info;
 drop table sys_competition_group;
+
+create UNIQUE INDEX uk_competition_username ON
+ sys_project_sign(competition_id, group_name, username);
+
+ create UNIQUE INDEX uk_competition_place ON
+ sys_competition_group(competition_id, place);
 

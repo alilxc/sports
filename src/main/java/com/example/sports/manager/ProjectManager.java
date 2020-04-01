@@ -51,14 +51,14 @@ public class ProjectManager {
     private static final int pageSize = 30;
 
 
-    /*@PostConstruct
+    @PostConstruct
     public void init(){
         try{
             load();
         }catch (Exception e){
             log.error("[ProjectManager].init failed!", e);
         }
-    }*/
+    }
 
     public void load(){
         SysProjectExample example = new SysProjectExample();
